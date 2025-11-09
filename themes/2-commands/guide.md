@@ -1,0 +1,686 @@
+# Commands - Guide Complet
+
+> 📄 **Documentation Officielle** : https://docs.claude.com/en/docs/claude-code/slash-commands
+
+## 📚 Théorie
+
+### Qu'est-ce que les Commandes Slash ?
+
+Les **Commandes Slash** (Slash Commands) sont des **prompts complexes réutilisables** stockés dans des fichiers markdown et invocables via la syntaxe `/nom-commande`.
+
+```
+╔══════════════════════════════════════════╗
+║     COMMANDES SLASH - VUE D'ENSEMBLE     ║
+╚══════════════════════════════════════════╝
+
+Terminal Claude Code:
+┌────────────────────────────────────────┐
+│ > /epct "Créer page contact"           │
+└────────────────────────────────────────┘
+              ▼
+┌────────────────────────────────────────┐
+│  📄 .claude/commands/epct.md           │
+│  → Prompt complet chargé               │
+│  → Workflow EPCT exécuté               │
+│  → Feature créée automatiquement       │
+└────────────────────────────────────────┘
+```
+
+**Source** : Formation Melvynx Claude Code 2.0
+
+---
+
+### 🎯 Problème Résolu
+
+**Avant Commands** :
+```
+Chaque feature complexe :
+├── "Explore le code pour comprendre l'architecture"
+├── "Cherche la documentation de Vite"
+├── "Propose un plan avant de coder"
+├── "Implémente le code"
+├── "Lance les tests"
+└── [Répéter prompt long à CHAQUE fois] ❌
+```
+
+**Avec Commands** :
+```
+Une seule fois :
+├── Créer .claude/commands/epct.md
+├── Définir workflow complet
+└── Sauvegarder
+
+Toutes fois suivantes :
+└── /epct "Ma feature" ✅
+    → Workflow complet automatique !
+```
+
+---
+
+### 🔧 Comment ça Marche
+
+#### 📂 Structure des Commandes
+
+**Deux Types** : Projet (partagées) vs Personnelles (globales)
+
+```
+╔════════════════════════════════════════════╗
+║      TYPES DE COMMANDES SLASH              ║
+╚════════════════════════════════════════════╝
+
+📦 Commandes Projet (Partagées)
+   .claude/commands/
+   ┣━━ 📄 setup.md
+   ┣━━ 📄 epct.md
+   ┗━━ 📄 commit.md
+   → Committées sur Git
+   → Partagées avec équipe
+   → Spécifiques au projet
+
+🏠 Commandes Personnelles (Globales)
+   ~/.claude/commands/
+   ┣━━ 📄 debug.md
+   ┣━━ 📄 prompt.md
+   ┗━━ 📄 refactor.md
+   → Locales à l'utilisateur
+   → Non versionnées
+   → Utilisables partout
+```
+
+**💡 Règle** :
+- **Projet** (.claude/commands/) : Workflows spécifiques équipe
+- **Personnel** (~/.claude/commands/) : Préférences individuelles
+
+---
+
+#### ⚡ Workflow Création de Commande
+
+```
+┌────────────────────────────────────────┐
+│   WORKFLOW CRÉATION COMMANDE           │
+└────────────────────────────────────────┘
+
+1️⃣ Créer fichier
+   ┌─────────────────┐
+   │ .claude/        │
+   │ commands/       │
+   │ ma-commande.md  │
+   └────────┬────────┘
+            ▼
+2️⃣ Rédiger prompt
+   ┌─────────────────┐
+   │ Demander à      │
+   │ Claude de       │
+   │ rédiger le      │
+   │ prompt complet  │
+   └────────┬────────┘
+            ▼
+3️⃣ Redémarrer Claude
+   ┌─────────────────┐
+   │ Ctrl+C          │
+   │ puis 'claude'   │
+   │                 │
+   │ Commandes       │
+   │ rechargées ✅   │
+   └────────┬────────┘
+            ▼
+4️⃣ Utiliser
+   ┌─────────────────┐
+   │ /ma-commande    │
+   │ [arguments]     │
+   └─────────────────┘
+```
+
+**⚠️ Important** : Claude Code doit être **redémarré** après création/modification de commandes pour les charger.
+
+---
+
+### 📝 Anatomie d'une Commande
+
+**Structure fichier** (.claude/commands/nom.md) :
+
+```markdown
+# Description de la commande (optionnel)
+
+Prompt complet exécuté par Claude quand /nom est appelé.
+
+Tu peux :
+- Donner des instructions détaillées
+- Définir un workflow en étapes
+- Utiliser des variables : {argument}
+- Référencer documentation externe (WebFetch)
+- Invoquer des agents (Task tool)
+- Combiner avec Memory (CLAUDE.md)
+
+Exemple : "Explore le code, propose un plan, implémente, teste"
+```
+
+**Exemple Concret** - /epct.md :
+
+```markdown
+# EPCT Workflow : Explore-Plan-Code-Test
+
+Quand l'utilisateur demande une nouvelle feature avec /epct "description", suis ce workflow :
+
+## Phase 1 : 🔍 EXPLORE
+- Recherche documentation pertinente (WebFetch si nécessaire)
+- Lis les fichiers projet importants (Read, Grep)
+- Comprends l'architecture existante
+- Identifie les dépendances
+
+## Phase 2 : 📋 PLAN
+- Propose un plan structuré en étapes
+- **STOP** : Demande validation utilisateur
+- Pose des questions sur points ambigus
+- Ajuste le plan selon feedback
+
+## Phase 3 : 💻 CODE
+- Implémente selon plan validé
+- Respecte conventions CLAUDE.md
+- Modifie/crée fichiers nécessaires
+- Installe dépendances (npm install)
+
+## Phase 4 : ✅ TEST
+- Lis package.json pour tests existants
+- Lance tests si configurés
+- Vérifie linting (ESLint)
+- Build de vérification
+
+❌ Ne crée PAS de tests s'ils n'existent pas déjà.
+✅ N'exécute QUE les tests existants.
+
+Résultat attendu : Feature complète, testée, fonctionnelle.
+```
+
+---
+
+### 🎨 Exemples de Commandes Utiles
+
+#### 1. /commit - Commit Conventionnel
+
+```markdown
+# Commit Conventionnel avec Analyse Git
+
+1. Exécute `git status` pour voir fichiers modifiés
+2. Exécute `git diff` pour voir changements
+3. Analyse les modifications
+4. Génère un message de commit conventionnel :
+   - Type : feat/fix/docs/style/refactor/test/chore
+   - Scope : composant/module affecté
+   - Description : courte et claire
+   - Body : détails si nécessaire
+
+5. Demande confirmation avant commit
+6. Exécute : git add . && git commit -m "message"
+
+Format :
+type(scope): description
+
+body (optionnel)
+
+Exemple :
+feat(auth): add login with Google OAuth
+
+Implement OAuth2 flow with Google provider
+```
+
+#### 2. /debug - Débogage Systématique
+
+```markdown
+# Debug Workflow Systématique
+
+Quand l'utilisateur signale un bug avec /debug "description", suis ce processus :
+
+1. **Reproduction**
+   - Demande steps to reproduce
+   - Vérifie logs/erreurs
+
+2. **Investigation**
+   - Explore code concerné (Grep, Read)
+   - Identifie fichiers suspects
+   - Analyse stack trace
+
+3. **Hypothèses**
+   - Liste causes possibles
+   - Prioritise par probabilité
+
+4. **Tests**
+   - Teste chaque hypothèse
+   - Ajoute logs temporaires si besoin
+
+5. **Fix**
+   - Propose solution
+   - Implémente après validation
+   - Vérifie que bug est résolu
+
+6. **Prevention**
+   - Suggère test pour éviter régression
+```
+
+#### 3. /prompt - Créer Nouvelles Commandes
+
+```markdown
+# Générateur de Commandes Slash
+
+Aide l'utilisateur à créer une nouvelle commande slash personnalisée.
+
+1. Demande :
+   - Nom de la commande
+   - Description de ce qu'elle doit faire
+   - Arguments éventuels
+   - Cas d'usage
+
+2. Génère le fichier markdown :
+   - Structure claire
+   - Workflow en étapes
+   - Exemples concrets
+   - Best practices
+
+3. Sauvegarde dans .claude/commands/nom.md
+
+4. Rappelle de redémarrer Claude Code (Ctrl+C puis claude)
+
+5. Donne exemple d'utilisation
+```
+
+#### 4. /refactor - Amélioration Code
+
+```markdown
+# Refactoring Workflow
+
+Pour améliorer du code existant :
+
+1. **Analyse**
+   - Lis le fichier ciblé
+   - Identifie code smells :
+     * Duplication
+     * Complexité excessive
+     * Nommage peu clair
+     * Fonctions trop longues
+
+2. **Suggestions**
+   - Propose améliorations concrètes
+   - Explique le "pourquoi"
+   - Estime impact/risque
+
+3. **Validation**
+   - Demande confirmation
+   - Discute alternatives
+
+4. **Application**
+   - Refactor par étapes
+   - Maintient fonctionnalité
+   - Vérifie tests passent
+
+5. **Documentation**
+   - Update commentaires si nécessaire
+   - Explique changements majeurs
+```
+
+---
+
+### ✅ Avantages
+
+```
+✅ Réutilisabilité    → Prompt complexe = 1 commande simple
+✅ Partage équipe     → Workflows standardisés via Git
+✅ Autocomplétion     → Terminal et VS Code suggèrent commandes
+✅ Documentation      → WebFetch pour récupérer docs externes
+✅ Consistency        → Toute l'équipe utilise mêmes workflows
+✅ Productivité       → Gain de temps énorme sur tâches répétitives
+✅ Évolutif           → Ajouter/modifier commandes facilement
+```
+
+---
+
+### ⚠️ Limitations
+
+```
+❌ Redémarrage requis   → Nouvelles commandes pas chargées à chaud
+❌ Pas d'éditeur visuel → Edition manuelle fichiers markdown
+❌ Debug complexe       → Si prompt mal formulé, résultats imprévisibles
+❌ Pas de versioning    → Pas d'historique des commandes (utiliser Git)
+```
+
+---
+
+### 🎯 Use Cases Concrets
+
+#### 1. Workflow EPCT (Features Complexes)
+
+```bash
+# Situation : Ajouter authentification OAuth
+claude
+> /epct "Implémenter login Google OAuth"
+
+# Résultat :
+→ Explore : Recherche doc Google OAuth, lit fichiers auth existants
+→ Plan : Propose architecture (route, middleware, UI)
+→ Validation : Demande confirmation
+→ Code : Implémente selon plan
+→ Test : Lance tests auth existants
+```
+
+#### 2. Commits Conventionnels
+
+```bash
+# Situation : Commit après modifications
+claude
+> /commit
+
+# Résultat :
+→ Analyse git status + git diff
+→ Génère : "feat(auth): add Google OAuth login"
+→ Demande confirmation
+→ Commit automatique
+```
+
+#### 3. Debugging Systématique
+
+```bash
+# Situation : Bug en production
+claude
+> /debug "Page 404 sur /dashboard après login"
+
+# Résultat :
+→ Demande logs/stack trace
+→ Explore routing + auth middleware
+→ Identifie cause (redirect incorrect)
+→ Propose fix
+→ Implémente après validation
+```
+
+#### 4. Création de Commandes
+
+```bash
+# Situation : Besoin d'une nouvelle commande
+claude
+> /prompt
+
+# Dialogue :
+Claude : "Quel nom pour la commande ?"
+> deploy
+
+Claude : "Que doit-elle faire ?"
+> Déployer sur Vercel avec tests préalables
+
+# Résultat :
+→ Crée .claude/commands/deploy.md
+→ Workflow : tests → build → vercel deploy
+→ Rappelle de redémarrer Claude
+```
+
+---
+
+## 📋 Cheatsheet
+
+### Commandes Essentielles
+
+| Commande | Description | Exemple |
+|----------|-------------|---------|
+| `/init` | Initialiser projet Claude Code | `/init` |
+| `/epct` | Explore-Plan-Code-Test workflow | `/epct "page contact"` |
+| `/commit` | Commit conventionnel | `/commit` |
+| `/debug` | Débogage systématique | `/debug "erreur 500"` |
+| `/prompt` | Créer nouvelle commande | `/prompt` |
+
+### Gestion des Commandes
+
+```bash
+# Lister commandes disponibles
+ls .claude/commands/
+ls ~/.claude/commands/
+
+# Créer nouvelle commande (projet)
+touch .claude/commands/ma-commande.md
+# → Éditer le fichier
+# → Redémarrer Claude (Ctrl+C puis claude)
+
+# Créer nouvelle commande (personnelle)
+touch ~/.claude/commands/ma-commande.md
+# → Éditer le fichier
+# → Redémarrer Claude
+
+# Éditer commande existante
+vim .claude/commands/epct.md
+# → Redémarrer Claude pour charger modifications
+
+# Supprimer commande
+rm .claude/commands/ancienne.md
+```
+
+### Structure Fichier Commande
+
+```markdown
+# Description (optionnel)
+
+Prompt principal qui sera exécuté.
+
+## Étapes (optionnel, mais recommandé)
+
+1. Première action
+2. Deuxième action
+3. Etc.
+
+## Variables
+
+{argument} : Remplacé par argument passé à /commande
+
+## Exemples
+
+Donner exemples d'utilisation attendue.
+```
+
+### Workflow Typique
+
+```bash
+# 1. Créer fichier commande
+echo "# Ma Commande\n\nInstructions ici..." > .claude/commands/test.md
+
+# 2. Demander à Claude de rédiger prompt
+claude
+> "Rédige une commande /test qui fait X, Y, Z"
+
+# 3. Redémarrer Claude
+Ctrl+C
+claude
+
+# 4. Utiliser la commande
+> /test "mon argument"
+
+# 5. Itérer si nécessaire
+> "Améliore /test pour aussi faire W"
+# → Edit .claude/commands/test.md
+# → Redémarrer
+```
+
+---
+
+## ✏️ Exercices
+
+### 🟢 Niveau 1 : Découverte (10 min)
+
+**Objectif** : Créer ta première commande slash simple
+
+**Exercice** :
+1. Crée un fichier `.claude/commands/hello.md`
+2. Ajoute ce contenu :
+   ```markdown
+   # Hello Command
+
+   Dis bonjour à l'utilisateur de manière amicale et demande comment tu peux l'aider aujourd'hui.
+   ```
+3. Redémarre Claude Code
+4. Teste : `/hello`
+
+**Résultat attendu** : Claude te salue et propose son aide
+
+---
+
+### 🟡 Niveau 2 : Utilisation (15 min)
+
+**Objectif** : Créer une commande avec argument
+
+**Exercice** :
+1. Crée `.claude/commands/readme.md`
+2. Contenu :
+   ```markdown
+   # Generate README
+
+   Génère un fichier README.md professionnel pour le projet "{project_name}".
+
+   Inclure :
+   - Description du projet
+   - Installation
+   - Usage
+   - Technologies utilisées
+   - License MIT
+
+   Utilise un ton professionnel mais accessible.
+   ```
+3. Redémarre Claude
+4. Teste : `/readme "Mon Super Projet"`
+
+**Résultat attendu** : README.md généré avec le nom du projet
+
+---
+
+### 🟠 Niveau 3 : Maîtrise (20 min)
+
+**Objectif** : Créer une commande EPCT simplifiée
+
+**Exercice** :
+1. Crée `.claude/commands/feature.md`
+2. Implémenter workflow en 3 étapes :
+   - **Explore** : Lire fichiers pertinents du projet
+   - **Plan** : Proposer architecture de la feature
+   - **Code** : Implémenter après validation
+3. La commande doit accepter : `/feature "description"`
+
+**Indice** :
+```markdown
+# Feature Creator
+
+Quand /feature est appelé avec une description :
+
+1. EXPLORE
+   - Lis package.json, src/, etc.
+   - Comprends architecture actuelle
+
+2. PLAN
+   - Propose fichiers à créer/modifier
+   - Demande validation
+
+3. CODE
+   - Implémente selon plan validé
+   - Respecte conventions projet
+```
+
+**Test** : `/feature "formulaire de contact avec validation"`
+
+**Résultat attendu** : Exploration → Plan → Validation → Implémentation
+
+---
+
+### 🔴 Niveau 4 : Expert (25 min)
+
+**Objectif** : Créer commande avec agents parallèles
+
+**Exercice** :
+1. Crée `.claude/commands/audit.md`
+2. La commande doit :
+   - Lancer 3 agents en parallèle :
+     * Agent 1 : Audit sécurité (XSS, injections)
+     * Agent 2 : Audit performance (bundles, imports)
+     * Agent 3 : Audit accessibilité (a11y)
+   - Agréger résultats
+   - Générer rapport markdown
+
+**Indice** : Utiliser Task tool avec subagent_type
+
+**Test** : `/audit`
+
+**Résultat attendu** : Rapport complet avec 3 sections (sécurité, perf, a11y)
+
+---
+
+## 🎓 Points Clés
+
+### Concepts Essentiels
+
+✅ **Prompts Réutilisables** : Transformer prompt complexe en `/commande`
+✅ **Deux Scopes** : Projet (.claude/) vs Personnel (~/.claude/)
+✅ **Partageable** : Commitez commands/ pour workflow équipe
+✅ **Arguments** : Utiliser {variable} dans prompt
+✅ **Redémarrage** : Obligatoire après création/modification
+✅ **Autocomplétion** : Terminal suggère commandes disponibles
+
+### Commandes Clés
+
+| Action | Commande |
+|--------|----------|
+| Initialiser projet | `/init` |
+| Lister commandes | `ls .claude/commands/` |
+| Créer commande | `touch .claude/commands/nom.md` |
+| Utiliser commande | `/nom [arguments]` |
+| Redémarrer Claude | `Ctrl+C` puis `claude` |
+
+### Différence avec Memory
+
+| Aspect | Commands | Memory |
+|--------|----------|--------|
+| **Type** | Actions réutilisables | Instructions persistantes |
+| **Fichier** | .claude/commands/*.md | .claude/CLAUDE.md |
+| **Activation** | Manuelle (`/commande`) | Automatique (toujours) |
+| **Utilité** | Workflows répétitifs | Context général projet |
+| **Exemple** | `/epct "feature"` | "Use TypeScript strict" |
+| **Quand** | Action spécifique | Background permanent |
+
+**Commands** : Ce que tu **demandes explicitement** (foreground)
+**Memory** : Ce que Claude **sait toujours** (background)
+
+**Combinés** :
+```bash
+# Memory (automatic) :
+"Use TypeScript, Tailwind, Zod validation"
+
+# Command (manual) :
+/epct "Créer page pricing"
+
+# Résultat :
+→ Feature avec TypeScript + Tailwind + Zod
+  (Memory appliqué automatiquement dans Command)
+```
+
+---
+
+## 📚 Ressources
+
+- 📄 **Claude Slash Commands** : https://docs.claude.com/en/docs/claude-code/slash-commands
+- 🎥 **Melvynx - Formation Claude Code 2.0** : https://www.youtube.com/watch?v=bDr1tGskTdw (30:00 - Commands)
+- 🔗 **Weston Hobson Commands** : https://github.com/wshobson/commands
+- 📄 **Voir aussi** : [Memory](../memory/guide.md) | [Workflows](../workflows/guide.md)
+
+---
+
+## Conclusion
+
+Les **Commandes Slash** transforment des prompts complexes répétitifs en **workflows réutilisables en un mot**.
+
+**Principe** : Write once, use everywhere.
+
+**Setup recommandé** :
+```
+.claude/commands/         # Équipe (partagé Git)
+├── epct.md              # Features complexes
+├── commit.md            # Commits conventionnels
+└── deploy.md            # Déploiement
+
+~/.claude/commands/       # Personnel (local)
+├── debug.md             # Débogage
+├── prompt.md            # Créer commandes
+└── refactor.md          # Amélioration code
+```
+
+**Quote Melvynx** :
+> "Les commandes slash permettent d'injecter des prompts complexes et réutilisables. C'est un gain de temps énorme."

@@ -1,0 +1,136 @@
+{
+  "$schema": "https://code.claude.com/schemas/settings.json",
+  "version": "1.0.0",
+
+  "enabledPlugins": {
+    "local-global-info@supernovae-studio": true,
+    "plugin-traduction@supernovae-studio": true,
+    "qr-code-ai@supernovae-studio": true
+  },
+
+  "extraKnownMarketplaces": {
+    "supernovae-studio": {
+      "source": {
+        "source": "local",
+        "path": "./supernovae-marketplace"
+      },
+      "description": "Marketplace privée Supernovae Studio avec plugins pour locales, traduction et QR codes"
+    }
+  },
+
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(npm:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(python:*)",
+      "Bash(node:*)",
+      "Edit",
+      "Write",
+      "mcp__global_info",
+      "mcp__qr_code_ai"
+    ],
+    "deny": [
+      "Read(.env:*)",
+      "Read(./secrets/**)",
+      "Read(~/.ssh/**)",
+      "Bash(rm:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(git commit:*)",
+      "Bash(npm install:*)"
+    ],
+    "additionalDirectories": [],
+    "defaultMode": "acceptEdits"
+  },
+
+  "mcp": {
+    "servers": {
+      "global-info": {
+        "transport": "http",
+        "url": "https://api.supernovae.studio/mcp/locales",
+        "auth": {
+          "type": "oauth2",
+          "clientId": "${GLOBAL_INFO_CLIENT_ID}",
+          "clientSecret": "${GLOBAL_INFO_CLIENT_SECRET}"
+        },
+        "description": "Accès à la base de données des 174 locales",
+        "enabled": true
+      },
+      "qr-code-ai": {
+        "transport": "http",
+        "url": "https://api.supernovae.studio/mcp/qrcodes",
+        "auth": {
+          "type": "oauth2",
+          "clientId": "${QR_CODE_CLIENT_ID}",
+          "clientSecret": "${QR_CODE_CLIENT_SECRET}"
+        },
+        "description": "Génération et gestion de QR codes avec AI",
+        "enabled": true
+      }
+    }
+  },
+
+  "sandbox": {
+    "enabled": false,
+    "autoAllowBashIfSandboxed": false,
+    "excludedCommands": ["git", "npm", "node", "python"],
+    "network": {
+      "allowUnixSockets": [],
+      "allowLocalBinding": true
+    }
+  },
+
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"File modified: $(jq -r '.tool_input.file_path')\" >> .claude/edit-log.txt"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "date '+%Y-%m-%d %H:%M:%S' >> .claude/session-log.txt"
+          }
+        ]
+      }
+    ]
+  },
+
+  "context": {
+    "maxTokens": 200000,
+    "enablePromptCaching": true,
+    "autoCompact": false
+  },
+
+  "ui": {
+    "outputStyle": "default",
+    "showProgressIndicators": true,
+    "notifications": {
+      "enabled": true,
+      "sound": false
+    }
+  },
+
+  "environment": {
+    "NODE_ENV": "development",
+    "SUPERNOVAE_STUDIO_VERSION": "1.0.0"
+  }
+}
