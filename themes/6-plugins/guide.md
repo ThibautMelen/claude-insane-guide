@@ -126,6 +126,43 @@ Un plugin peut contenir **jusqu'à 5 types de composants** :
 
 ---
 
+## 🆕 Nouveautés 2025 - Système de Plugins
+
+### Gestion des Plugins Améliorée
+
+**Installation depuis marketplace** :
+```bash
+# Ajouter une marketplace
+/plugin marketplace add your-org/claude-plugins
+
+# Installer un plugin
+/plugin install formatter@your-org
+
+# Enable/disable
+/plugin enable plugin-name@marketplace-name
+/plugin disable plugin-name@marketplace-name
+```
+
+**Configuration équipe dans `.claude/settings.json`** :
+```json
+{
+  "enabledPlugins": {
+    "formatter@company-tools": true
+  },
+  "extraKnownMarketplaces": {
+    "company-tools": {
+      "source": {"source": "github", "repo": "org/repo"}
+    }
+  }
+}
+```
+
+### Types de Sources Supportées
+
+- **GitHub repositories** : `github.com/org/repo`
+- **URLs Git** : Tout repo git accessible
+- **Répertoires locaux** : Pour développement
+
 ## 🏗️ Architecture d'un Plugin
 
 ### 📐 Structure Standard
@@ -2779,7 +2816,7 @@ Préfixes spéciaux :
 
 ### 📄 Documentation Officielle
 
-- **Plugins Guide** : https://docs.claude.com/en/docs/claude-code/plugins
+- **Plugins Guide** : https://code.claude.com/docs/plugins
 - **Commands** : [Guide Commands](../commands/guide.md)
 - **Sub-Agents** : [Guide Agents](../agents/guide.md)
 - **Skills** : [Guide Skills](../skills/guide.md)

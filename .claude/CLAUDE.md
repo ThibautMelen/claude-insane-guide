@@ -344,9 +344,9 @@ Pas copier/coller
 
 ### Documentation Sources
 
-- 📄 **Claude Code Docs** : https://docs.claude.com/en/docs/claude-code
-- 📄 **Memory** : https://docs.claude.com/en/docs/claude-code/memory
-- 📄 **Commands** : https://docs.claude.com/en/docs/claude-code/slash-commands
+- 📄 **Claude Code Docs** : https://code.claude.com/docs
+- 📄 **Memory** : https://code.claude.com/docs/memory
+- 📄 **Commands** : https://code.claude.com/docs/slash-commands
 - 📄 **MCP** : https://modelcontextprotocol.io/
 
 ### Vidéos Analysées

@@ -1,6 +1,6 @@
 # Best Practices - Guide Complet
 
-> 📄 **Documentation Officielle** : https://docs.claude.com/en/docs/claude-code
+> 📄 **Documentation Officielle** : https://code.claude.com/docs
 
 ## 📚 Théorie
 
@@ -368,6 +368,128 @@ Indicateur : [X 📄] = X fichiers modifiés
 
 ---
 
+## 💾 Checkpoints - Sauvegarde de Session (2025)
+
+### Système de Points de Sauvegarde
+
+**Checkpoints** = Nouveau système Claude Code 2.0 permettant de **sauvegarder l'état complet** d'une session de travail pour y revenir plus tard.
+
+```
+╔═══════════════════════════════════════════╗
+║          SYSTÈME DE CHECKPOINTS           ║
+╚═══════════════════════════════════════════╝
+
+Création Automatique :
+├── Toutes les 10 min d'activité
+├── Avant opérations critiques
+├── Après étapes majeures
+└── Sur demande manuelle
+
+┌───────────────────────────────────────────┐
+│  CHECKPOINT SAUVEGARDÉ                     │
+├───────────────────────────────────────────┤
+│  📸 État conversation                      │
+│  📁 Fichiers modifiés                     │
+│  🧠 Contexte Claude                       │
+│  🔧 Configuration session                 │
+│  📝 Historique commandes                  │
+│  ⏱️  Timestamp : 2025-11-10 14:30:00      │
+└───────────────────────────────────────────┘
+```
+
+### 🎯 Commandes Checkpoints
+
+```bash
+# Créer checkpoint manuel
+/checkpoint save "Avant refactoring majeur"
+
+# Lister checkpoints disponibles
+/checkpoint list
+
+# Restaurer checkpoint
+/checkpoint restore <id>
+
+# Supprimer checkpoint
+/checkpoint delete <id>
+
+# Info checkpoint
+/checkpoint info <id>
+```
+
+### 💡 Use Cases Checkpoints
+
+**Expérimentation Sans Risque** :
+```
+1. Créer checkpoint
+2. Tester approche A
+3. Si échec → restore checkpoint
+4. Tester approche B
+```
+
+**Travail Multi-Sessions** :
+```
+Matin : Développer feature → checkpoint
+Pause déjeuner : Claude fermé
+Après-midi : Restore checkpoint → continuer
+```
+
+**Collaboration Asynchrone** :
+```
+Dev 1 : Feature → checkpoint → partage ID
+Dev 2 : Restore checkpoint → continue travail
+```
+
+### ⚡ Différence Checkpoint vs Rewind
+
+```
+┌────────────────┬──────────────┬──────────────┐
+│   Feature      │  Checkpoint  │    Rewind    │
+├────────────────┼──────────────┼──────────────┤
+│ Persistance    │ ✅ Permanent │ ❌ Session   │
+│ Partage        │ ✅ Possible  │ ❌ Local     │
+│ Granularité    │ État complet │ Par message  │
+│ Automatique    │ ✅ Oui       │ ❌ Manuel    │
+│ Cross-session  │ ✅ Oui       │ ❌ Non       │
+└────────────────┴──────────────┴──────────────┘
+```
+
+### 💾 Configuration Checkpoints
+
+```json
+// .claude/settings.json
+{
+  "checkpoints": {
+    "autoSave": true,
+    "interval": 600,        // secondes (10 min)
+    "maxCheckpoints": 10,
+    "beforeCritical": true, // avant opérations critiques
+    "compression": true,
+    "includeOutput": false  // économiser espace
+  }
+}
+```
+
+### 📊 Best Practices Checkpoints
+
+**DO ✅** :
+```
+✅ Checkpoint avant refactoring majeur
+✅ Nommer checkpoints descriptifs
+✅ Nettoyer vieux checkpoints régulièrement
+✅ Partager checkpoint ID dans README équipe
+✅ Checkpoint avant expérimentation risquée
+```
+
+**DON'T ❌** :
+```
+❌ Garder 100+ checkpoints (pollution)
+❌ Se fier uniquement aux checkpoints (Git reste essentiel)
+❌ Checkpoint avec secrets/credentials exposés
+❌ Oublier de documenter checkpoint important
+```
+
+---
+
 ## 📋 Best Practices par Outil
 
 ### Memory
@@ -606,7 +728,7 @@ Shift+Tab → ASK MODE     # Modifications finales avec validation
 
 ## 📚 Ressources
 
-- 📄 **Claude Code Docs** : https://docs.claude.com/en/docs/claude-code
+- 📄 **Claude Code Docs** : https://code.claude.com/docs
 - 🎥 **Melvynx - Formation Claude Code 2.0** : https://www.youtube.com/watch?v=bDr1tGskTdw
   - 15:00 - Modes d'édition
   - 18:00 - Thinking Mode

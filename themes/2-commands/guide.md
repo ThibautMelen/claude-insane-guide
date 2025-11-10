@@ -1,6 +1,6 @@
 # Commands - Guide Complet
 
-> 📄 **Documentation Officielle** : https://docs.claude.com/en/docs/claude-code/slash-commands
+> 📄 **Documentation Officielle** : https://code.claude.com/docs/slash-commands
 
 ## 📚 Théorie
 
@@ -656,7 +656,7 @@ Quand /feature est appelé avec une description :
 
 ## 📚 Ressources
 
-- 📄 **Claude Slash Commands** : https://docs.claude.com/en/docs/claude-code/slash-commands
+- 📄 **Claude Slash Commands** : https://code.claude.com/docs/slash-commands
 - 🎥 **Melvynx - Formation Claude Code 2.0** : https://www.youtube.com/watch?v=bDr1tGskTdw (30:00 - Commands)
 - 🔗 **Weston Hobson Commands** : https://github.com/wshobson/commands
 - 📄 **Voir aussi** : [Memory](../memory/guide.md) | [Workflows](../workflows/guide.md)

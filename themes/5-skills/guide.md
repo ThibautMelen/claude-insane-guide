@@ -2,7 +2,7 @@
 
 > **Maîtrisez les capacités spécialisées autonomes**
 
-📄 **Docs officielles** : [Claude Code Skills](https://docs.claude.com/en/docs/claude-code/skills)
+📄 **Docs officielles** : [Claude Code Skills](https://code.claude.com/docs/skills)
 
 ---
 
@@ -213,7 +213,7 @@ Generate reports from data sources.
 ## 📚 Ressources
 
 ### 📄 Documentation Officielle
-- 📄 [Claude Code Skills](https://docs.claude.com/en/docs/claude-code/skills)
+- 📄 [Claude Code Skills](https://code.claude.com/docs/skills)
 - 📄 [Plugins](../6-plugins/guide.md) - Package skills
 
 ### 🔗 Guides Connexes

@@ -10,6 +10,12 @@ Guide d'apprentissage complet sur **Claude Code** et l'écosystème Anthropic, o
 
 **Public** : Développeurs francophones souhaitant maîtriser Claude Code.
 
+**🆕 Nouveautés 2025** :
+- Theme 10 : Interactive UI (AskUserQuestion)
+- Patterns avancés multi-dialog
+- Showcase production (Supernovae Studio)
+- Updates Claude Sonnet 4.5
+
 ---
 
 ## 📖 Format d'Apprentissage
@@ -53,7 +59,13 @@ Suivez cet ordre pour une progression optimale :
 8️⃣ WORKFLOWS
    ↓ Orchestration avancée - Pipelines
 9️⃣ BEST PRACTICES
-   └─> Synthèse - Stratégies production
+   ↓ Synthèse - Stratégies production
+🔟 INTERACTIVE UI
+   └─> Dialogues - AskUserQuestion avancé
+
+Pour Experts :
+💪 ADVANCED PATTERNS → Multi-dialog & Decision Trees
+🎯 SHOWCASE → Cas réels production
 ```
 
 ---
@@ -105,10 +117,25 @@ claude-anthropic-comprhension/
 ┃   ┃   ├── 📄 cheatsheet.md    → Patterns orchestration
 ┃   ┃   └── 📁 exercices/
 ┃   ┃
-┃   ┗━━ 📁 9-best-practices/    🟢🟡🟠 [3 cas - 60 min]
-┃       ├── 📄 guide.md         → Stratégies production
-┃       ├── 📄 cheatsheet.md    → DO/DON'T essentiels
+┃   ┣━━ 📁 9-best-practices/    🟢🟡🟠 [3 cas - 60 min]
+┃   ┃   ├── 📄 guide.md         → Stratégies production
+┃   ┃   ├── 📄 cheatsheet.md    → DO/DON'T essentiels
+┃   ┃   └── 📁 exercices/
+┃   ┃
+┃   ┗━━ 📁 10-interactive-ui/   🟢🟡🟠🔴 [4 niveaux - 90 min] 🆕
+┃       ├── 📄 guide.md         → AskUserQuestion avancé
+┃       ├── 📄 cheatsheet.md    → Patterns dialogues
 ┃       └── 📁 exercices/
+┃
+┣━━ 📁 advanced/                💪 Patterns experts 🆕
+┃   ├── 📄 multi-dialog-patterns.md → Decision trees complexes
+┃   └── 📁 examples/
+┃
+┣━━ 📁 showcase/                🎯 Cas réels production 🆕
+┃   └── 📁 supernovae-studio/
+┃       ├── 📄 README.md        → Vue d'ensemble
+┃       ├── 📄 architecture.md  → Architecture technique
+┃       └── 📄 quick-start.md   → Setup rapide
 ┃
 ┣━━ 📁 ressources/              📹 Vidéos & ressources
 ┃   └── 📁 videos/
@@ -122,6 +149,7 @@ claude-anthropic-comprhension/
 ┃
 ┣━━ 📄 README.md                📚 Ce fichier
 ┣━━ 📄 STATUS.md                ⚠️ État de la documentation
+┣━━ 📄 QUICK_START.md           🚀 Guide démarrage rapide 🆕
 ┗━━ 📄 ressources.md            🔗 Index ressources
 ```
 
@@ -179,8 +207,9 @@ Chaque niveau d'exercice est **progressif** :
 | 7-agents | 🟢🟡 | 45 min |
 | 8-workflows | 🟢🟡 | 45 min |
 | 9-best-practices | 🟢🟡🟠 | 60 min |
+| 10-interactive-ui | 🟢🟡🟠🔴 | 90 min |
 
-**Total Formation** : **~10 heures** (théorie + pratique)
+**Total Formation** : **~12 heures** (théorie + pratique)
 
 ---
 
@@ -188,12 +217,12 @@ Chaque niveau d'exercice est **progressif** :
 
 ### 📄 Documentation Officielle
 
-- 📄 [Claude Code Docs](https://docs.claude.com/en/docs/claude-code)
-- 📄 [Memory](https://docs.claude.com/en/docs/claude-code/memory)
-- 📄 [Commands](https://docs.claude.com/en/docs/claude-code/slash-commands)
-- 📄 [Hooks](https://docs.claude.com/en/docs/claude-code/hooks)
+- 📄 [Claude Code Docs](https://code.claude.com/docs)
+- 📄 [Memory](https://code.claude.com/docs/en/memory)
+- 📄 [Commands](https://code.claude.com/docs/en/slash-commands)
+- 📄 [Hooks](https://code.claude.com/docs/en/hooks)
 - 📄 [MCP Protocol](https://modelcontextprotocol.io/)
-- 📄 [Plugins](https://docs.claude.com/en/docs/claude-code/plugins)
+- 📄 [Plugins](https://code.claude.com/docs/en/plugins)
 
 ### 🎥 Vidéos Analysées
 

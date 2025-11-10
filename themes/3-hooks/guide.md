@@ -2,7 +2,7 @@
 
 > **Automatisez vos workflows avec des événements système**
 
-📄 **Docs officielles** : [Claude Code Hooks](https://docs.claude.com/en/docs/claude-code/hooks)
+📄 **Docs officielles** : [Claude Code Hooks](https://code.claude.com/docs/hooks)
 
 ---
 
@@ -754,9 +754,9 @@ chmod +x scripts/my-hook.sh  # Si nécessaire
 
 ### 📄 Documentation Officielle
 
-- 📄 [Claude Code Hooks](https://docs.claude.com/en/docs/claude-code/hooks)
-- 📄 [Claude Code Plugins](https://docs.claude.com/en/docs/claude-code/plugins)
-- 📄 [Claude Code Settings](https://docs.claude.com/en/docs/claude-code/settings)
+- 📄 [Claude Code Hooks](https://code.claude.com/docs/hooks)
+- 📄 [Claude Code Plugins](https://code.claude.com/docs/plugins)
+- 📄 [Claude Code Settings](https://code.claude.com/docs/settings)
 
 ### 🔗 Guides Connexes
 

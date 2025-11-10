@@ -1,6 +1,6 @@
 # Workflows - Guide Complet
 
-> 📄 **Documentation Officielle** : https://docs.claude.com/en/docs/claude-code
+> 📄 **Documentation Officielle** : https://code.claude.com/docs
 
 ## 📚 Théorie
 
@@ -276,9 +276,36 @@ Workflow :
 
 ---
 
+## 🆕 Nouvelles Fonctionnalités 2025
+
+### ✅ Checkpoints Automatiques
+
+Claude Code sauvegarde automatiquement l'état avant chaque édition :
+
+```
+╔═══════════════════════════════════════════╗
+║     CHECKPOINTS SYSTEM                    ║
+╚═══════════════════════════════════════════╝
+
+Avant chaque Edit/Write:
+├── 📸 Snapshot automatique
+├── 💾 État sauvegardé
+└── 🔄 Retour possible
+
+Commandes:
+├── Esc+Esc : Annuler dernière action
+├── /rewind : Retour au checkpoint
+└── /checkpoint : Créer manuel
+
+Bénéfices:
+✅ Expérimentation sans risque
+✅ Recovery rapide
+✅ Historique complet
+```
+
 ## 🔄 Tâches Background & Todo Dynamique
 
-### Tâches Background
+### Tâches Background Améliorées (2025)
 
 Claude Code peut **exécuter commandes longues en arrière-plan** (serveurs, builds) pour continuer à travailler pendant l'exécution.
 
@@ -296,6 +323,12 @@ Commande : npm run dev (exemple)
 │  → Status : Running                       │
 └───────────────────────────────────────────┘
            ↓ Flèche ↓ pour voir logs
+
+Nouvelles Commandes 2025:
+├── /bashes : Lister toutes les tâches
+├── /kill [id] : Terminer une tâche
+└── /logs [id] : Voir logs complets
+
 ┌───────────────────────────────────────────┐
 │  📊 Logs en Temps Réel                    │
 │  > vite v5.0.0 dev server running at:     │
@@ -569,7 +602,7 @@ Workflows multi-étapes → Todo tracking
 
 ## 📚 Ressources
 
-- 📄 **Claude Code Docs** : https://docs.claude.com/en/docs/claude-code
+- 📄 **Claude Code Docs** : https://code.claude.com/docs
 - 🎥 **Melvynx - Formation Claude Code 2.0** : https://www.youtube.com/watch?v=bDr1tGskTdw
   - 30:00 - Workflow EPCT
   - 27:00 - Background Tasks

@@ -308,7 +308,7 @@ echo "File: $FILE"
 
 ## 🔗 Ressources
 
-- 📄 [Docs Officielles](https://docs.claude.com/en/docs/claude-code/hooks)
+- 📄 [Docs Officielles](https://code.claude.com/docs/hooks)
 - 📖 [Guide Complet](./guide.md)
 - 🧪 [Exercices](./exercices/niveau-1.md)
 

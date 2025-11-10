@@ -545,7 +545,7 @@ BEST PRACTICES D'OPTIMISATION:
 - **Anthropic Skills Repository** : [https://github.com/anthropics/skills](https://github.com/anthropics/skills)
   - Skills officiels: PDF, Excel, PowerPoint, Word, Skill Creator
   - Examples de structure et best practices
-- **Agent Skills Documentation** : [https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview)
+- **Agent Skills Documentation** : [https://code.claude.com/docs/en/docs/agents-and-tools/agent-skills/overview](https://code.claude.com/docs/en/docs/agents-and-tools/agent-skills/overview)
 
 ### 🎥 Vidéos
 

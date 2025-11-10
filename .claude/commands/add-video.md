@@ -11,30 +11,45 @@ Ce projet est un guide d'apprentissage francophone sur Claude Code. Toutes les f
 
 ## ARGUMENTS
 
-**URL YouTube (REQUIS)** : L'URL complète de la vidéo à analyser
-- Format: `https://www.youtube.com/watch?v=xxxxx` ou `https://youtu.be/xxxxx`
+**URL Vidéo (REQUIS)** : L'URL complète de la vidéo à analyser
+- Plateformes supportées : YouTube, TikTok, Instagram, Twitter
+- Formats acceptés :
+  - YouTube: `https://www.youtube.com/watch?v=xxxxx` ou `https://youtu.be/xxxxx`
+  - TikTok: `https://www.tiktok.com/@user/video/xxxxx`
+  - Instagram: `https://www.instagram.com/reel/xxxxx`
+  - Twitter: `https://twitter.com/user/status/xxxxx`
 - La vidéo doit être accessible publiquement
 
 ## WORKFLOW DÉTAILLÉ
 
-### 1. Récupération des Métadonnées
+### 1. Récupération de la Transcription avec Supadata
 
-Utilise le MCP tool `mcp__MCP_DOCKER__get_video_info` avec l'URL fournie pour obtenir:
+Utilise le MCP tool `mcp__supadata-ai-mcp__supadata_transcript` avec:
+- URL de la vidéo fournie
+- `lang`: `fr` (priorité au français, sinon `en`)
+- `text`: `false` pour obtenir les métadonnées complètes
+- `mode`: `auto` pour obtenir la meilleure transcription disponible
+
+Si la transcription est asynchrone (retourne un job ID), utilise `mcp__supadata-ai-mcp__supadata_check_transcript_status` pour vérifier le statut et récupérer le résultat.
+
+### 2. Extraction des Métadonnées
+
+À partir de la réponse de Supadata, extraire:
 - Titre de la vidéo
 - Auteur/Chaîne
 - Durée
-- Date de publication
-- Description
+- Date de publication (si disponible)
+- Transcription complète
 
-### 2. Récupération de la Transcription
+### 3. Gestion du Processus Asynchrone (si nécessaire)
 
-Utilise le MCP tool `mcp__MCP_DOCKER__get_transcript` avec:
-- URL de la vidéo
-- Langue: `fr` (priorité au français, sinon `en`)
+Si Supadata retourne un job ID au lieu de la transcription directe:
+1. Attendre quelques secondes (2-5 secondes)
+2. Utiliser `mcp__supadata-ai-mcp__supadata_check_transcript_status` avec le job ID
+3. Répéter jusqu'à obtenir le statut 'completed' ou 'failed'
+4. Maximum 10 tentatives avec attente progressive (2, 4, 6, 8, 10 secondes)
 
-Si la transcription est trop longue (> 100K tokens), utilise `next_cursor` pour récupérer par morceaux.
-
-### 3. Analyse du Contenu
+### 4. Analyse du Contenu
 
 Analyse la transcription pour extraire:
 
@@ -66,7 +81,7 @@ Analyse la transcription pour extraire:
 - Format: backticks `#tag`
 - Exemples: `#subagents` `#mcp` `#skills` `#workflow`
 
-### 4. Génération du Slug
+### 5. Génération du Slug
 
 Créer un nom de fichier descriptif:
 - Format: `theme-principal-auteur.md`
@@ -80,7 +95,7 @@ Créer un nom de fichier descriptif:
   - Pas d'accents ni caractères spéciaux
   - Maximum 60 caractères
 
-### 5. Utilisation du Template
+### 6. Utilisation du Template
 
 Utilise le tool `Read` pour lire le template:
 ```
@@ -104,7 +119,7 @@ Remplace tous les placeholders `{{XXX}}` avec les données extraites:
 - `{{ACTION_X_*}}` : Points d'action
 - `{{RESOURCE_X_*}}` : Ressources mentionnées
 
-### 6. Création de Schémas ASCII
+### 7. Création de Schémas ASCII
 
 **MINIMUM 3 SCHÉMAS OBLIGATOIRES** par fiche.
 
@@ -137,7 +152,7 @@ Utilise les styles du projet (voir `.claude/CLAUDE.md`) :
 └─────┘    └─────┘    └─────┘
 ```
 
-### 7. Sauvegarde du Fichier
+### 8. Sauvegarde du Fichier
 
 Utilise le tool `Write` pour créer:
 ```
@@ -201,19 +216,23 @@ ressources/videos/[slug].md
 
 ## OUTILS MCP À UTILISER
 
-1. **get_video_info** : Métadonnées vidéo
+1. **supadata_transcript** : Extraction de transcription
    ```
-   mcp__MCP_DOCKER__get_video_info
-   Parameters: { url: string }
+   mcp__supadata-ai-mcp__supadata_transcript
+   Parameters: {
+     url: string,            // URL YouTube/TikTok/Instagram/Twitter
+     lang?: string,         // Code langue ISO 639-1 (fr, en)
+     text?: boolean,        // false pour obtenir les métadonnées
+     mode?: "native" | "auto" | "generate",  // Mode de transcription
+     chunkSize?: number     // Taille max par chunk
+   }
    ```
 
-2. **get_transcript** : Transcription complète
+2. **supadata_check_transcript_status** : Vérifier statut transcription asynchrone
    ```
-   mcp__MCP_DOCKER__get_transcript
+   mcp__supadata-ai-mcp__supadata_check_transcript_status
    Parameters: {
-     url: string,
-     lang: "fr" | "en",
-     next_cursor?: string
+     id: string  // Job ID retourné par supadata_transcript
    }
    ```
 
@@ -279,8 +298,9 @@ Après exécution, afficher:
 
 **Si URL invalide** :
 ```
-❌ Erreur : URL YouTube invalide.
-Format attendu : https://www.youtube.com/watch?v=xxxxx
+❌ Erreur : URL vidéo invalide ou plateforme non supportée.
+Plateformes supportées : YouTube, TikTok, Instagram, Twitter
+Format YouTube : https://www.youtube.com/watch?v=xxxxx
 ```
 
 **Si vidéo privée/indisponible** :
@@ -293,6 +313,12 @@ Vérifier que la vidéo est publique et accessible.
 ```
 ⚠️ Attention : Pas de transcription disponible.
 Analyse limitée aux métadonnées et description.
+```
+
+**Si job transcription échoue** :
+```
+❌ Erreur : Le job de transcription a échoué après X tentatives.
+Essayer avec mode: "generate" pour forcer la génération.
 ```
 
 **Si fichier existe déjà** :
@@ -340,4 +366,17 @@ Idées à considérer (non implémentées) :
 
 ---
 
-**Note** : Cette commande respecte scrupuleusement les guidelines du fichier `.claude/CLAUDE.md`. Toute modification doit maintenir cette cohérence.
+**Note** : Cette commande utilise désormais Supadata AI MCP pour l'extraction de transcriptions. Supadata supporte plusieurs plateformes vidéo (YouTube, TikTok, Instagram, Twitter) et offre une extraction robuste avec gestion asynchrone. La commande respecte scrupuleusement les guidelines du fichier `.claude/CLAUDE.md`.
+
+**Configuration MCP requise** : Assurez-vous d'avoir configuré Supadata AI MCP dans votre `~/.config/claude-code/config.json` :
+
+```json
+{
+  "mcpServers": {
+    "supadata-ai-mcp": {
+      "command": "npx",
+      "args": ["-y", "@supadata-ai/mcp"]
+    }
+  }
+}
+```

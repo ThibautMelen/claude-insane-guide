@@ -1,6 +1,6 @@
 # Memory - Guide Complet
 
-> 📄 **Documentation Officielle** : https://docs.claude.com/en/docs/claude-code/memory
+> 📄 **Documentation Officielle** : https://code.claude.com/docs/memory
 
 ## 📚 Théorie
 
@@ -172,6 +172,13 @@ Tu peux importer d'autres fichiers markdown dans ta mémoire :
 @~/.claude/preferences.md
 @.claude/config/style.md
 @.claude/config/standards.md
+
+# Références directes dans les instructions
+Voir @README pour overview et @package.json pour npm commands.
+
+# Instructions Additionnelles
+- git workflow @docs/git-instructions.md
+- Préférences perso @~/.claude/my-project-instructions.md
 ```
 
 **Visualisation** :
@@ -191,6 +198,19 @@ Tu peux importer d'autres fichiers markdown dans ta mémoire :
 - Réutiliser configurations communes
 - Organiser mémoire en modules
 - Partager standards entre projets
+- Chemins relatifs et absolus supportés
+
+### 🆕 Nouvelles Fonctionnalités 2025
+
+**Quick Add avec `#`** :
+- Commencer ton message par `#` pour ajouter rapidement en mémoire
+- Exemple : `# Toujours utiliser Vitest pour les tests`
+- Claude ajoute automatiquement dans le bon fichier CLAUDE.md
+
+**Commandes Améliorées** :
+- `/memory` : Éditer directement les fichiers de mémoire
+- `/init` : Bootstrap un CLAUDE.md avec template intelligent
+- Auto-détection du contexte projet pour suggestions
 
 ---
 
@@ -557,7 +577,7 @@ All developers should have Claude Code configured to read this file.
 
 ## 📚 Ressources
 
-- 📄 **Claude Code Memory** : https://docs.claude.com/en/docs/claude-code/memory
+- 📄 **Claude Code Memory** : https://code.claude.com/docs/memory
 - 🎥 **Edmund Yong - 800h Claude Code** : https://www.youtube.com/watch?v=Ffh9OeJ7yxw
 - 📄 **Voir aussi** : [Commands](../commands/guide.md) | [Plugins](../plugins/guide.md)
 

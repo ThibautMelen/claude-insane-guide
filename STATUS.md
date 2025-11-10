@@ -1,6 +1,6 @@
 # Statut de la Documentation
 
-**Dernière mise à jour**: 7 novembre 2025
+**Dernière mise à jour**: 10 novembre 2025
 
 Ce fichier track l'état de la documentation pour s'assurer qu'elle reste à jour avec les dernières versions de Claude Code.
 
@@ -14,18 +14,26 @@ Ce fichier track l'état de la documentation pour s'assurer qu'elle reste à jou
 
 ```
 themes/
-├── 1-memory/         ✅ COMPLET (guide + cheatsheet + 4 exercices)
-├── 2-commands/       ✅ COMPLET (guide + cheatsheet + 4 exercices)
-├── 3-hooks/          ✅ COMPLET (guide + cheatsheet + 3 exercices) 🆕
-├── 4-mcp/            ✅ COMPLET (guide + cheatsheet + 4 exercices)
-├── 5-skills/         ✅ COMPLET (guide + cheatsheet + 3 exercices) 🆕
-├── 6-plugins/        ✅ COMPLET (guide + cheatsheet + 3 exercices)
-├── 7-agents/         ✅ COMPLET (guide + cheatsheet + 2 exercices)
-├── 8-workflows/      ✅ COMPLET (guide + cheatsheet + 2 exercices)
-└── 9-best-practices/ ✅ COMPLET (guide + cheatsheet + 3 exercices)
+├── 1-memory/          ✅ COMPLET (guide + cheatsheet + 4 exercices)
+├── 2-commands/        ✅ COMPLET (guide + cheatsheet + 4 exercices)
+├── 3-hooks/           ✅ COMPLET (guide + cheatsheet + 3 exercices)
+├── 4-mcp/             ✅ COMPLET (guide + cheatsheet + 4 exercices)
+├── 5-skills/          ✅ COMPLET (guide + cheatsheet + 3 exercices)
+├── 6-plugins/         ✅ COMPLET (guide + cheatsheet + 3 exercices)
+├── 7-agents/          ✅ COMPLET (guide + cheatsheet + 2 exercices)
+├── 8-workflows/       ✅ COMPLET (guide + cheatsheet + 2 exercices)
+├── 9-best-practices/  ✅ COMPLET (guide + cheatsheet + 3 exercices)
+└── 10-interactive-ui/ ✅ COMPLET (guide + cheatsheet + 4 exercices) 🆕
+
+advanced/
+├── multi-dialog-patterns.md  ✅ Patterns avancés 🆕
+└── examples/                 ✅ Exemples complexes 🆕
+
+showcase/
+└── supernovae-studio/        ✅ Cas réel production 🆕
 ```
 
-**Total Formation** : **~10 heures** d'exercices pratiques progressifs
+**Total Formation** : **~12 heures** d'exercices pratiques progressifs
 
 ---
 
@@ -84,7 +92,7 @@ themes/
 - **Status**: Deprecated
 - **Date de fin**: **5 novembre 2025**
 - **Alternative**: Utiliser **Plugins** avec SessionStart hooks
-- **Docs**: [Claude Code Output Styles](https://docs.claude.com/fr/docs/claude-code/output-styles)
+- **Docs**: [Claude Code Output Styles](https://code.claude.com/docs/fr/output-styles)
 
 **Migration** :
 
@@ -122,6 +130,55 @@ Voir [ressources.md](./ressources.md) pour détails complets.
 ---
 
 ## 📅 Changelog
+
+### 2025-11-10 (Mise à jour URLs & Contenu Advanced) ⭐ IMPORTANT
+- ✅ **CORRECTION URLS** : Migration complète documentation
+  - Toutes les URLs `docs.claude.com` → `code.claude.com/docs`
+  - 20+ fichiers mis à jour (tous les thèmes, README, STATUS, etc.)
+  - Vérification exhaustive : 0 URL obsolète restante
+
+- ✅ **CONTENU ADVANCED CRÉÉ** : Dossier advanced/ maintenant complet
+  - `advanced/multi-dialog-patterns.md` : Guide expert patterns dialogs (300+ lignes)
+  - `advanced/README.md` : Navigation et roadmap section avancée
+  - Patterns documentés : Sequential, Branching, Parallel, Validation, State Management
+
+- ✅ **SYNCHRONISATION README/STATUS** : Cohérence restaurée
+  - Temps total formation : 12h (partout)
+  - Ligne thème 10 ajoutée dans tableau README
+  - Changelog STATUS mis à jour
+
+### 2025-11-09 (Intégration AskUserQuestion & Advanced Patterns) ⭐ MAJEUR
+- ✅ **NOUVEAU THEME 10** : Interactive UI (AskUserQuestion)
+  - Guide complet avec approche top-down
+  - Cheatsheet patterns dialogues
+  - 4 exercices progressifs (🟢🟡🟠🔴)
+  - Cas réels : Migration cloud, Setup monorepo, Wizard infrastructure
+
+- ✅ **DOSSIER ADVANCED** : Patterns experts
+  - multi-dialog-patterns.md (depuis Advanced-Patterns-Multi-Dialog.md)
+  - Decision trees complexes
+  - Patterns : Sequential, Branching, Parallel, Validation chains
+
+- ✅ **SHOWCASE SUPERNOVAE STUDIO** : Cas production réel
+  - Architecture marketplace plugins
+  - Quick start guide (mix tutorial + analyse)
+  - Stack : Next.js 14, Supabase, Tailwind
+
+- ✅ **QUIZ SYSTEM** : Slash commands quiz
+  - /quiz : Menu principal
+  - /quiz-memory, /quiz-commands, /quiz-interactive-ui
+  - /check-knowledge : Auto-évaluation globale
+
+- ✅ **UPDATES 2025** : Intégration news dans guides
+  - Memory : Quick add avec #, imports améliorés
+  - Plugins : Marketplace system, configuration équipe
+  - Workflows : Checkpoints automatiques, background tasks
+  - Model : Claude Sonnet 4.5 (septembre 2025)
+
+- ✅ **DOCUMENTATION** :
+  - README.md : Ajout thème 10, advanced, showcase
+  - QUICK_START.md : Guide démarrage rapide créé
+  - Suppression /new/ après intégration complète
 
 ### 2025-11-07 (Migration Structure Complète) ⭐ MAJEUR
 - ✅ **RESTRUCTURATION** : Tout migré vers themes/ numéroté
@@ -184,7 +241,7 @@ claude
 
 ### Vérifier Docs Officielles
 
-- [Claude Code Docs](https://docs.claude.com/en/docs/claude-code)
+- [Claude Code Docs](https://code.claude.com/docs)
 - [MCP Docs](https://modelcontextprotocol.io/)
 
 ### Tester Workflows
@@ -225,7 +282,7 @@ claude
 | **Deprecated** | ✅ Identifiés | 100% |
 | **Ressources** | ✅ Analysées | 100% |
 
-**Score Global** : 🟢 **100% à jour** (7 nov 2025)
+**Score Global** : 🟢 **100% à jour** (10 nov 2025)
 
 ---
 
@@ -250,4 +307,4 @@ claude
 
 **Note** : Ce fichier STATUS.md doit être mis à jour à chaque changement majeur !
 
-**Dernière validation complète** : 7 novembre 2025
+**Dernière validation complète** : 10 novembre 2025

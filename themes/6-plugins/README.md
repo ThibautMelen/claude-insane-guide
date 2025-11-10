@@ -167,8 +167,8 @@ EOF
 ## 📊 Ressources
 
 ### Documentation Officielle
-- 📄 [Claude Code Plugins](https://docs.claude.com/en/docs/claude-code/plugins)
-- 📄 [Marketplaces](https://docs.claude.com/en/docs/claude-code/plugins#marketplaces)
+- 📄 [Claude Code Plugins](https://code.claude.com/docs/en/plugins)
+- 📄 [Marketplaces](https://code.claude.com/docs/en/plugins#marketplaces)
 
 ### Communauté
 - 🔗 [Awesome Plugins](https://github.com/VoltAgent/awesome-claude-plugins)

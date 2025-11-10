@@ -2,7 +2,7 @@
 
 > **Référence rapide pour Slash Commands Claude Code**
 
-📄 **Docs** : [Claude Code Commands](https://docs.claude.com/en/docs/claude-code/slash-commands)
+📄 **Docs** : [Claude Code Commands](https://code.claude.com/docs/slash-commands)
 
 ---
 
@@ -223,7 +223,7 @@ cat .claude/commands/ma-command.md
 
 - 📖 [Guide Complet](./guide.md)
 - 🧪 [Exercices](./exercices/niveau-1.md)
-- 📄 [Docs Officielles](https://docs.claude.com/en/docs/claude-code/slash-commands)
+- 📄 [Docs Officielles](https://code.claude.com/docs/slash-commands)
 
 ---
 

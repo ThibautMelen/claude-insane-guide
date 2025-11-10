@@ -190,7 +190,7 @@ Exemples d'agents utiles:
 
 > **⚠️ DEPRECATED**: Output styles seront automatiquement convertis en plugins le **5 novembre 2025**
 >
-> **Source**: [Claude Code Docs - Output Styles](https://docs.claude.com/fr/docs/claude-code/output-styles)
+> **Source**: [Claude Code Docs - Output Styles](https://code.claude.com/docs/fr/docs/claude-code/output-styles)
 >
 > **Alternative Recommandée**: Utiliser des **PLUGINS** (pas agents!)
 >

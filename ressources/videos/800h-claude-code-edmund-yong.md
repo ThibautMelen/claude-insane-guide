@@ -138,7 +138,7 @@ code .claude/CLAUDE.md
 
 ### Documentation Officielle
 
-📄 **Claude Code Memory Docs**: https://docs.claude.com/en/docs/claude-code/memory
+📄 **Claude Code Memory Docs**: https://code.claude.com/docs/memory
 
 ---
 
@@ -291,7 +291,7 @@ cp -r commands/* .claude/commands/
 
 ### Documentation Officielle
 
-📄 **Claude Code Slash Commands Docs**: https://docs.claude.com/en/docs/claude-code/slash-commands
+📄 **Claude Code Slash Commands Docs**: https://code.claude.com/docs/slash-commands
 
 ---
 
@@ -860,15 +860,15 @@ claude (new session)
 ### Documentation Officielle
 
 1. **Claude Code Memory**
-   - URL: https://docs.claude.com/en/docs/claude-code/memory
+   - URL: https://code.claude.com/docs/memory
    - Sujet: Fichier .claude/CLAUDE.md, scope local/global
 
 2. **Slash Commands**
-   - URL: https://docs.claude.com/en/docs/claude-code/slash-commands
+   - URL: https://code.claude.com/docs/slash-commands
    - Sujet: Créer custom commands
 
 3. **Sub-Agents**
-   - URL: https://docs.claude.com/en/docs/claude-code/sub-agents
+   - URL: https://code.claude.com/docs/sub-agents
    - Sujet: Agents isolés pour tâches parallèles
 
 4. **Plugins**
