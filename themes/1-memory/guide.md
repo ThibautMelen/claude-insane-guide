@@ -52,6 +52,30 @@ claude
 
 **💡 Tip** : `/init` crée le fichier CLAUDE.md initial. Ensuite, utilisez `/memory` pour l'éditer.
 
+#### 🔄 Commande `/cloud-memory` (Melvynx - CCLI)
+
+Pour **optimiser et réorganiser automatiquement** ton fichier CLAUDE.md :
+
+```bash
+/cloud-memory update
+
+# Sélectionner : .claude/CLAUDE.md
+# Prompt : "Regroupe les éléments qui ont un rapport ensemble afin d'avoir un meilleur fichier"
+
+# → Claude analyse et restructure automatiquement
+# → Regroupe par thématiques
+# → Améliore la lisibilité
+# → Élimine les redondances
+```
+
+**Utilité** :
+- Maintenir la mémoire organisée à long terme
+- Éviter l'accumulation de règles éparpillées
+- Identifier règles contradictoires
+- Optimiser la consommation de tokens
+
+**Source** : [CCLI Blueprint](https://mlv.sh/ccli) - Pack de commandes Melvynx
+
 #### ➕ Ajout Rapide
 
 ```bash
@@ -115,9 +139,333 @@ This is a Next.js 14 app using:
 
 ---
 
-### 🏗️ Hiérarchie - Pyramide de Priorité
+### 📋 Que Mettre dans CLAUDE.md ? (Recommandations Melvynx 500h)
 
-**Ordre de priorité** : 🏢 Enterprise > 📁 Project > 👤 User
+Après **500h d'utilisation**, Melvynx recommande de structurer la mémoire ainsi :
+
+#### 1. ⚡ **Commandes Importantes à Lancer**
+
+```markdown
+## Commandes Importantes
+
+**Dev**:
+- `npm run dev` : Démarre serveur développement (port 3000)
+- `npm run build` : Build production
+- `npm test` : Lance tous les tests
+
+**Database**:
+- `npm run db:push` : Sync schema Prisma → Supabase
+- `npm run db:studio` : Ouvre Prisma Studio
+
+**Déploiement**:
+- `vercel --prod` : Déployer en production
+```
+
+**Pourquoi** : Claude peut suggérer ces commandes dans son workflow automatiquement.
+
+---
+
+#### 2. 🔴 **Spécificités CRITICAL (Erreurs Fréquentes)**
+
+Utilise le mot-clé **CRITICAL** pour marquer les règles que Claude **oublie souvent** :
+
+```markdown
+## ⚠️ CRITICAL Rules
+
+**CRITICAL**: ALWAYS use `"use client"` directive for components with hooks (useState, useEffect).
+
+**CRITICAL**: NEVER expose API keys in client-side code. Use environment variables server-side only.
+
+**CRITICAL**: Database queries MUST use Prisma client, NEVER raw SQL (security).
+
+**CRITICAL**: All forms MUST have Zod validation BEFORE database operations.
+```
+
+**Pourquoi** : Le mot CRITICAL attire l'attention de Claude sur les règles prioritaires.
+
+---
+
+#### 3. 🧩 **Composants & Librairies à Utiliser**
+
+```markdown
+## Composants Préférés
+
+**UI Library**: shadcn/ui
+- Toujours utiliser composants shadcn/ui existants
+- Ne JAMAIS créer de boutons custom (utiliser Button from shadcn)
+- Variants: default, destructive, outline, ghost
+
+**Icons**: lucide-react
+- Import: `import { Icon } from 'lucide-react'`
+- Ne pas utiliser heroicons ou autres
+
+**Forms**: react-hook-form + Zod
+- Toujours combiner les deux
+- Pattern: Controller + zodResolver
+
+**Date Handling**: date-fns (pas moment.js)
+```
+
+**Pourquoi** : Évite que Claude utilise des librairies non installées ou crée des composants custom inutiles.
+
+---
+
+#### 4. 🔐 **Méthodes d'Authentification & Patterns**
+
+```markdown
+## Authentification
+
+**Provider**: Supabase Auth
+
+**Patterns**:
+- Server Components: `createServerClient()` from @supabase/ssr
+- Client Components: `createClientClient()` from @supabase/ssr
+- Middleware: Check auth in middleware.ts
+
+**Session Management**:
+- NEVER store tokens in localStorage (use cookies only)
+- Refresh tokens handled automatically by Supabase client
+
+**Protected Routes**:
+- Use middleware.ts to redirect unauthenticated users
+- Pattern: Check session → redirect to /login if null
+```
+
+**Pourquoi** : Sécurité et cohérence dans toute l'application.
+
+---
+
+#### 5. 🔄 **Workflows de Développement**
+
+```markdown
+## Development Workflow
+
+**Feature Development**:
+1. Create feature branch: `git checkout -b feat/feature-name`
+2. Implement feature with tests
+3. Run `npm test` → doit passer
+4. Run `npm run build` → doit passer
+5. Commit avec conventional commits: `feat(scope): description`
+6. Push et créer PR
+
+**Testing Workflow**:
+1. Write test FIRST (TDD)
+2. Implement feature
+3. Run test until green
+4. Refactor if needed
+5. Coverage minimum: 80%
+
+**Commit Workflow**:
+- Format: `type(scope): description`
+- Types: feat, fix, docs, refactor, test, chore
+- Always add Co-Authored-By: Claude <noreply@anthropic.com> when AI-generated
+```
+
+**Pourquoi** : Claude suit automatiquement ces workflows dans ses suggestions.
+
+---
+
+#### 📊 Structure Optimale CLAUDE.md (Template Melvynx)
+
+```markdown
+# Mémoire du Projet - [Nom Projet]
+
+## ⚡ Commandes Importantes
+[Commandes npm, scripts custom]
+
+## 🔴 CRITICAL Rules
+[Règles prioritaires que Claude oublie souvent]
+
+## 🧩 Stack Technique
+[Tech stack détaillée]
+
+## 🎨 Composants & Librairies
+[UI library, icons, forms, etc.]
+
+## 🔐 Authentification
+[Provider, patterns, session management]
+
+## 📁 Architecture
+[Structure fichiers, conventions nommage]
+
+## 🔄 Workflows
+[Dev workflow, testing, commits, déploiement]
+
+## 📚 Ressources
+[Liens documentation, repos importants]
+```
+
+**💡 Pro Tip** : Utiliser `/cloud-memory update` tous les mois pour réorganiser automatiquement.
+
+---
+
+### 🔄 Comment la Mémoire est Injectée ? (System Reminder)
+
+À chaque fois que tu envoies un prompt, Claude Code injecte automatiquement ta mémoire sous forme de **System Reminder**.
+
+**Visualisation du processus** :
+
+```
+╔═══════════════════════════════════════════════════════════╗
+║  INJECTION AUTOMATIQUE DE LA MÉMOIRE                      ║
+╚═══════════════════════════════════════════════════════════╝
+
+TON PROMPT :
+┌────────────────────────────────────────┐
+│ "Create a new user endpoint"           │
+└────────────────────────────────────────┘
+               │
+               ▼
+    ┌──────────────────────────┐
+    │  Claude Code Process     │
+    └──────────────────────────┘
+               │
+               ▼
+PROMPT ENRICHI ENVOYÉ À CLAUDE :
+┌────────────────────────────────────────────────────────┐
+│ <system-reminder>                                      │
+│                                                        │
+│ # Global Instructions (~/.claude/CLAUDE.md)           │
+│ - Always use TypeScript strict mode                   │
+│ - Prefer async/await over .then                       │
+│ - Use conventional commits                            │
+│                                                        │
+│ # Project Instructions (.claude/CLAUDE.md)            │
+│ - Stack: Next.js 14 + Supabase                        │
+│ - CRITICAL: Use Zod validation for all forms          │
+│ - All API routes in src/app/api/                      │
+│                                                        │
+│ </system-reminder>                                     │
+│                                                        │
+│ User prompt: "Create a new user endpoint"             │
+└────────────────────────────────────────────────────────┘
+               │
+               ▼
+    ┌──────────────────────────┐
+    │  Claude génère code      │
+    │  en respectant memory    │
+    └──────────────────────────┘
+```
+
+**Ce qui se passe en coulisses** :
+
+1. **Lecture automatique** : Claude Code lit tous les fichiers CLAUDE.md (global + projet)
+2. **Fusion hiérarchique** : Combine selon priorité (projet > global)
+3. **Injection invisible** : Ajoute avant ton prompt sous forme `<system-reminder>`
+4. **Application** : Claude répond en tenant compte de TOUTE la mémoire
+
+**Exemple Concret** :
+
+Si tu as dans ta mémoire :
+```markdown
+## CRITICAL Rules
+- ALWAYS use Zod validation for forms
+- NEVER expose API keys client-side
+```
+
+Et que tu demandes :
+```
+"Create a login form"
+```
+
+Claude va **automatiquement** :
+- ✅ Ajouter Zod validation au formulaire
+- ✅ Gérer les API keys côté serveur uniquement
+- ✅ Sans que tu aies à le répéter !
+
+**💡 Astuce** : Tu peux voir la mémoire injectée en regardant les messages "system-reminder" dans les conversations.
+
+---
+
+### 🏗️ Hiérarchie - 3 Niveaux de Mémoire (Melvynx)
+
+Selon **Melvynx** (500h d'expérience), Claude Code a **3 niveaux de mémoire hiérarchique** en pratique :
+
+```
+╔═══════════════════════════════════════════════════════════╗
+║  HIÉRARCHIE MÉMOIRE CLAUDE CODE (3 NIVEAUX)              ║
+╚═══════════════════════════════════════════════════════════╝
+
+📦 ~/
+┃
+┣━━ 🌍 ~/.claude/CLAUDE.md
+┃   └─> MÉMOIRE GLOBALE (tous projets)
+┃       • Préférences générales
+┃       • Style de code personnel
+┃       • Conventions commit
+┃       • Outils favoris
+┃
+┗━━ 📂 mon-projet/
+    ┃
+    ┣━━ 🏢 .claude/CLAUDE.md
+    ┃   └─> MÉMOIRE PROJET (tout le projet)
+    ┃       • Stack technique
+    ┃       • Architecture globale
+    ┃       • Commandes importantes
+    ┃       • CRITICAL rules projet
+    ┃
+    ┗━━ 📁 src/components/
+        ┃
+        ┗━━ 🎯 .claude/CLAUDE.md
+            └─> MÉMOIRE DOSSIER (scope limité)
+                • Règles spécifiques au dossier
+                • Composants à utiliser (ex: shadcn)
+                • Patterns locaux
+                • Conventions nommage
+
+🔄 ORDRE DE PRIORITÉ (du plus spécifique au plus général) :
+   DOSSIER > PROJET > GLOBAL
+```
+
+**Comment ça fonctionne** :
+
+```
+┌───────────────────────────────────────────────────────┐
+│  Quand tu travailles dans src/components/Button.tsx  │
+└───────────────────────────────────────────────────────┘
+                     │
+                     ▼
+┌───────────────────────────────────────────────────────┐
+│  Claude lit (dans l'ordre) :                          │
+│                                                       │
+│  1️⃣ ~/.claude/CLAUDE.md                              │
+│     → "Use TypeScript strict"                        │
+│     → "Conventional commits"                         │
+│                                                       │
+│  2️⃣ mon-projet/.claude/CLAUDE.md                     │
+│     → "Stack: Next.js 14 + Tailwind"                 │
+│     → "CRITICAL: Use Zod validation"                 │
+│                                                       │
+│  3️⃣ mon-projet/src/components/.claude/CLAUDE.md      │
+│     → "ALWAYS use shadcn/ui components"              │
+│     → "Never create custom buttons"                  │
+│                                                       │
+│  ✅ Résultat: TOUTES les règles sont appliquées      │
+│     (la plus spécifique gagne en cas de conflit)     │
+└───────────────────────────────────────────────────────┘
+```
+
+**💡 Exemple de conflit (priorité)** :
+
+```
+🌍 Global (~/.claude/CLAUDE.md):
+   "Use spaces (2)"
+
+🏢 Projet (projet/.claude/CLAUDE.md):
+   "Use tabs"
+
+🎯 Dossier (projet/src/.claude/CLAUDE.md):
+   "Use spaces (4)"
+
+✅ RÉSULTAT dans projet/src/ → spaces (4)
+   (Dossier gagne car plus spécifique)
+```
+
+---
+
+### 📚 Hiérarchie Complète (4 Niveaux Officiels)
+
+Claude Code supporte techniquement **4 niveaux** (mais le niveau Enterprise est rare en pratique) :
 
 ```
         ╔═══════════════════════════════════════╗
@@ -577,9 +925,24 @@ All developers should have Claude Code configured to read this file.
 
 ## 📚 Ressources
 
+### Documentation Officielle
 - 📄 **Claude Code Memory** : https://code.claude.com/docs/memory
+
+### Vidéos Recommandées
 - 🎥 **Edmund Yong - 800h Claude Code** : https://www.youtube.com/watch?v=Ffh9OeJ7yxw
-- 📄 **Voir aussi** : [Commands](../commands/guide.md) | [Plugins](../plugins/guide.md)
+  - Quote: "D.R.Y. (Don't Repeat Yourself) - Let Claude remember your preferences"
+- 🎥 **Melvynx - 500h Claude Code Workflow** : [Fiche complète](../../ressources/videos/500h-optimisation-workflow-melvynx.md)
+  - 3 niveaux mémoire, `/cloud-memory`, structure CRITICAL
+
+### Outils & Packs
+- 🔧 **CCLI Blueprint (Melvynx)** : https://mlv.sh/ccli
+  - Pack complet de commandes optimisées
+  - Inclut `/cloud-memory update` pour maintenance automatique
+  - Status line personnalisée
+  - Hooks de sécurité
+
+### Guides Connexes
+- 📄 **Voir aussi** : [Commands](../commands/guide.md) | [Hooks](../hooks/guide.md) | [Best Practices](../best-practices/guide.md)
 
 ---
 

@@ -88,6 +88,345 @@ Claude Code supporte **deux façons** de configurer des hooks :
 
 ---
 
+### 🎭 Before Tool vs After Tool (Melvynx 500h)
+
+Selon **Melvynx**, les deux hooks les plus utilisés sont **PreToolUse** et **PostToolUse**. Voici leurs **cas d'usage distincts** :
+
+```
+╔═══════════════════════════════════════════════════════════╗
+║  BEFORE vs AFTER TOOL - CAS D'USAGE                       ║
+╚═══════════════════════════════════════════════════════════╝
+
+🔒 BEFORE TOOL (PreToolUse)
+   └─> VALIDATION & SÉCURITÉ
+       ├─> Bloquer commandes dangereuses (rm -rf)
+       ├─> Demander confirmation utilisateur
+       ├─> Vérifier permissions
+       └─> Valider patterns de commandes
+
+✨ AFTER TOOL (PostToolUse)
+   └─> MODIFICATION & AUTOMATION
+       ├─> Run prettier/ESLint automatiquement
+       ├─> Ajouter du contexte (ex: tests results)
+       ├─> Formater output
+       └─> Envoyer notifications
+```
+
+**Règle d'or** :
+- **Before** = Peut **bloquer** l'exécution (sécurité)
+- **After** = **Améliore** le résultat (automation)
+
+---
+
+#### 🔒 Before Tool : Validation & Sécurité
+
+**Objectif** : **Intercepter** les commandes avant exécution pour valider ou bloquer.
+
+**Exemple 1 : Bloquer `rm -rf` dangereux**
+
+```bash
+# .claude/hooks/before-tool.sh
+
+#!/bin/bash
+
+# Lire la commande que Claude veut exécuter
+COMMAND="$TOOL_ARGS"
+
+# Pattern dangereux : rm -rf dans /user ou /home
+if [[ "$TOOL_NAME" == "Bash" ]] && [[ "$COMMAND" == *"rm -rf /user"* || "$COMMAND" == *"rm -rf /home"* ]]; then
+  echo "⚠️ ATTENTION : Commande dangereuse détectée !"
+  echo "Tentative de suppression dans : /user ou /home"
+  echo "Commande : $COMMAND"
+  echo ""
+  echo "Voulez-vous vraiment continuer ? (y/N)"
+
+  # Exit 1 = BLOQUE l'exécution
+  exit 1
+fi
+
+# Exit 0 = AUTORISE l'exécution
+exit 0
+```
+
+**Configuration** (.claude/settings.json) :
+
+```json
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "tool": "Bash",
+      "script": "bash .claude/hooks/before-tool.sh",
+      "blocking": true
+    }
+  ]
+}
+```
+
+**Workflow** :
+
+```
+Claude veut exécuter : `rm -rf /user/temp/not-exist`
+         │
+         ▼
+🔒 Before Hook s'exécute
+         │
+         ├─> Pattern détecté : "rm -rf /user"
+         ├─> Affiche warning
+         └─> Exit 1 (BLOQUE)
+
+❌ Commande ANNULÉE
+✅ Système protégé
+```
+
+---
+
+**Exemple 2 : Confirmation pour force push**
+
+```bash
+#!/bin/bash
+
+if [[ "$TOOL_NAME" == "Bash" ]] && [[ "$TOOL_ARGS" == *"git push --force"* ]]; then
+  BRANCH=$(git branch --show-current)
+
+  if [[ "$BRANCH" == "main" || "$BRANCH" == "master" ]]; then
+    echo "⚠️ Force push sur $BRANCH détecté !"
+    echo "Voulez-vous vraiment force push sur la branche principale ?"
+    exit 1
+  fi
+fi
+
+exit 0
+```
+
+---
+
+#### ✨ After Tool : Automation & Amélioration
+
+**Objectif** : **Modifier** ou **enrichir** après l'exécution d'un tool.
+
+**Exemple 1 : Prettier automatique après édition**
+
+```bash
+# .claude/hooks/after-tool.sh
+
+#!/bin/bash
+
+# Si Claude a modifié un fichier
+if [[ "$TOOL_NAME" == "Edit" || "$TOOL_NAME" == "Write" ]]; then
+  FILE="$TOOL_FILE"
+
+  # Run prettier sur le fichier modifié
+  if command -v prettier &> /dev/null; then
+    echo "✨ Running prettier on $FILE..."
+    prettier --write "$FILE"
+  fi
+fi
+
+exit 0
+```
+
+**Configuration** :
+
+```json
+{
+  "hooks": [
+    {
+      "event": "PostToolUse",
+      "tool": "Edit",
+      "script": "bash .claude/hooks/after-tool.sh"
+    },
+    {
+      "event": "PostToolUse",
+      "tool": "Write",
+      "script": "bash .claude/hooks/after-tool.sh"
+    }
+  ]
+}
+```
+
+**Workflow** :
+
+```
+Claude modifie fichier : `src/components/Button.tsx`
+         │
+         ▼
+Fichier sauvegardé
+         │
+         ▼
+✨ After Hook s'exécute
+         │
+         ├─> Détecte Edit tool
+         ├─> Run prettier --write Button.tsx
+         └─> Fichier formaté automatiquement
+
+✅ Code propre sans action manuelle
+```
+
+---
+
+**Exemple 2 : Ajouter contexte après tests**
+
+```bash
+#!/bin/bash
+
+# Si Claude a lancé des tests
+if [[ "$TOOL_NAME" == "Bash" ]] && [[ "$TOOL_ARGS" == *"npm test"* ]]; then
+  # Récupérer résultat tests
+  TEST_RESULT="$TOOL_OUTPUT"
+
+  # Analyser si échec
+  if [[ "$TEST_RESULT" == *"FAIL"* ]]; then
+    echo "⚠️ Tests échoués détectés"
+    echo "Logs complets :"
+    cat test-output.log
+
+    # Injecter dans contexte Claude
+    echo "CONTEXT: Tests failed, check logs above"
+  else
+    echo "✅ Tests passés"
+  fi
+fi
+
+exit 0
+```
+
+---
+
+### 🚀 Yolo Mode + Hook Sécurité (Melvynx)
+
+Melvynx utilise un **alias `cc`** pour lancer Claude en **mode bypass permissions** (dangereux mais rapide), combiné avec un **Before Hook** pour bloquer les commandes vraiment dangereuses.
+
+#### 1️⃣ Créer l'alias Yolo Mode
+
+```bash
+# ~/.bashrc ou ~/.zshrc
+
+# Alias cc = Claude Code en mode bypass
+alias cc="claude --dangerous-skip-permission"
+```
+
+**Effet** :
+- Claude n'attend **PLUS** de validation pour chaque action
+- Exécution **ultra-rapide**
+- ⚠️ **DANGER** : Claude peut tout faire sans demander !
+
+---
+
+#### 2️⃣ Installer le Hook Sécurité
+
+Pour **limiter les dégâts** en Yolo Mode, installer un hook qui bloque les commandes critiques :
+
+```bash
+# .claude/hooks/yolo-safety.sh
+
+#!/bin/bash
+
+DANGEROUS_PATTERNS=(
+  "rm -rf /"
+  "rm -rf /user"
+  "rm -rf /home"
+  "rm -rf ~"
+  "git push --force main"
+  "git push --force master"
+  "sudo rm"
+  "chmod 777 /"
+)
+
+for pattern in "${DANGEROUS_PATTERNS[@]}"; do
+  if [[ "$TOOL_ARGS" == *"$pattern"* ]]; then
+    echo "🚨 YOLO MODE : Commande BLOQUÉE par sécurité"
+    echo "Pattern dangereux : $pattern"
+    echo "Commande tentée : $TOOL_ARGS"
+    exit 1
+  fi
+done
+
+exit 0
+```
+
+**Configuration** :
+
+```json
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "tool": "Bash",
+      "script": "bash .claude/hooks/yolo-safety.sh",
+      "blocking": true
+    }
+  ]
+}
+```
+
+---
+
+#### 🎯 Workflow Yolo Mode Sécurisé
+
+```
+╔═══════════════════════════════════════════════════════════╗
+║  YOLO MODE + HOOK SÉCURITÉ                                ║
+╚═══════════════════════════════════════════════════════════╝
+
+1️⃣ Lancer Claude en Yolo Mode
+   $ cc
+
+2️⃣ Claude exécute actions sans demander
+   → Suppression fichiers ✅
+   → Modifications code ✅
+   → Git commits ✅
+   → Installation packages ✅
+
+3️⃣ MAIS si commande dangereuse
+   → Before Hook intercepte
+   → Pattern détecté
+   → BLOQUÉ automatiquement ❌
+
+✅ Résultat : Rapidité + Sécurité minimale
+```
+
+**Avantages** :
+- 🚀 **Vitesse** : Pas d'attente validation
+- 🔒 **Sécurité** : Commandes critiques bloquées
+- 🎯 **Productivité** : Flow de travail fluide
+
+**Inconvénients** :
+- ⚠️ Claude peut faire des erreurs non critiques
+- ⚠️ Faut bien configurer les patterns dangereux
+- ⚠️ Toujours vérifier avec `git diff` avant commit
+
+---
+
+### 🛠️ Créer un Hook avec Claude (Workflow Melvynx)
+
+Melvynx recommande d'utiliser **Claude lui-même** pour écrire des hooks optimaux.
+
+**Workflow** :
+
+```bash
+# 1. Ouvrir dossier projet dans Claude
+claude
+
+# 2. Demander à Claude de créer le hook
+→ "Peux-tu me créer un nouveau hook PreToolUse qui bloque les commandes rm -rf dangereuses ?"
+
+# 3. IMPORTANT : Fournir la documentation
+→ Copier-coller la doc officielle hooks : https://code.claude.com/docs/hooks
+→ Ou uploader PDF de la doc
+
+# 4. Claude génère le hook complet
+   ├─> Script bash avec validation
+   ├─> Configuration settings.json
+   └─> Exemples de tests
+
+# 5. Sauvegarder et tester
+```
+
+**Astuce** : Toujours fournir la **documentation officielle** pour que Claude génère des hooks corrects.
+
+---
+
 ## 🎯 Événements Disponibles
 
 ### 📋 Liste Complète des Événements
@@ -764,10 +1103,18 @@ chmod +x scripts/my-hook.sh  # Si nécessaire
 - 📖 [Guide Commands](../2-commands/guide.md) - Commands vs Hooks
 - 📖 [Guide Best Practices](../9-best-practices/guide.md) - Patterns hooks avancés
 
+### 🎥 Vidéos Recommandées
+
+- 🎥 **Melvynx - 500h Claude Code Workflow** : [Fiche complète](../../ressources/videos/500h-optimisation-workflow-melvynx.md)
+  - Before/After Tool distinction claire
+  - Yolo Mode + hook sécurité (`alias cc`)
+  - Workflow création avec Claude + documentation
+
 ### 🧪 Exemples Communautaires
 
 - 🔗 [Weston Hobson Commands](https://github.com/wshobson/commands) - Exemples hooks
 - 🔗 [Edmund Yong Setup](https://github.com/edmund-io/edmunds-claude-code) - Hooks production
+- 🔧 **CCLI Blueprint (Melvynx)** : https://mlv.sh/ccli - Pack hooks sécurité
 
 ### 💡 Use Cases Inspirants
 

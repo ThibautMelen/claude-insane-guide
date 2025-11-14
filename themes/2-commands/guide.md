@@ -194,6 +194,240 @@ Résultat attendu : Feature complète, testée, fonctionnelle.
 
 ---
 
+### 📐 Structure Optimale (Melvynx 500h)
+
+Après **500h d'utilisation**, Melvynx recommande une structure de commande **en 4 sections** pour maximiser la cohérence et éviter les hallucinations :
+
+```
+╔════════════════════════════════════════════════════════╗
+║  ANATOMIE COMMANDE OPTIMALE (MELVYNX)                 ║
+╚════════════════════════════════════════════════════════╝
+
+📋 /ma-commande.md
+┃
+┣━━ 🔢 1. WORKFLOW (étapes numérotées)
+┃   ├─> Étape 1
+┃   ├─> Étape 2
+┃   ├─> Étape 3
+┃   └─> Étape N
+┃
+┣━━ 📜 2. RULES (règles spécifiques)
+┃   ├─> Format de sortie
+┃   ├─> Conventions à suivre
+┃   └─> Contraintes techniques
+┃
+┣━━ 💡 3. EXAMPLES (few-shot learning)
+┃   ├─> ✅ Bon exemple 1
+┃   ├─> ✅ Bon exemple 2
+┃   └─> ❌ Mauvais exemple
+┃
+┗━━ ⚠️ 4. CRITICAL RULES (priorité absolue)
+    ├─> ALWAYS: comportement obligatoire
+    ├─> NEVER: comportement interdit
+    └─> IF X: comportement conditionnel
+```
+
+---
+
+#### 🔢 Section 1 : WORKFLOW (Étapes Numérotées)
+
+**Objectif** : Donner une **séquence claire** d'actions à Claude.
+
+```markdown
+# /commit
+
+## Workflow
+
+1. **Stage**: `git add .` pour stager tous les changements
+2. **Analyze**: `git diff --staged` pour voir les modifications
+3. **Commit**: Créer message selon format conventional commits
+4. **Push**: `git push` pour envoyer au remote (optionnel)
+```
+
+**Pourquoi numéroté** : Claude suit mieux une liste ordonnée qu'un texte libre.
+
+---
+
+#### 📜 Section 2 : RULES (Règles Spécifiques)
+
+**Objectif** : Préciser le **format** et les **conventions**.
+
+```markdown
+## Rules
+
+**Message Format**:
+- Pattern: `type(scope): description`
+- Types autorisés: feat, fix, docs, refactor, test, chore
+- Scope: optionnel mais recommandé
+- Description: impératif présent ("add" pas "added")
+- Max 72 caractères pour le titre
+
+**Co-authorship**:
+- ALWAYS add: `Co-Authored-By: Claude <noreply@anthropic.com>`
+- Placé en footer du message de commit
+
+**Validation**:
+- NEVER commit si tests échouent
+- NEVER commit si build échoue
+```
+
+**Astuce** : Utiliser **ALWAYS**, **NEVER**, **MUST** pour règles strictes.
+
+---
+
+#### 💡 Section 3 : EXAMPLES (Few-Shot Learning)
+
+**Objectif** : Montrer **concrètement** ce qui est attendu (et ce qui ne l'est pas).
+
+```markdown
+## Examples
+
+✅ **Bon**:
+```
+feat(auth): add OAuth login with Google
+
+Implemented OAuth 2.0 flow for Google authentication.
+Users can now sign in with their Google account.
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+✅ **Bon**:
+```
+fix(ui): resolve button hover state bug
+
+Button now properly changes color on hover.
+Fixed CSS specificity issue.
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+❌ **Mauvais**:
+```
+updated stuff
+```
+→ Trop vague, pas de type, pas de scope
+```
+
+**Pourquoi des exemples** : Claude apprend par pattern matching (few-shot learning). Plus il voit d'exemples, plus il est cohérent.
+
+---
+
+#### ⚠️ Section 4 : CRITICAL RULES (Priorité Absolue)
+
+**Objectif** : Définir les **comportements non-négociables**.
+
+```markdown
+## Critical
+
+**ALWAYS**:
+- Review `git diff` before committing
+- Ask user confirmation if > 10 files changed
+- Include Co-Authored-By when AI-generated
+
+**NEVER**:
+- Commit without testing first (`npm test`)
+- Commit with failing build (`npm run build`)
+- Force push to main/master without explicit user request
+- Skip pre-commit hooks (--no-verify)
+
+**IF**:
+- IF conflict detected → ask user before resolving
+- IF push fails → show error and ask user
+- IF no changes staged → inform user and abort
+```
+
+**Pourquoi CRITICAL** : Claude priorise ces règles sur tout le reste.
+
+---
+
+### 📋 Template Complet (Melvynx)
+
+Copie ce template pour créer tes commandes :
+
+```markdown
+# /nom-commande
+
+Description courte de la commande (1 ligne).
+
+## Workflow
+
+1. Étape 1
+2. Étape 2
+3. Étape 3
+
+## Rules
+
+**Format**:
+- Règle 1
+- Règle 2
+
+**Conventions**:
+- Règle A
+- Règle B
+
+## Examples
+
+✅ **Bon Exemple 1**:
+```
+[exemple concret]
+```
+
+✅ **Bon Exemple 2**:
+```
+[autre exemple]
+```
+
+❌ **Mauvais Exemple**:
+```
+[contre-exemple]
+```
+
+## Critical
+
+**ALWAYS**:
+- Comportement obligatoire 1
+- Comportement obligatoire 2
+
+**NEVER**:
+- Comportement interdit 1
+- Comportement interdit 2
+
+**IF X**:
+- Condition → Action
+```
+
+---
+
+### 🛠️ Commande `/prompt-command` (Meta-Commande)
+
+Melvynx recommande d'utiliser Claude **lui-même** pour écrire des commandes optimales.
+
+**Workflow** :
+
+```bash
+# 1. Créer fichier vide
+touch .claude/commands/ma-nouvelle-commande.md
+
+# 2. Dans Claude Code
+/prompt-command
+
+# Prompt : "Crée une commande /debug qui :
+# - Analyse le code pour trouver la source d'un bug
+# - Ultra Think phase pour réflexion approfondie
+# - Recherche dans les logs/docs
+# - Propose des solutions
+# - Vérifie que ça fonctionne"
+
+# 3. Claude génère la commande avec structure optimale
+# 4. Sauvegarder dans .claude/commands/debug.md
+# 5. Redémarrer Claude Code
+```
+
+**Avantage** : Claude connaît les best practices et génère des commandes **déjà optimisées**.
+
+---
+
 ### 🎨 Exemples de Commandes Utiles
 
 #### 1. /commit - Commit Conventionnel
@@ -656,10 +890,25 @@ Quand /feature est appelé avec une description :
 
 ## 📚 Ressources
 
+### Documentation Officielle
 - 📄 **Claude Slash Commands** : https://code.claude.com/docs/slash-commands
+
+### Vidéos Recommandées
 - 🎥 **Melvynx - Formation Claude Code 2.0** : https://www.youtube.com/watch?v=bDr1tGskTdw (30:00 - Commands)
+- 🎥 **Melvynx - 500h Claude Code Workflow** : [Fiche complète](../../ressources/videos/500h-optimisation-workflow-melvynx.md)
+  - Structure Workflow + Rules + Examples + Critical
+  - Commande `/prompt-command` pour générer des commandes
+
+### Outils & Packs
+- 🔧 **CCLI Blueprint (Melvynx)** : https://mlv.sh/ccli
+  - Pack complet de commandes prêtes à l'emploi
+  - `/commit`, `/debug`, `/cloud-memory`, `/prompt-command`
+  - Structure optimale selon 500h d'expérience
 - 🔗 **Weston Hobson Commands** : https://github.com/wshobson/commands
-- 📄 **Voir aussi** : [Memory](../memory/guide.md) | [Workflows](../workflows/guide.md)
+  - Collection communautaire de commandes
+
+### Guides Connexes
+- 📄 **Voir aussi** : [Memory](../memory/guide.md) | [Workflows](../workflows/guide.md) | [Best Practices](../best-practices/guide.md)
 
 ---
 
