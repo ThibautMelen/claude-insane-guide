@@ -4,7 +4,7 @@
 
 Ce projet est un **guide d'apprentissage complet** sur Claude Code et l'écosystème Anthropic.
 
-**Objectif** : Maîtriser Claude Code à travers documentation structurée, cheatsheets pratiques et exercices progressifs.
+**Objectif** : Maîtriser Claude Code à travers documentation structurée et cheatsheets pratiques.
 
 **Public** : Développeurs francophones apprenant Claude Code de débutant à expert.
 
@@ -32,12 +32,6 @@ Chaque guide contient obligatoirement :
    └─> Référence rapide
    └─> Syntaxe essentielle
    └─> Quick commands
-
-✏️ EXERCICES
-   └─> 🟢 Niveau 1 : Découverte (10-15 min)
-   └─> 🟡 Niveau 2 : Utilisation (15-20 min)
-   └─> 🟠 Niveau 3 : Maîtrise (20-25 min)
-   └─> 🔴 Niveau 4 : Expert (25-30 min) [fichiers majeurs]
 
 🎓 POINTS CLÉS
    └─> Résumé concepts essentiels
@@ -128,10 +122,8 @@ Flow linéaire :
 - 📈 Progress/Progression
 
 **🎓 Apprentissage** :
-- 🟢 Niveau 1 - Découverte
-- 🟡 Niveau 2 - Utilisation
-- 🟠 Niveau 3 - Maîtrise
-- 🔴 Niveau 4 - Expert
+- 📚 Guide complet
+- ⚡ Cheatsheet rapide
 
 **⭐ Priorité & Importance** :
 - ⭐ Recommandé
@@ -236,12 +228,11 @@ Add to `~/.config/claude-code/config.json`:
 
 Avant de créer/modifier un document, vérifier :
 
-- [ ] ✅ Structure respectée (Théorie → Cheatsheet → Exercices → Points Clés)
+- [ ] ✅ Structure respectée (Théorie → Cheatsheet → Points Clés)
 - [ ] ✅ Schémas ASCII présents (minimum 3 par document)
 - [ ] ✅ Emojis pertinents utilisés
 - [ ] ✅ Exemples concrets fournis
 - [ ] ✅ Code blocks avec langage spécifié
-- [ ] ✅ Exercices progressifs (🟢→🟡→🟠→🔴)
 - [ ] ✅ Ton amical et pédagogue
 - [ ] ✅ Points clés résumés en fin
 - [ ] ✅ Liens vers ressources officielles
@@ -314,14 +305,10 @@ Pas copier/coller
 1️⃣ Créer structure
    themes/nom-theme/
    ├── guide.md
-   ├── cheatsheet.md
-   └── exercices/
-       ├── niveau-1.md
-       ├── niveau-2.md
-       └── niveau-3.md
+   └── cheatsheet.md
 
 2️⃣ Rédiger guide.md
-   - Suivre template (Théorie/Cheatsheet/Exercices/Points Clés)
+   - Suivre template (Théorie → Cheatsheet → Points Clés)
    - Minimum 3 schémas ASCII
    - Exemples concrets
 
@@ -330,14 +317,8 @@ Pas copier/coller
    - Syntaxe essentielle
    - Quick commands
 
-4️⃣ Écrire exercices
-   - Progressifs (🟢→🟡→🟠)
-   - Temps estimé
-   - Objectifs clairs
-
-5️⃣ Mettre à jour README.md
+4️⃣ Mettre à jour README.md
    - Ajouter dans navigation
-   - Temps estimé global
 ```
 
 ## 📚 Références du Projet
@@ -367,7 +348,7 @@ Pas copier/coller
 
 **Principes** :
 1. 🎯 **Progressivité** : Du débutant à l'expert, pas de raccourcis
-2. 💡 **Pratique** : Exercices concrets, pas que théorie
+2. 💡 **Pratique** : Exemples concrets, pas que théorie
 3. 🎨 **Visuel** : Schémas ASCII, emojis, clarté maximale
 4. 🇫🇷 **Accessibilité** : Français clair, exemples du quotidien
 5. 📚 **Complétude** : Tous les aspects de Claude Code couverts

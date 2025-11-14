@@ -835,7 +835,6 @@ Exécute tests selon stratégie définie.
 
 - **[Guide Plugins](./guide.md)** - Documentation complète
 - **[Cheatsheet](./cheatsheet.md)** - Référence rapide
-- **[Exercices](./exercices/)** - Pratique progressive
 
 **Repos Exemples** :
 - DevOps : https://github.com/exemple/devops-toolkit

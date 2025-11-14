@@ -4,7 +4,7 @@
 
 **Transformer Claude Code en assistant interactif intelligent** capable de prendre des décisions complexes avec l'utilisateur à travers des dialogues structurés et contextuels.
 
-> **Temps estimé** : 1h30 (guide 45min + exercices 45min)
+> **Temps estimé** : 45min
 > **Prérequis** : Themes 1-2 (Memory & Commands)
 > **Niveau** : Intermédiaire → Expert
 
@@ -445,16 +445,10 @@ Validation → Saisie de données critiques
 
 ### 🎯 Prochaines Étapes
 
-1. **Exercices Pratiques** :
-   - 🟢 [Niveau 1](./exercices/niveau-1.md) : Dialog simple (15 min)
-   - 🟡 [Niveau 2](./exercices/niveau-2.md) : Wizard multi-étapes (20 min)
-   - 🟠 [Niveau 3](./exercices/niveau-3.md) : Branching conditionnel (25 min)
-   - 🔴 [Niveau 4](./exercices/niveau-4.md) : Decision tree complet (30 min)
-
-2. **Projets Suggérés** :
-   - Créer un wizard de setup pour votre stack
-   - Implémenter un diagnostic interactif
-   - Builder un configurateur de CI/CD
+**Projets Suggérés** :
+- Créer un wizard de setup pour votre stack
+- Implémenter un diagnostic interactif
+- Builder un configurateur de CI/CD
 
 ### 💬 Communauté
 

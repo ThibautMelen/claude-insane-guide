@@ -2849,27 +2849,6 @@ Préfixes spéciaux :
 
 ---
 
-## ✏️ Exercices Pratiques
-
-Pratiquez avec nos exercices progressifs :
-
-- 🟢 [Niveau 1 - Découverte](./exercices/niveau-1.md) (15 min)
-  - Premier plugin avec command
-  - Marketplace locale
-  - Installation et test
-
-- 🟡 [Niveau 2 - Utilisation](./exercices/niveau-2.md) (20 min)
-  - Plugin multi-composants
-  - Commands + Agents + Hooks
-  - Distribution GitHub
-
-- 🟠 [Niveau 3 - Maîtrise](./exercices/niveau-3.md) (25 min)
-  - Marketplace organisation
-  - Team workflows
-  - Plugin enterprise complet
-
----
-
 ## 🎓 Conclusion
 
 Les **Plugins Claude Code** sont le **système d'extensibilité le plus puissant** pour :
@@ -2882,9 +2861,8 @@ Les **Plugins Claude Code** sont le **système d'extensibilité le plus puissant
 
 **Prochaines Étapes** :
 
-1. 🟢 Créez votre premier plugin (exercice niveau 1)
-2. 🏪 Configurez marketplace locale
-3. 👥 Partagez avec votre équipe
-4. 🚀 Explorez plugins communauté
+1. 🏪 Configurez marketplace locale
+2. 👥 Partagez avec votre équipe
+3. 🚀 Explorez plugins communauté
 
 **Happy Plugin Building!** 🔌

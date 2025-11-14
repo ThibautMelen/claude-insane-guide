@@ -222,7 +222,6 @@ cat .claude/commands/ma-command.md
 ## 🔗 Ressources
 
 - 📖 [Guide Complet](./guide.md)
-- 🧪 [Exercices](./exercices/niveau-1.md)
 - 📄 [Docs Officielles](https://code.claude.com/docs/slash-commands)
 
 ---

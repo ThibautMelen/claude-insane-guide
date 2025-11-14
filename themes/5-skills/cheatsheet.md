@@ -29,4 +29,4 @@ Process PDF files and extract content.
 
 ---
 
-📖 [Guide](./guide.md) | 🧪 [Exercices](./exercices/niveau-1.md)
+📖 [Guide](./guide.md)

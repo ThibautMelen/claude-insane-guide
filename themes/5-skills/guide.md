@@ -226,5 +226,3 @@ Generate reports from data sources.
 - 🔗 [Excel Handler](https://github.com/community/excel-skill)
 
 ---
-
-**🎓 Prêt ?** → Passez aux [Exercices](./exercices/niveau-1.md) ! 🚀

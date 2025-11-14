@@ -36,6 +36,20 @@ Référence rapide pour :
 
 ---
 
+### 🌍 [Scopes et Marketplaces](./scopes-et-marketplaces.md)
+Guide complet sur l'organisation :
+- 🎯 Les 3 scopes (User, Project, Local)
+- 🔧 Deux méthodes activation marketplace
+- 📥 Workflow installation détaillé
+- 🔌 Plugins standalone vs marketplace
+- 📊 Organisation marketplaces (combien par scope)
+- ❌ Copie plugins entre marketplaces (impossible → solutions)
+- 💡 Exemples concrets et FAQ
+
+**🕐 Temps de lecture** : ~20 minutes
+
+---
+
 ### 🎯 [Cas d'Usage Réels](./cas-usage.md)
 Exemples production-ready :
 - 🚀 **DevOps Toolkit** - Déploiements, rollbacks, monitoring
@@ -52,43 +66,27 @@ Chaque cas inclut :
 
 ---
 
-### ✏️ [Exercices Pratiques](./exercices/)
-Apprentissage progressif par niveaux :
-- 🟢 **[Niveau 1](./exercices/niveau-1.md)** - Découverte (15 min)
-  - Premier plugin avec command
-  - Marketplace locale
-  - Installation et test
-
-- 🟡 **[Niveau 2](./exercices/niveau-2.md)** - Utilisation (20 min)
-  - Plugin multi-composants
-  - Commands + Agents + Hooks
-  - Distribution GitHub
-
-- 🟠 **[Niveau 3](./exercices/niveau-3.md)** - Maîtrise (25 min)
-  - Marketplace organisation
-  - Team workflows
-  - Plugin enterprise complet
-
----
-
 ## 🎯 Par Où Commencer ?
 
 ### 🆕 Débutant
-1. Lire [Guide Complet](./guide.md) sections "Théorie" et "Architecture"
-2. Pratiquer [Exercice Niveau 1](./exercices/niveau-1.md)
-3. Garder [Cheatsheet](./cheatsheet.md) sous la main
+1. Lire [Scopes et Marketplaces](./scopes-et-marketplaces.md) pour comprendre l'organisation
+2. Lire [Guide Complet](./guide.md) sections "Théorie" et "Architecture"
+3. Pratiquer [Exercice Niveau 1](./exercices/niveau-1.md)
+4. Garder [Cheatsheet](./cheatsheet.md) sous la main
 
 ### 🔧 Développeur
-1. Parcourir [Cas d'Usage Réels](./cas-usage.md) pour inspiration
-2. Lire [Guide Complet](./guide.md) section "Best Practices"
-3. Pratiquer [Exercices Niveau 2-3](./exercices/)
-4. Utiliser [Cheatsheet](./cheatsheet.md) comme référence
+1. **Comprendre organisation**: [Scopes et Marketplaces](./scopes-et-marketplaces.md)
+2. Parcourir [Cas d'Usage Réels](./cas-usage.md) pour inspiration
+3. Lire [Guide Complet](./guide.md) section "Best Practices"
+4. Pratiquer [Exercices Niveau 2-3](./exercices/)
+5. Utiliser [Cheatsheet](./cheatsheet.md) comme référence
 
 ### 🏢 Enterprise
-1. Étudier [Cas d'Usage](./cas-usage.md) "DevOps Toolkit" et "Data Platform"
-2. Lire [Guide Complet](./guide.md) sections "Écosystème" et "Gouvernance"
-3. Implémenter marketplace organisation
-4. Consulter [Cheatsheet](./cheatsheet.md) section "Configuration Équipe"
+1. **CRITICAL**: Lire [Scopes et Marketplaces](./scopes-et-marketplaces.md) sections organisation
+2. Étudier [Cas d'Usage](./cas-usage.md) "DevOps Toolkit" et "Data Platform"
+3. Lire [Guide Complet](./guide.md) sections "Écosystème" et "Gouvernance"
+4. Implémenter marketplace organisation (user + project scopes)
+5. Consulter [Cheatsheet](./cheatsheet.md) section "Configuration Équipe"
 
 ---
 

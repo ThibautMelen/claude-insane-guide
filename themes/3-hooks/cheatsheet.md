@@ -310,7 +310,6 @@ echo "File: $FILE"
 
 - 📄 [Docs Officielles](https://code.claude.com/docs/hooks)
 - 📖 [Guide Complet](./guide.md)
-- 🧪 [Exercices](./exercices/niveau-1.md)
 
 ---
 

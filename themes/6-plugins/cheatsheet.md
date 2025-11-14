@@ -633,7 +633,6 @@ cat .claude-plugin/plugin.json | jq .
 
 - [Guide Complet](./guide.md) - Documentation exhaustive
 - [Cas d'Usage Réels](./cas-usage.md) - Exemples production-ready
-- [Exercices Pratiques](./exercices/) - Apprentissage progressif
 - [Commands](../commands/guide.md) - Slash commands
 - [Agents](../agents/guide.md) - Sub-agents
 - [MCP](../mcp/guide.md) - Model Context Protocol

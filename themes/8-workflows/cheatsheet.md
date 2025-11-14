@@ -26,4 +26,4 @@ Workflow = orchestration commands + agents + hooks
 
 ---
 
-📖 [Guide](./guide.md) | 🧪 [Exercices](./exercices/niveau-1.md)
+📖 [Guide](./guide.md)

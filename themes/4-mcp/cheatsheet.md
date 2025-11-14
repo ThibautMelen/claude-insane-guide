@@ -83,4 +83,4 @@ Add to `~/.config/claude-code/config.json`:
 
 ---
 
-📖 [Guide Complet](./guide.md) | 🧪 [Exercices](./exercices/niveau-1.md)
+📖 [Guide Complet](./guide.md)

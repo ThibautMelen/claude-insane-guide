@@ -1147,5 +1147,3 @@ chmod +x scripts/my-hook.sh  # Si nécessaire
 ```
 
 ---
-
-**🎓 Prêt pour la pratique ?** → Passe aux [Exercices Hooks](./exercices/niveau-1.md) pour maîtriser les hooks ! 🚀
