@@ -1,0 +1,174 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Claude Code - Workflow & Pattern Orchestration"
+  site-url: https://claude-anthropic-comprhension.github.io
+  repo-url: https://github.com/ThibautMelen/claude-anthropic-comprhension
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Accueil"
+        file: README.md
+      - text: "Patterns"
+        menu:
+          - text: "Agent Orchestration"
+            file: patterns/agent-orchestration/overview.qmd
+          - text: "Command Coordination"
+            file: patterns/command-coordination/overview.qmd
+          - text: "Hook Automation"
+            file: patterns/hook-automation/overview.qmd
+      - text: "Workflows"
+        menu:
+          - text: "Enterprise RFP Response"
+            file: workflows/enterprise-rfp/overview.qmd
+          - text: "CI/CD Pipeline"
+            file: workflows/ci-cd-pipeline/overview.qmd
+          - text: "Security Incident Response"
+            file: workflows/security-incident-response/overview.qmd
+          - text: "---"
+          - text: "Global Localization"
+            file: workflows/global-localization/overview.qmd
+          - text: "Multi-Language Content"
+            file: workflows/multi-language-content-startup/overview.qmd
+          - text: "---"
+          - text: "Blog Automation"
+            file: workflows/blog-automation-startup/overview.qmd
+          - text: "Content Repurposing"
+            file: workflows/content-repurposing-startup/overview.qmd
+          - text: "Social Media Automation"
+            file: workflows/social-media-automation-startup/overview.qmd
+          - text: "---"
+          - text: "Community Management"
+            file: workflows/community-management-startup/overview.qmd
+    right:
+      - icon: github
+        href: https://github.com/ThibautMelen/claude-anthropic-comprhension
+        aria-label: GitHub
+
+  sidebar:
+    - title: "Patterns"
+      style: "docked"
+      search: true
+      contents:
+        - section: "Agent Orchestration"
+          contents:
+            - patterns/agent-orchestration/overview.qmd
+            - patterns/agent-orchestration/diagrams.qmd
+            - patterns/agent-orchestration/examples.qmd
+            - text: "---"
+            - text: "Documentation complète"
+              file: patterns/agent-orchestration/agent-orchestration.md
+        - section: "Command Coordination"
+          contents:
+            - patterns/command-coordination/overview.qmd
+            - patterns/command-coordination/diagrams.qmd
+            - patterns/command-coordination/examples.qmd
+            - text: "---"
+            - text: "Documentation complète"
+              file: patterns/command-coordination/command-coordination.md
+        - section: "Hook Automation"
+          contents:
+            - patterns/hook-automation/overview.qmd
+            - patterns/hook-automation/diagrams.qmd
+            - patterns/hook-automation/examples.qmd
+            - text: "---"
+            - text: "Documentation complète"
+              file: patterns/hook-automation/hook-automation.md
+
+    - title: "Workflows"
+      contents:
+        - section: "Enterprise Workflows"
+          contents:
+            - text: "Enterprise RFP Response"
+              contents:
+                - workflows/enterprise-rfp/overview.qmd
+                - workflows/enterprise-rfp/diagrams.qmd
+                - workflows/enterprise-rfp/examples.qmd
+            - text: "CI/CD Pipeline"
+              contents:
+                - workflows/ci-cd-pipeline/overview.qmd
+                - workflows/ci-cd-pipeline/diagrams.qmd
+                - workflows/ci-cd-pipeline/examples.qmd
+            - text: "Security Incident Response"
+              contents:
+                - workflows/security-incident-response/overview.qmd
+                - workflows/security-incident-response/diagrams.qmd
+                - workflows/security-incident-response/examples.qmd
+
+        - section: "Global Expansion Workflows"
+          contents:
+            - text: "Global Localization"
+              contents:
+                - workflows/global-localization/overview.qmd
+                - workflows/global-localization/diagrams.qmd
+                - workflows/global-localization/examples.qmd
+            - text: "Multi-Language Content"
+              contents:
+                - workflows/multi-language-content-startup/overview.qmd
+                - workflows/multi-language-content-startup/diagrams.qmd
+                - workflows/multi-language-content-startup/examples.qmd
+
+        - section: "Content Marketing Workflows"
+          contents:
+            - text: "Blog Automation"
+              contents:
+                - workflows/blog-automation-startup/overview.qmd
+                - workflows/blog-automation-startup/diagrams.qmd
+                - workflows/blog-automation-startup/examples.qmd
+            - text: "Content Repurposing"
+              contents:
+                - workflows/content-repurposing-startup/overview.qmd
+                - workflows/content-repurposing-startup/diagrams.qmd
+                - workflows/content-repurposing-startup/examples.qmd
+            - text: "Social Media Automation"
+              contents:
+                - workflows/social-media-automation-startup/overview.qmd
+                - workflows/social-media-automation-startup/diagrams.qmd
+                - workflows/social-media-automation-startup/examples.qmd
+
+        - section: "Community Workflows"
+          contents:
+            - text: "Community Management"
+              contents:
+                - workflows/community-management-startup/overview.qmd
+                - workflows/community-management-startup/diagrams.qmd
+                - workflows/community-management-startup/examples.qmd
+
+  page-footer:
+    left: |
+      © 2025 Thibaut Melen - [SuperNovae Studio](https://github.com/SuperNovae-studio)
+    center: |
+      Documentation Claude Code - Workflow & Pattern Orchestration
+    right: |
+      Built with [Quarto](https://quarto.org/)
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    toc-expand: 2
+    number-sections: true
+    number-depth: 3
+    code-fold: false
+    code-tools: true
+    code-copy: true
+    smooth-scroll: true
+    highlight-style: github
+    fig-width: 8
+    fig-height: 6
+    fig-dpi: 300
+    link-external-newwindow: true
+    link-external-icon: true
+
+execute:
+  freeze: auto
+  echo: true
+  warning: false
+  error: false

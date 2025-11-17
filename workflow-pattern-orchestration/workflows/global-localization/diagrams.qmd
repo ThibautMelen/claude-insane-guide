@@ -1,0 +1,523 @@
+---
+title: "Global Localization Workflow - Diagrams"
+subtitle: "Visual Architecture and Flow Representations"
+author: "Anthropic Workflow Patterns"
+date: 2025-11-17
+format:
+  html:
+    code-fold: true
+    code-summary: "Show code"
+    toc: true
+    toc-depth: 2
+    number-sections: true
+---
+
+## Parallel Execution Flowchart {#sec-parallel-flowchart}
+
+This diagram shows how the workflow launches 15 translation agents simultaneously across three geographic regions:
+
+```mermaid
+flowchart TD
+    Start[📥 Source Content Uploaded]
+
+    Start --> PreProc["🔧 HOOK: Preprocessing<br/>(Extract segments, load Translation Memory)"]
+
+    PreProc --> Launch["🚀 Launch 3 Regional Subcommands in PARALLEL"]
+
+    Launch --> EMEA["<b>EMEA REGION</b><br/>6 Agents Parallel"]
+    Launch --> APAC["<b>APAC REGION</b><br/>6 Agents Parallel"]
+    Launch --> AMERICAS["<b>AMERICAS REGION</b><br/>3 Agents Parallel"]
+
+    EMEA --> FR["🇫🇷 French"]
+    EMEA --> DE["🇩🇪 German"]
+    EMEA --> ES["🇪🇸 Spanish-EU"]
+    EMEA --> IT["🇮🇹 Italian"]
+    EMEA --> NL["🇳🇱 Dutch"]
+    EMEA --> PL["🇵🇱 Polish"]
+
+    APAC --> JA["🇯🇵 Japanese"]
+    APAC --> ZHS["🇨🇳 Chinese-Simplified"]
+    APAC --> ZHT["🇨🇳 Chinese-Traditional"]
+    APAC --> KO["🇰🇷 Korean"]
+    APAC --> TH["🇹🇭 Thai"]
+    APAC --> VI["🇻🇳 Vietnamese"]
+
+    AMERICAS --> PT["🇧🇷 Portuguese-BR"]
+    AMERICAS --> ESLA["🇲🇽 Spanish-LatAm"]
+    AMERICAS --> FC["🇨🇦 French-Canadian"]
+
+    FR --> QC["✅ Quality Check<br/>(per language)"]
+    DE --> QC
+    ES --> QC
+    IT --> QC
+    NL --> QC
+    PL --> QC
+    JA --> QC
+    ZHS --> QC
+    ZHT --> QC
+    KO --> QC
+    TH --> QC
+    VI --> QC
+    PT --> QC
+    ESLA --> QC
+    FC --> QC
+
+    QC --> Agg["📦 Regional Aggregation<br/>(Combine outputs)"]
+
+    Agg --> Review["🔍 Review Phase<br/>(Native speaker, Cultural, SEO)"]
+
+    Review --> Human["👤 Human Review<br/>(Critical languages)"]
+
+    Human --> Pub["📤 Publish Phase<br/>(CMS, CDN, GA4)"]
+
+    Pub --> End["✨ Complete<br/>All 15 languages LIVE"]
+
+    style Start fill:#e1f5ff
+    style PreProc fill:#fff3e0
+    style Launch fill:#fff3e0
+    style QC fill:#f3e5f5
+    style Agg fill:#f3e5f5
+    style Review fill:#f3e5f5
+    style Human fill:#f3e5f5
+    style Pub fill:#fff3e0
+    style End fill:#e8f5e9
+    style EMEA fill:#ffe0b2
+    style APAC fill:#ffe0b2
+    style AMERICAS fill:#ffe0b2
+```
+
+---
+
+## Timeline Comparison: Sequential vs Parallel {#sec-timeline-comparison}
+
+### Sequential Approach (❌ Anti-pattern)
+
+Translating 15 languages one after another:
+
+```mermaid
+gantt
+    title Sequential Translation Timeline (❌ DO NOT USE)
+    dateFormat YYYY-MM-DD
+
+    section Translation
+    French        :f, 2025-01-01, 40m
+    German        :d, after f, 40m
+    Spanish-EU    :s, after d, 40m
+    Italian       :it, after s, 40m
+    Dutch         :nl, after it, 40m
+    Polish        :pl, after nl, 40m
+    Japanese      :ja, after pl, 45m
+    Chinese-S     :zhs, after ja, 45m
+    Chinese-T     :zht, after zhs, 45m
+    Korean        :ko, after zht, 45m
+    Thai          :th, after ko, 45m
+    Vietnamese    :vi, after th, 45m
+    Portuguese    :pt, after vi, 40m
+    Spanish-LA    :esla, after pt, 40m
+    French-CA     :fc, after esla, 40m
+
+    Total: 600min, crit, 2025-01-01, 600m
+```
+
+**Total Duration**: 600 minutes = **10 hours** ❌
+
+---
+
+### Parallel Approach (✅ Correct pattern)
+
+Translating 15 languages simultaneously in 3 regional groups:
+
+```mermaid
+gantt
+    title Parallel Translation Timeline (✅ CORRECT)
+    dateFormat YYYY-MM-DD
+
+    section EMEA
+    French        :emea1, 2025-01-01, 40m
+    German        :emea2, 2025-01-01, 40m
+    Spanish-EU    :emea3, 2025-01-01, 40m
+    Italian       :emea4, 2025-01-01, 40m
+    Dutch         :emea5, 2025-01-01, 40m
+    Polish        :emea6, 2025-01-01, 40m
+
+    section APAC
+    Japanese      :apac1, 2025-01-01, 45m
+    Chinese-S     :apac2, 2025-01-01, 45m
+    Chinese-T     :apac3, 2025-01-01, 45m
+    Korean        :apac4, 2025-01-01, 45m
+    Thai          :apac5, 2025-01-01, 45m
+    Vietnamese    :apac6, 2025-01-01, 45m
+
+    section AMERICAS
+    Portuguese    :amer1, 2025-01-01, 40m
+    Spanish-LA    :amer2, 2025-01-01, 40m
+    French-CA     :amer3, 2025-01-01, 40m
+
+    section Post
+    Quality Check :crit, qc, after apac6, 5m
+    Review Phase  :rev, after qc, 65m
+    Publishing    :pub, after rev, 35m
+
+    Total Duration: 195min, crit, 2025-01-01, 195m
+```
+
+**Total Duration**: 195 minutes = **3.25 hours** ✅
+
+**Speedup**: 600 ÷ 195 = **3.07x faster** than sequential translation alone
+**With everything included**: **13x faster than manual sequential approach**
+
+---
+
+## Sequence Diagram: Command Launching Agents {#sec-sequence-diagram}
+
+Detailed interaction flow between orchestrator and agents:
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant Orch as Localization<br/>Orchestrator
+    participant PreH as Preprocessing<br/>Hook
+    participant TM as Translation<br/>Memory
+    participant EMEA_Sub as EMEA<br/>Subcommand
+    participant FR as French<br/>Agent
+    participant DE as German<br/>Agent
+    participant QC as Quality<br/>Check Hook
+
+    User ->> Orch: /localization-orchestrator<br/>(source.md, en→20 langs)
+
+    Orch ->> PreH: Extract segments,<br/>load metadata
+
+    PreH ->> TM: Query 100% matches
+    TM -->> PreH: 30% exact matches found
+
+    PreH -->> Orch: preprocessed-segments.json
+
+    Orch ->> EMEA_Sub: Launch subcommand<br/>(segments, 6 langs)
+
+    EMEA_Sub ->> FR: Translate to French<br/>(preprocessed segments)
+    EMEA_Sub ->> DE: Translate to German<br/>(preprocessed segments)
+
+    par Parallel Execution
+        FR ->> TM: Check for fuzzy matches
+        TM -->> FR: 20% fuzzy matches
+        FR ->> FR: Translate new segments
+        FR -->> EMEA_Sub: fr-translated.md
+
+        DE ->> TM: Check for fuzzy matches
+        TM -->> DE: 15% fuzzy matches
+        DE ->> DE: Translate new segments
+        DE -->> EMEA_Sub: de-translated.md
+    end
+
+    EMEA_Sub -->> Orch: {emea-package}
+
+    Orch ->> QC: Validate translations
+    QC ->> QC: Check completeness,<br/>brand consistency
+
+    QC -->> Orch: Quality report
+
+    Orch -->> User: ✅ All complete<br/>(15 languages ready)
+```
+
+---
+
+## Architecture Diagram: Components & Data Flow {#sec-architecture-diagram}
+
+Complete system architecture showing skills, MCPs, and data persistence:
+
+```mermaid
+graph TB
+    subgraph User["👤 User Input"]
+        Content["📄 Source Content<br/>(English master)"]
+    end
+
+    subgraph Orchestration["🎯 Main Orchestrator"]
+        OrcCmd["localization-orchestrator<br/>(Command)"]
+    end
+
+    subgraph Hooks["🔧 Hooks - Quality Gates"]
+        PreProc["PreProcess<br/>(Extract, parse)"]
+        QC["Quality-Check<br/>(Validate per lang)"]
+        Agg["Regional-Aggregation<br/>(Combine)"]
+        HumanRev["Human-Native-Reviewer<br/>(Optional spot-check)"]
+    end
+
+    subgraph Agents["🤖 Translation Agents - 15 Total"]
+        EMEA_Agents["EMEA: FR, DE, ES, IT, NL, PL"]
+        APAC_Agents["APAC: JA, ZH-S, ZH-T, KO, TH, VI"]
+        Americas_Agents["AMERICAS: PT-BR, ES-LA, FR-CA"]
+    end
+
+    subgraph Skills["💡 Shared Skills - Reusable Context"]
+        TM["Translation Memory<br/>(Past translations DB)"]
+        BV["Brand Voice<br/>(Terminology, tone)"]
+        CG["Cultural Guidelines<br/>(Adaptation rules)"]
+    end
+
+    subgraph MCPs["🌐 External Services - MCP Servers"]
+        DeepL["DeepL MCP<br/>(AI Translation)"]
+        GlossDB["Glossary-DB MCP<br/>(Brand terms)"]
+        CMS["Contentful MCP<br/>(Content storage)"]
+        CDN["CloudFront MCP<br/>(CDN deployment)"]
+        GA4["GA4 MCP<br/>(Analytics)"]
+    end
+
+    subgraph DataStore["💾 Data Storage"]
+        TM_DB["Translation Memory<br/>Database"]
+        GlossDB_DB["Glossary DB"]
+        Outputs["Translated<br/>Content"]
+    end
+
+    Content --> OrcCmd
+    OrcCmd --> PreProc
+
+    PreProc --> EMEA_Agents
+    PreProc --> APAC_Agents
+    PreProc --> Americas_Agents
+
+    PreProc --> TM
+    EMEA_Agents --> TM
+    APAC_Agents --> TM
+    Americas_Agents --> TM
+
+    EMEA_Agents --> BV
+    APAC_Agents --> BV
+    Americas_Agents --> BV
+
+    EMEA_Agents --> DeepL
+    APAC_Agents --> DeepL
+    Americas_Agents --> DeepL
+
+    EMEA_Agents --> GlossDB
+    APAC_Agents --> GlossDB
+    Americas_Agents --> GlossDB
+
+    EMEA_Agents --> Outputs
+    APAC_Agents --> Outputs
+    Americas_Agents --> Outputs
+
+    Outputs --> QC
+    QC --> Agg
+    Agg --> HumanRev
+
+    HumanRev --> CMS
+    HumanRev --> CDN
+    HumanRev --> GA4
+
+    TM --> TM_DB
+    GlossDB --> GlossDB_DB
+
+    style Orchestration fill:#bbdefb
+    style Hooks fill:#fff9c4
+    style Agents fill:#c8e6c9
+    style Skills fill:#f8bbd0
+    style MCPs fill:#ffe0b2
+    style DataStore fill:#d1c4e9
+```
+
+---
+
+## Regional Organization Tree {#sec-regional-tree}
+
+How 15 languages are organized hierarchically by region:
+
+```mermaid
+graph TD
+    Root["🌍 Global Localization<br/>15 Languages"]
+
+    Root --> EMEA["🌍 EMEA Region<br/>6 Languages"]
+    Root --> APAC["🌏 APAC Region<br/>6 Languages"]
+    Root --> AMERICAS["🌎 AMERICAS Region<br/>3 Languages"]
+
+    EMEA --> FR["🇫🇷 French<br/>(40min)"]
+    EMEA --> DE["🇩🇪 German<br/>(40min)"]
+    EMEA --> ES["🇪🇸 Spanish-EU<br/>(40min)"]
+    EMEA --> IT["🇮🇹 Italian<br/>(40min)"]
+    EMEA --> NL["🇳🇱 Dutch<br/>(40min)"]
+    EMEA --> PL["🇵🇱 Polish<br/>(40min)"]
+
+    APAC --> JA["🇯🇵 Japanese<br/>(45min, complex scripts)"]
+    APAC --> ZHS["🇨🇳 Chinese-Simplified<br/>(45min)"]
+    APAC --> ZHT["🇨🇳 Chinese-Traditional<br/>(45min)"]
+    APAC --> KO["🇰🇷 Korean<br/>(45min)"]
+    APAC --> TH["🇹🇭 Thai<br/>(45min, complex)"]
+    APAC --> VI["🇻🇳 Vietnamese<br/>(45min)"]
+
+    AMERICAS --> PT["🇧🇷 Portuguese-BR<br/>(40min)"]
+    AMERICAS --> ESLA["🇲🇽 Spanish-LatAm<br/>(40min, diff from ES-EU)"]
+    AMERICAS --> FC["🇨🇦 French-Canadian<br/>(40min, diff from FR)"]
+
+    style Root fill:#e1f5fe
+    style EMEA fill:#fff3e0
+    style APAC fill:#fff3e0
+    style AMERICAS fill:#fff3e0
+    style FR fill:#f3e5f5
+    style DE fill:#f3e5f5
+    style JA fill:#fce4ec
+    style KO fill:#fce4ec
+    style TH fill:#fce4ec
+```
+
+---
+
+## Quality Assurance Pipeline {#sec-qa-pipeline}
+
+Multi-stage validation ensuring consistent quality across all 15 languages:
+
+```mermaid
+flowchart LR
+    Start["✏️ Translated<br/>Content<br/>(15 langs)"]
+
+    Start --> QC1["🔍 QA Stage 1<br/>Completeness Check<br/>(100% segments)"]
+
+    QC1 --> Check1{All segments<br/>translated?}
+    Check1 -->|No| Retry1["🔄 Retry<br/>failed languages"]
+    Retry1 --> QC1
+    Check1 -->|Yes| QC2["🔍 QA Stage 2<br/>Brand Consistency<br/>(Glossary-DB)"]
+
+    QC2 --> Check2{Brand terms<br/>consistent?}
+    Check2 -->|No| Retry2["🔄 Apply<br/>corrections"]
+    Retry2 --> QC2
+    Check2 -->|Yes| QC3["🔍 QA Stage 3<br/>Format Validation<br/>(Markdown/HTML)"]
+
+    QC3 --> Check3{Formatting<br/>intact?}
+    Check3 -->|No| Retry3["🔄 Fix<br/>formatting"]
+    Retry3 --> QC3
+    Check3 -->|Yes| QC4["🔍 QA Stage 4<br/>Native Review<br/>(10% spot check)"]
+
+    QC4 --> Check4{Quality<br/>acceptable?}
+    Check4 -->|No| Retry4["🔄 Re-translate<br/>failed sections"]
+    Retry4 --> QC4
+    Check4 -->|Yes| End["✅ Ready for<br/>Publishing"]
+
+    style Start fill:#e8f5e9
+    style QC1 fill:#fff3e0
+    style QC2 fill:#fff3e0
+    style QC3 fill:#fff3e0
+    style QC4 fill:#fff3e0
+    style End fill:#c8e6c9
+```
+
+---
+
+## Processing Timeline (Complete View) {#sec-complete-timeline}
+
+End-to-end timeline showing all phases with realistic durations:
+
+```mermaid
+gantt
+    title Global Localization Complete Timeline (3-6 hours total)
+    dateFormat HH:mm
+    axisFormat %H:%M
+
+    section Preprocessing
+    Source Upload & Preprocess :pre, 00:00, 5m
+
+    section Translation (Parallel)
+    EMEA Translation :emea, 00:05, 40m
+    APAC Translation :apac, 00:05, 45m
+    AMERICAS Translation :amer, 00:05, 40m
+
+    section Validation
+    Quality Check :qc, 00:50, 5m
+    Regional Aggregation :agg, 00:55, 5m
+
+    section Review Phase
+    Native Speaker Review :rev1, 01:00, 30m
+    Cultural Adaptation :rev2, 01:30, 20m
+    SEO Optimization :rev3, 01:50, 15m
+
+    section Human Approval (Optional)
+    Human Native Reviewer :human, 02:05, 60m
+
+    section Publishing
+    CMS Publishing :pub1, 03:05, 20m
+    CDN Deployment :pub2, 03:25, 10m
+    Analytics Config :pub3, 03:35, 5m
+
+    section Final
+    Complete :crit, 03:40, 1m
+```
+
+---
+
+## Dependency Graph: Language Dependencies {#sec-dependencies}
+
+Some languages depend on others for consistency (e.g., regional variants):
+
+```mermaid
+graph TD
+    EN["🇬🇧 English<br/>(Source)"]
+
+    EN --> FR["🇫🇷 French<br/>(EMEA)"]
+    FR --> FC["🇨🇦 French-Canadian<br/>(Variant)"]
+
+    EN --> ES["🇪🇸 Spanish-EU<br/>(EMEA)"]
+    ES --> ESLA["🇲🇽 Spanish-LatAm<br/>(Variant)"]
+
+    EN --> PT["🇧🇷 Portuguese-BR"]
+
+    EN --> DE["🇩🇪 German"]
+    EN --> IT["🇮🇹 Italian"]
+    EN --> NL["🇳🇱 Dutch"]
+    EN --> PL["🇵🇱 Polish"]
+
+    EN --> JA["🇯🇵 Japanese"]
+    EN --> ZHS["🇨🇳 Chinese-S"]
+    ZHS --> ZHT["🇨🇳 Chinese-T<br/>(Variant)"]
+    EN --> KO["🇰🇷 Korean"]
+    EN --> TH["🇹🇭 Thai"]
+    EN --> VI["🇻🇳 Vietnamese"]
+
+    style EN fill:#bbdefb
+    style FC fill:#ffccbc
+    style ESLA fill:#ffccbc
+    style ZHT fill:#ffccbc
+```
+
+---
+
+## Cost Flow Diagram {#sec-cost-analysis}
+
+Where money goes in automated vs manual approach:
+
+```mermaid
+graph LR
+    Budget["💰 Annual Budget"]
+
+    Budget --> Manual["Manual Approach<br/>$943,200"]
+    Budget --> Automated["Automated Approach<br/>$16,800"]
+
+    Manual --> MT["Translators<br/>$600,000"]
+    Manual --> MR["Reviewers<br/>$120,000"]
+    Manual --> MO["Overhead/PM<br/>$72,000"]
+    Manual --> MN["No Translation Memory<br/>(Wasted duplication)"]
+
+    Automated --> AT["API Costs<br/>$12,000"]
+    Automated --> AH["Human Review<br/>$4,800"]
+    Automated --> AS["Savings from Memory<br/>-30-50% faster"]
+
+    style Budget fill:#e8f5e9
+    style Manual fill:#ffcdd2
+    style Automated fill:#c8e6c9
+    style MT fill:#ef9a9a
+    style AT fill:#81c784
+```
+
+---
+
+## Summary
+
+These diagrams illustrate:
+
+1. **Parallel flowchart**: How 15 agents execute simultaneously across regions
+2. **Timeline comparison**: Sequential (10h) vs Parallel (3h) - **3x speedup**
+3. **Sequence diagram**: Detailed agent coordination and data flow
+4. **Architecture**: All components, skills, MCPs, and data stores
+5. **Regional tree**: Hierarchical organization of languages
+6. **QA pipeline**: Multi-stage validation ensuring quality
+7. **Complete timeline**: End-to-end duration with all phases
+8. **Dependencies**: Language variant relationships
+9. **Cost flow**: Budget allocation manual vs automated
+
+All diagrams emphasize the **parallel execution pattern** that enables 15-20x time reduction.

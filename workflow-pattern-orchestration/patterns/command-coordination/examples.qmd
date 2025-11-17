@@ -1,0 +1,577 @@
+---
+title: "Command Coordination - Exemples Concrets"
+subtitle: "Implémentations réelles de COMMAND orchestrators"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+---
+
+## 🎯 Exemple 1: Global Translation Orchestrator (PARALLEL)
+
+**Use Case**: Traduire un document dans 15 langues instantanément
+**Strategy**: Parallel (indépendant)
+**Speedup**: 15x (15 × 20min → 20min)
+
+### COMMAND Structure
+
+```yaml
+# .claude/commands/translate-global.md
+---
+description: Orchestrate parallel translation to multiple languages
+allowed-tools: Task, AskUserQuestion, Bash(git)
+---
+
+## 1️⃣ PARSE ARGUMENTS
+
+Extract inputs:
+- `content_file`: Path to markdown/text file
+- `languages`: List of target languages (en, es, fr, de, it, ja, zh, ko, ru, ar, pt, nl, pl, sv, tr)
+- `glossary`: Optional glossary file for consistency
+
+Example:
+/translate-global docs/README.md [es,fr,de,it,ja,zh,ko] --glossary docs/glossary.json
+
+## 2️⃣ VALIDATE INPUTS
+
+Verify requirements:
+- Content file exists and readable (max 50KB)
+- All language codes valid (ISO 639-1)
+- Glossary valid JSON if provided
+- No duplicate languages
+
+If missing/unclear, use AskUserQuestion:
+- Ask for content source (file path or paste text)
+- Ask for target languages (provide dropdown)
+- Ask for glossary requirement (optional)
+
+## 3️⃣ ORCHESTRATE (PARALLEL STRATEGY)
+
+Launch translator agents **concurrently** for each language:
+
+Task(
+  subagent_type="translator-spanish",
+  description="Translate to Spanish",
+  prompt="Translate the following content to Spanish using professional tone. Use glossary if provided for consistency."
+)
+
+Task(
+  subagent_type="translator-french",
+  description="Translate to French",
+  prompt="Translate the following content to French using professional tone. Use glossary if provided for consistency."
+)
+
+Task(
+  subagent_type="translator-german",
+  description="Translate to German",
+  prompt="Translate the following content to German using professional tone. Use glossary if provided for consistency."
+)
+
+Task(
+  subagent_type="translator-italian",
+  description="Translate to Italian",
+  prompt="Translate the following content to Italian using professional tone. Use glossary if provided for consistency."
+)
+
+Task(
+  subagent_type="translator-japanese",
+  description="Translate to Japanese",
+  prompt="Translate the following content to Japanese using professional tone. Use glossary if provided for consistency."
+)
+
+Task(
+  subagent_type="translator-mandarin",
+  description="Translate to Mandarin",
+  prompt="Translate the following content to Mandarin (Simplified) using professional tone. Use glossary if provided for consistency."
+)
+
+Task(
+  subagent_type="translator-korean",
+  description="Translate to Korean",
+  prompt="Translate the following content to Korean using professional tone. Use glossary if provided for consistency."
+)
+
+# ... 8 more languages ...
+
+⚡ PARALLEL EXECUTION: All 15 agents run simultaneously
+Expected time: ~20 minutes (vs 300 minutes sequential)
+
+## 4️⃣ AGGREGATE RESULTS
+
+Collect translations from all 15 agents:
+- Spanish: ✅ (2450 words)
+- French: ✅ (2380 words)
+- German: ✅ (2680 words)
+- ... (all others)
+
+Total: 15/15 translations complete ✅
+
+## 5️⃣ REPORT TO USER
+
+Summary:
+- ✅ Translations: 15/15 complete
+- 📊 Total words: 35,280
+- ⏱️ Time: 20 minutes
+- 💰 Cost: $45 (vs manual cost ~$1,500)
+- 🚀 Speedup: 15x
+- 📁 Output: s3://translations/README/{language}.md
+
+```
+
+### Key Points
+
+✅ **DO**:
+- Launch all translator agents in **parallel**
+- No dependencies between languages
+- Each agent handles one language independently
+- Aggregate all results together
+
+❌ **DON'T**:
+- Translate sequentially (would take 300 min)
+- Have one translator dependency-chain
+- Execute translation tasks directly (let agents do it)
+- Parse/validate each translation (agents handle this)
+
+---
+
+## 📦 Exemple 2: CI/CD Pipeline Orchestrator (SEQUENTIAL)
+
+**Use Case**: Automated build, test, deploy with quality gates
+**Strategy**: Sequential (dépendances strictes)
+**Phases**: Build → Test → Deploy (each phase blocks until success)
+
+### COMMAND Structure
+
+```yaml
+# .claude/commands/ci-cd-pipeline.md
+---
+description: Orchestrate sequential CI/CD pipeline with quality gates
+allowed-tools: Task, AskUserQuestion, Bash(git)
+---
+
+## 1️⃣ PARSE ARGUMENTS
+
+Extract inputs:
+- `branch`: Git branch to deploy (default: main)
+- `environment`: staging or production
+- `rollback`: Auto-rollback on health check failure? (yes/no)
+
+Example:
+/ci-cd-pipeline --branch feature/auth --env staging --rollback yes
+
+## 2️⃣ VALIDATE INPUTS
+
+Verify requirements:
+- Branch exists in git
+- No uncommitted changes on branch
+- Environment config valid
+- Deployment credentials available
+
+Use AskUserQuestion if missing:
+- Confirm branch to deploy
+- Confirm target environment (staging/production)
+- Confirm rollback strategy
+
+## 3️⃣ ORCHESTRATE (SEQUENTIAL STRATEGY)
+
+### PHASE 1: BUILD (Parallel agents, sequential phases)
+
+Launch 2 builder agents in parallel:
+
+Task(
+  subagent_type="frontend-builder",
+  description="Build frontend application",
+  prompt="Run 'npm run build' in frontend/ directory. BLOCK if fails. Return artifact path."
+)
+
+Task(
+  subagent_type="backend-builder",
+  description="Build backend application",
+  prompt="Run 'cargo build --release' in backend/ directory. BLOCK if fails. Return artifact path."
+)
+
+🚨 WAIT for both to complete AND succeed before moving to Phase 2
+
+### PHASE 2: TEST (Parallel agents, sequential phases)
+
+Launch 3 tester agents in parallel (only if build succeeded):
+
+Task(
+  subagent_type="unit-tester",
+  description="Run unit tests",
+  prompt="Run 'npm test' with coverage report. REQUIRE coverage >80%. BLOCK if fails."
+)
+
+Task(
+  subagent_type="integration-tester",
+  description="Run integration tests",
+  prompt="Run integration test suite. BLOCK if any test fails."
+)
+
+Task(
+  subagent_type="e2e-tester",
+  description="Run E2E tests",
+  prompt="Run E2E test suite with Playwright. BLOCK if any test fails."
+)
+
+🚨 WAIT for all to complete AND all pass >80% coverage before Phase 3
+
+### PHASE 3: DEPLOY (Sequential agents)
+
+Launch deployer agent (only if all tests passed):
+
+Task(
+  subagent_type="deployer",
+  description="Deploy to environment",
+  prompt="Deploy to {environment} with health checks. Auto-rollback if health checks fail. Report deployment status."
+)
+
+🚨 WAIT for deploy to complete
+
+## 4️⃣ AGGREGATE RESULTS
+
+Collect metrics from all phases:
+
+**Phase 1 - Build**:
+- Frontend: ✅ (2.3 MB artifact)
+- Backend: ✅ (15.7 MB binary)
+
+**Phase 2 - Test**:
+- Unit tests: ✅ (847 passed, 0 failed, coverage 87%)
+- Integration tests: ✅ (142 passed, 0 failed)
+- E2E tests: ✅ (45 passed, 0 failed)
+
+**Phase 3 - Deploy**:
+- Pre-deploy backup: ✅
+- Deployment: ✅ (3 regions)
+- Health checks: ✅ (all green)
+
+Total: 8/8 phases complete ✅
+
+## 5️⃣ REPORT TO USER
+
+Summary:
+- ✅ Pipeline: SUCCESS
+- 🏗️ Phase 1 (Build): ✅ (Frontend + Backend)
+- 🧪 Phase 2 (Test): ✅ (Unit + Integration + E2E)
+  - Coverage: 87% (target: >80%)
+  - Tests: 1034 passed, 0 failed
+- 🚀 Phase 3 (Deploy): ✅ (3 regions)
+  - Health: All green
+  - Rollback: Enabled
+- ⏱️ Total time: 60 minutes
+- 💰 Cost: $15 (vs manual $100+)
+- 📊 Details: [Full Report Link]
+
+```
+
+### Key Points
+
+✅ **DO**:
+- Run phases **sequentially** (Phase 2 only after Phase 1 success)
+- Use **quality gates** (block if tests fail, coverage <80%)
+- **Parallelize within phases** (2 builders, 3 testers in parallel)
+- Auto-rollback on health check failure
+
+❌ **DON'T**:
+- Run all phases in parallel (dependencies!)
+- Skip quality gates
+- Deploy without tests
+- Execute build/test tasks directly
+
+---
+
+## 🌍 Exemple 3: Batch Localization Orchestrator (BATCH)
+
+**Use Case**: Generate 174 locale files for global app
+**Strategy**: Batch (large dataset)
+**Batch Size**: 20 items per wave
+**Total Waves**: 9 waves (174 ÷ 20 = 8.7 → 9)
+
+### COMMAND Structure
+
+```yaml
+# .claude/commands/generate-locales.md
+---
+description: Orchestrate batch generation of locale files (174 locales)
+allowed-tools: Task, AskUserQuestion, Bash(git)
+---
+
+## 1️⃣ PARSE ARGUMENTS
+
+Extract inputs:
+- `source_locale`: Base locale file (default: en-US.json)
+- `locales_file`: List of target locales
+- `format`: json or yaml (default: json)
+
+Example:
+/generate-locales --source config/locales/en-US.json --format json
+
+## 2️⃣ VALIDATE INPUTS
+
+Verify requirements:
+- Source locale file exists and valid
+- Locales list has 174+ entries
+- Output directory writable
+- Format valid (json or yaml)
+
+## 3️⃣ ORCHESTRATE (BATCH STRATEGY)
+
+Total: 174 locales
+Batch size: 20 locales per wave
+Waves: 9 waves
+
+### WAVE 1 (Locales 1-20: en-AU, en-CA, en-GB, en-NZ, es-ES, es-MX, es-AR, es-CO, es-CL, es-PE, fr-FR, fr-CA, fr-BE, fr-CH, de-DE, de-AT, de-CH, it-IT, pt-BR, pt-PT)
+
+Launch 20 locale-generator agents in **parallel**:
+
+Task(
+  subagent_type="locale-generator",
+  description="Generate en-AU locale",
+  prompt="Generate locale file for en-AU from source. Follow naming convention."
+)
+
+Task(
+  subagent_type="locale-generator",
+  description="Generate en-CA locale",
+  prompt="Generate locale file for en-CA from source. Follow naming convention."
+)
+
+# ... 18 more locales in parallel ...
+
+Task(
+  subagent_type="locale-generator",
+  description="Generate pt-PT locale",
+  prompt="Generate locale file for pt-PT from source. Follow naming convention."
+)
+
+🚨 WAIT for Wave 1 completion
+✅ Wave 1: 20/20 success
+
+### WAVE 2 (Locales 21-40: ja-JP, ja-KY, zh-CN, zh-TW, zh-HK, ko-KR, ru-RU, ar-SA, tr-TR, pl-PL, nl-NL, sv-SE, da-DK, no-NO, fi-FI, et-EE, lt-LT, lv-LV, el-GR, hu-HU)
+
+Launch 20 locale-generator agents in **parallel**:
+
+Task(...) × 20 agents
+
+🚨 WAIT for Wave 2 completion
+✅ Wave 2: 20/20 success
+
+### WAVE 3-8
+
+Repeat for waves 3-8 (each with 20 locales)
+
+### WAVE 9 (Locales 161-174: hi-IN, bn-IN, th-TH, vi-VN, id-ID, my-MM, lo-LA, km-KH, ta-IN, te-IN, kn-IN, ml-IN, ur-PK, sr-RS)
+
+Launch 14 locale-generator agents in **parallel**:
+
+Task(...) × 14 agents
+
+🚨 WAIT for Wave 9 completion
+✅ Wave 9: 14/14 success
+
+## 4️⃣ AGGREGATE RESULTS
+
+Aggregate results from all 9 waves:
+
+Wave 1: 20/20 ✅
+Wave 2: 20/20 ✅
+Wave 3: 20/20 ✅
+Wave 4: 20/20 ✅
+Wave 5: 20/20 ✅
+Wave 6: 20/20 ✅
+Wave 7: 20/20 ✅
+Wave 8: 20/20 ✅
+Wave 9: 14/14 ✅
+
+Total: 174/174 ✅
+
+## 5️⃣ REPORT TO USER
+
+Summary:
+- ✅ Locales generated: 174/174
+- 📊 Total files: 174
+- 📦 Batch size: 20 per wave
+- 🌊 Waves: 9 (8 full + 1 partial)
+- ⏱️ Time: 3.5 hours
+  - Per wave: ~25 minutes
+- 💰 Cost: $85 (vs manual $2,500+)
+- 🚀 Speedup: 10x
+- 📁 Output: locales/generated/{locale}.json
+
+```
+
+### Key Points
+
+✅ **DO**:
+- Split large datasets into **batches** (20 items/wave)
+- Run each wave **in parallel**
+- **Wait between waves** (validate before next)
+- Stop on errors and report which wave failed
+
+❌ **DON'T**:
+- Launch all 174 agents at once (would timeout)
+- Sequence all 174 (would take 1,000+ hours)
+- Skip error checking between waves
+- Generate without validation
+
+---
+
+## 🎯 Exemple 4: Multi-Agent Workflow (CONDITIONAL)
+
+**Use Case**: Content processing with dynamic routing
+**Strategy**: Conditional (runtime decisions)
+**Flow**: Analyze → Route based on type → Process → Review
+
+### COMMAND Structure
+
+```yaml
+# .claude/commands/process-content.md
+---
+description: Orchestrate conditional content processing based on type
+allowed-tools: Task, AskUserQuestion, Bash(git)
+---
+
+## 1️⃣ PARSE ARGUMENTS
+
+Extract inputs:
+- `content`: Text, image, or video file
+- `content_type`: auto-detect or specify (text, image, video)
+
+## 2️⃣ VALIDATE INPUTS
+
+Verify file exists and is supported format.
+
+## 3️⃣ ORCHESTRATE (CONDITIONAL STRATEGY)
+
+### Step 1: ANALYZE content type
+
+Task(
+  subagent_type="analyzer",
+  description="Analyze content type",
+  prompt="Determine if content is text, image, or video. Return: {type, size, duration}"
+)
+
+🚨 WAIT for analysis result
+
+### Step 2: ROUTE based on type
+
+If type == "text":
+
+Task(
+  subagent_type="text-processor",
+  description="Process text content",
+  prompt="Extract entities, sentiment, keywords. Return structured output."
+)
+
+If type == "image":
+
+Task(
+  subagent_type="image-processor",
+  description="Process image",
+  prompt="Analyze image: objects, text, scene. Check quality. Return analysis."
+)
+
+Task(
+  subagent_type="ocr-processor",
+  description="Extract text from image",
+  prompt="Run OCR if image contains text. Return extracted text."
+)
+
+If type == "video":
+
+Task(
+  subagent_type="video-processor",
+  description="Process video",
+  prompt="Analyze: duration, quality, objects. Return analysis."
+)
+
+Task(
+  subagent_type="transcription-processor",
+  description="Transcribe audio",
+  prompt="Transcribe audio track if duration >5 min. Return transcript."
+)
+
+### Step 3: REVIEW
+
+Task(
+  subagent_type="reviewer",
+  description="Review and validate output",
+  prompt="Quality check all extracted data. Validate completeness. Return review report."
+)
+
+## 4️⃣ AGGREGATE RESULTS
+
+Collect results from routing path + review.
+
+## 5️⃣ REPORT TO USER
+
+Summary with:
+- Content type identified
+- Agents executed (conditional path)
+- All outputs
+- Quality validation result
+```
+
+### Key Points
+
+✅ **DO**:
+- **Analyze first** to make routing decision
+- Use conditional logic to **launch agents dynamically**
+- **Wait for decision** before launching next phase
+- Support multiple input types
+
+❌ **DON'T**:
+- Launch all agents upfront (waste resources)
+- Hard-code processing path
+- Skip analysis step
+
+---
+
+## 📋 Implementation Checklist
+
+Use this checklist when creating a new COMMAND orchestrator:
+
+```
+PARSING:
+  ☐ Extract all required arguments
+  ☐ Set sensible defaults
+  ☐ Handle multiple input formats
+
+VALIDATION:
+  ☐ Verify all inputs exist
+  ☐ Check format/structure
+  ☐ Use AskUserQuestion for missing data
+
+ORCHESTRATION:
+  ☐ Choose strategy (Parallel/Sequential/Batch)
+  ☐ Write clear Task() descriptions
+  ☐ Add comments for phase boundaries
+  ☐ Include wait points and quality gates
+
+AGGREGATION:
+  ☐ Collect all agent outputs
+  ☐ Check success/failure counts
+  ☐ Handle errors gracefully
+
+REPORTING:
+  ☐ Success count ✅
+  ☐ Failure count ❌
+  ☐ Time metrics ⏱️
+  ☐ Cost metrics 💰
+  ☐ Speedup calculation 🚀
+  ☐ Output location 📁
+```
+
+## 🔗 Navigation
+
+- **Vue d'ensemble** : [overview.qmd](overview.qmd)
+- **Diagrammes** : [diagrams.qmd](diagrams.qmd)
+- **Documentation complète** : [command-coordination.md](command-coordination.md)
+- **Workflows réels** : [../workflows/](../workflows/)
+
+---
+
+**Ready to create your own COMMAND orchestrator?** Start with the checklist above!

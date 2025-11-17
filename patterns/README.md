@@ -212,9 +212,9 @@ COMMAND level:
 - 📝 [AI Orchestration 2025](https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/)
 
 ### Ressources Internes
-- 🎓 [Workflows Guide](../themes/8-workflows/guide.md)
+- 🎓 [Workflows](../workflow-pattern-orchestration/README.md)
 - 🎓 [Advanced Patterns](../advanced/multi-dialog-patterns.md)
-- 🎓 [Best Practices](../themes/9-best-practices/guide.md)
+- 🎓 [Best Practices](../workflow-pattern-orchestration/best-practices/README.md)
 
 ---
 

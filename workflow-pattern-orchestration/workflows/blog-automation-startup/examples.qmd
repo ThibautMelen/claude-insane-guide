@@ -1,0 +1,880 @@
+---
+title: "Blog Automation - Implementation Examples"
+subtitle: "Code samples, configurations, and real-world examples"
+author: "Claude Code Documentation"
+date: "`r Sys.Date()`"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    code-summary: "Show code"
+    highlight-style: github
+    theme: cosmo
+execute:
+  echo: true
+  eval: false
+  warning: false
+---
+
+# Implementation Examples
+
+## Main Command Structure
+
+### `/blog-automation` Command
+
+File: `.claude/commands/blog-automation.md`
+
+```yaml
+---
+name: blog-automation
+description: Complete blog post creation pipeline from research to publishing
+args:
+  topic: Main topic or keyword for the blog post
+  target_length: Target word count (default 1500)
+  publish: Auto-publish or save as draft (default false)
+---
+
+# Blog Automation Pipeline
+
+You are orchestrating a complete blog post creation workflow for a startup.
+
+## Input Parameters
+- **Topic**: {{topic}}
+- **Target Length**: {{target_length}} words
+- **Auto-publish**: {{publish}}
+
+## Workflow Execution
+
+### PHASE 1: Planning & Research
+Execute subcommand: `/blog-plan {{topic}}`
+
+This launches 3 agents in PARALLEL:
+1. **Keyword-Researcher** - finds primary + secondary keywords
+2. **Competitor-Analyzer** - analyzes top 10 SERP results
+3. **Outline-Generator** - creates structured outline
+
+Once all complete → HOOK: content-brief-validation
+
+### PHASE 2: Content Creation
+Execute subcommand: `/blog-write {{topic}} {{outline}}`
+
+This launches 3 agents in PARALLEL:
+1. **Draft-Writer** - writes full article
+2. **SEO-Optimizer** - optimizes keywords, meta, headers
+3. **Visual-Curator** - finds images, creates alt text
+
+Once all complete → HOOK: quality-gate → HOOK: human-in-loop
+
+### PHASE 3: Publishing
+Execute subcommand: `/blog-publish {{article}} {{metadata}}`
+
+This launches 2 agents in SEQUENCE:
+1. **CMS-Publisher** - publishes to WordPress/Ghost
+2. **Analytics-Tracker** - sets up tracking (uses URL from #1)
+
+Once complete → HOOK: format-normalization
+
+### PHASE 4: Promotion
+Execute subcommand: `/blog-promote {{article_url}} {{title}}`
+
+This launches 3 agents in PARALLEL:
+1. **Social-Media-Creator** - creates 5 social posts
+2. **Newsletter-Builder** - adds to newsletter queue
+3. **SEO-Submitter** - submits to search engines
+
+## Output Format
+
+Return complete success report:
+- ✅ Published URL
+- 📊 SEO score breakdown
+- 📱 Social media posts generated
+- 📈 Analytics dashboard link
+- ⏱️ Total time taken (target: <1 hour)
+```
+
+## Subcommand Examples
+
+### `/blog-plan` - Planning Phase
+
+File: `.claude/commands/blog-plan.md`
+
+```yaml
+---
+name: blog-plan
+description: Research and content planning for blog post
+args:
+  topic: Main topic or keyword
+---
+
+# Blog Planning Subcommand
+
+Coordinate 3 specialized agents in PARALLEL.
+
+## Agent 1: Keyword-Researcher
+
+Launch with this prompt:
+
+\`\`\`
+You are a Keyword-Researcher agent.
+
+Task: Find optimal keywords for "{{topic}}"
+
+Use MCP tools:
+- mcp__ahrefs__keywords-explorer-overview
+- mcp__ahrefs__keywords-explorer-matching-terms
+
+Requirements:
+- Primary keyword difficulty < 70
+- Minimum volume: 500/month
+- Search intent: Informational (for blog)
+
+Output JSON:
+{
+  "primary_keyword": "...",
+  "difficulty": 45,
+  "volume": 1200,
+  "secondary_keywords": [...],
+  "long_tail": [...],
+  "search_intent": "informational",
+  "serp_features": ["featured_snippet", "people_also_ask"]
+}
+\`\`\`
+
+## Agent 2: Competitor-Analyzer
+
+Launch with this prompt:
+
+\`\`\`
+You are a Competitor-Analyzer agent.
+
+Task: Analyze top 10 SERP results for "{{topic}}"
+
+Use MCP tools:
+- mcp__firecrawl__firecrawl_search
+- mcp__firecrawl__firecrawl_scrape
+
+For each result, extract:
+- Title and meta description
+- Word count
+- H2/H3 structure
+- Internal linking strategy
+- Image usage
+
+Identify:
+- Topics covered by ALL top 10 (must-haves)
+- Content gaps (our opportunity)
+- Unique angles present
+
+Output JSON:
+{
+  "avg_word_count": 2100,
+  "common_structure": {
+    "avg_h2_count": 6,
+    "avg_h3_per_h2": 3
+  },
+  "must_have_topics": [...],
+  "content_gaps": [...],
+  "unique_angles": [...]
+}
+\`\`\`
+
+## Agent 3: Outline-Generator
+
+Launch with this prompt:
+
+\`\`\`
+You are an Outline-Generator agent.
+
+Task: Create structured outline for "{{topic}}"
+
+Use Skills:
+- Brand-Voice skill (read tone guidelines)
+- SEO-Best-Practices skill (structure rules)
+
+Input from other agents:
+- Keywords from Keyword-Researcher
+- Gaps from Competitor-Analyzer
+
+Create outline:
+{
+  "title": "Primary keyword in title",
+  "meta_description": "155 chars, compelling, includes keyword",
+  "introduction": "Hook, promise, word count",
+  "sections": [
+    {
+      "h2": "Section title (with keyword)",
+      "h3": ["Subsection 1", "Subsection 2"],
+      "keywords": ["secondary keywords"],
+      "internal_links": ["url1", "url2"]
+    }
+  ],
+  "cta": "Strong call-to-action",
+  "conclusion": "Summary + next steps"
+}
+\`\`\`
+
+## Consolidation
+
+Merge outputs into Content Brief JSON for next phase.
+```
+
+### `/blog-write` - Writing Phase
+
+File: `.claude/commands/blog-write.md`
+
+```yaml
+---
+name: blog-write
+description: Content creation with SEO optimization
+args:
+  topic: Main topic
+  outline: JSON outline from planning phase
+  target_length: Target word count
+---
+
+# Blog Writing Subcommand
+
+Coordinate 3 specialized agents in PARALLEL.
+
+## Agent 1: Draft-Writer
+
+\`\`\`
+You are a Draft-Writer agent.
+
+Task: Write complete article for "{{topic}}"
+
+Use:
+- Brand-Voice skill (tone, style, audience)
+- Content-Templates skill (proven structures)
+- Read .claude/CLAUDE.md for brand guidelines
+
+Requirements:
+- Follow outline structure exactly
+- Engaging, conversational tone
+- Include examples and case studies
+- All statistics cited with [sources]
+- Word count: {{target_length}} ±10%
+- Reading level: Grade 8-10 (Flesch-Kincaid)
+- No plagiarism - original content only
+
+Output: Complete article in Markdown
+\`\`\`
+
+## Agent 2: SEO-Optimizer
+
+\`\`\`
+You are an SEO-Optimizer agent.
+
+Task: Optimize article for search engines
+
+Input: Draft article + keywords from Phase 1
+
+Optimize:
+1. Keyword placement:
+   - Primary keyword in title, first 100 words, conclusion
+   - Secondary keywords in H2 headers
+   - Long-tail keywords naturally throughout
+   - Target density: 1-2%
+
+2. Meta elements:
+   - Title tag (50-60 chars, includes keyword)
+   - Meta description (150-155 chars)
+   - URL slug (short, keyword-rich)
+
+3. Internal linking:
+   - 3-5 internal links to related posts
+   - Descriptive anchor text
+   - Link to cornerstone content
+
+4. Header structure:
+   - One H1 (title only)
+   - Logical H2/H3 hierarchy
+   - Keywords in headers naturally
+
+5. Readability:
+   - Short paragraphs (2-3 sentences)
+   - Transition words (however, therefore, etc.)
+   - Active voice > passive voice
+
+Output:
+{
+  "article": "optimized_html",
+  "seo_score": {
+    "overall": 87,
+    "keyword_optimization": 90,
+    "readability": 85,
+    "internal_linking": 80
+  },
+  "improvements": ["..."]
+}
+\`\`\`
+
+## Agent 3: Visual-Curator
+
+\`\`\`
+You are a Visual-Curator agent.
+
+Task: Find and optimize images
+
+Requirements:
+1. Featured image:
+   - Relevant to topic
+   - 1200x630px minimum
+   - <200KB file size
+   - Alt text with keyword
+
+2. In-article images:
+   - 1 image per 300-500 words
+   - Illustrates key concepts
+   - Descriptive alt text
+
+3. Image optimization:
+   - Compress all images
+   - Lazy loading attributes
+   - Responsive sizing
+   - WebP format preferred
+
+Output:
+{
+  "featured_image": {
+    "url": "...",
+    "alt": "...",
+    "width": 1200,
+    "height": 630
+  },
+  "in_article": [
+    {
+      "url": "...",
+      "alt": "...",
+      "placement": "after_h2_2"
+    }
+  ]
+}
+\`\`\`
+
+## Consolidation
+
+Merge outputs into complete article package.
+```
+
+## Skill Definitions
+
+### Brand-Voice Skill
+
+File: `.claude/skills/brand-voice.md`
+
+```markdown
+# Brand Voice Skill
+
+Shared knowledge about company's tone, voice, and audience.
+
+## Tone Attributes
+- Friendly and approachable
+- Professional but not corporate
+- Educational without being condescending
+- Enthusiastic about helping startups
+- Conversational, as if talking to a friend
+
+## Writing Style
+- Use "you" and "your" (direct address)
+- Short paragraphs (max 2-3 sentences)
+- Bullet points for scannability
+- Examples and case studies from real startups
+- Conversational language (avoid jargon)
+- Active voice > passive voice
+- Short sentences (avg 15-20 words)
+
+## Target Audience
+- Startup founders (age 25-40)
+- Tech-savvy but non-technical
+- Time-constrained (busy people)
+- ROI-focused and practical
+- Want actionable advice, not theory
+
+## Vocabulary Guidelines
+
+✅ Use these words:
+- Simple, practical, actionable
+- ROI, efficiency, growth
+- Building, creating, starting
+- Real-world, example, proof
+
+❌ Avoid these words:
+- Synergy, leverage, paradigm shift
+- Disruptive, innovative (overused)
+- Utilize, facilitate, implement
+- Stakeholder, holistic, dynamic
+
+## Content Principles
+1. Lead with value (what's in it for them)
+2. Use data and real examples
+3. Keep it actionable (not theoretical)
+4. End with clear next steps
+5. Show results with concrete numbers
+```
+
+### SEO-Best-Practices Skill
+
+File: `.claude/skills/seo-best-practices.md`
+
+```markdown
+# SEO Best Practices Skill (2025)
+
+Proven on-page SEO optimization techniques.
+
+## Keyword Optimization
+- Primary keyword density: 1-2%
+- Include primary keyword in:
+  - Title (ideally at start)
+  - First 100 words of article
+  - At least one H2 header
+  - Meta description
+  - URL slug
+  - Image alt text (one image)
+
+## Content Structure
+- One H1 tag (article title only)
+- 5-8 H2 sections (one primary or secondary keyword per H2)
+- 2-4 H3 subsections per H2
+- Logical hierarchy (no skipping levels)
+- Short paragraphs (<150 words)
+- Clear topic sentences
+
+## Readability Standards
+- Target reading level: Grade 8-10 (Flesch-Kincaid)
+- Average sentence length: 15-20 words
+- Variety in sentence length
+- Use transition words (however, therefore, additionally, meanwhile)
+- Active voice preferred
+- Short, punchy opening sentences
+
+## Technical SEO
+- Internal links: 3-5 per article
+  - Descriptive anchor text (not "click here")
+  - Link to cornerstone/pillar content
+  - Link to related articles
+- External links: 2-3 to authoritative sources
+- Images: 1 per 300-500 words, <200KB each
+- Alt text on all images (descriptive, includes keyword once)
+- Mobile responsive (test on mobile)
+- Fast load time (<3 seconds)
+
+## User Experience
+- Hook reader in first 100 words
+- Clear value proposition early
+- Use bullets and numbered lists
+- Bold key phrases
+- Visual breaks every 300-500 words
+- Scannable formatting
+- Strong CTA at end
+```
+
+## Hook Implementations
+
+### content-brief-validation Hook
+
+File: `.claude/hooks/content-brief-validation.sh`
+
+```bash
+#!/bin/bash
+# Hook: Validate content brief before writing begins
+
+BRIEF_FILE="$1"
+
+echo "🪝 Running Content Brief Validation..."
+
+if [[ ! -f "$BRIEF_FILE" ]]; then
+  echo "❌ Brief file not found"
+  exit 1
+fi
+
+# Parse JSON
+DIFFICULTY=$(jq -r '.primary_keyword.difficulty' "$BRIEF_FILE")
+SECTIONS=$(jq -r '.outline.sections | length' "$BRIEF_FILE")
+GAPS=$(jq -r '.competitor_insights.content_gaps | length' "$BRIEF_FILE")
+
+VALID=true
+
+# Validation rules
+if (( $(echo "$DIFFICULTY > 70" | bc -l) )); then
+  echo "⚠️  Keyword difficulty too high: $DIFFICULTY (max: 70)"
+  VALID=false
+fi
+
+if (( SECTIONS < 5 || SECTIONS > 8 )); then
+  echo "⚠️  Wrong section count: $SECTIONS (target: 5-8)"
+  VALID=false
+fi
+
+if (( GAPS == 0 )); then
+  echo "⚠️  No content gaps identified"
+  VALID=false
+fi
+
+if [[ "$VALID" == true ]]; then
+  echo "✅ Content brief validation PASSED"
+  exit 0
+else
+  echo "❌ Validation FAILED - adjust topic and retry"
+  exit 1
+fi
+```
+
+### quality-gate Hook
+
+File: `.claude/hooks/quality-gate.sh`
+
+```bash
+#!/bin/bash
+# Hook: Validate article quality before publishing
+
+ARTICLE_FILE="$1"
+TARGET_LENGTH="$2"
+
+echo "🪝 Running Quality Gate..."
+
+# Extract metrics
+WORD_COUNT=$(jq -r '.article.word_count' "$ARTICLE_FILE")
+SEO_SCORE=$(jq -r '.seo_score.overall' "$ARTICLE_FILE")
+READABILITY=$(jq -r '.seo_score.readability' "$ARTICLE_FILE")
+IMAGES=$(jq -r '.images | length' "$ARTICLE_FILE")
+
+# Calculate tolerance (±10%)
+MIN_WORDS=$(echo "$TARGET_LENGTH * 0.9" | bc | cut -d'.' -f1)
+MAX_WORDS=$(echo "$TARGET_LENGTH * 1.1" | bc | cut -d'.' -f1)
+
+VALID=true
+
+# Validation rules
+if (( WORD_COUNT < MIN_WORDS || WORD_COUNT > MAX_WORDS )); then
+  echo "⚠️  Word count: $WORD_COUNT (target: $MIN_WORDS-$MAX_WORDS)"
+  VALID=false
+fi
+
+if (( $(echo "$SEO_SCORE < 80" | bc -l) )); then
+  echo "⚠️  SEO score: $SEO_SCORE (minimum: 80)"
+  VALID=false
+fi
+
+if (( $(echo "$READABILITY < 60" | bc -l) )); then
+  echo "⚠️  Readability: $READABILITY (minimum: 60)"
+  VALID=false
+fi
+
+if (( IMAGES < 3 )); then
+  echo "⚠️  Images: $IMAGES (minimum: 3)"
+  VALID=false
+fi
+
+if [[ "$VALID" == true ]]; then
+  echo "✅ Quality gate PASSED"
+  exit 0
+else
+  echo "❌ Quality gate FAILED - improve and retry"
+  exit 1
+fi
+```
+
+## Project Memory Configuration
+
+File: `.claude/CLAUDE.md` (Project-specific)
+
+```markdown
+# Blog Automation Memory
+
+## Company Information
+- Industry: SaaS for Startups
+- Product: Growth automation platform
+- Founded: 2023
+- Team: 5 people
+
+## Brand Voice
+- Tone: Friendly, professional, educational
+- Audience: Startup founders (25-40, tech-savvy, time-constrained)
+- Style: Short paragraphs, bullets, conversational
+- Key phrases: "simple", "practical", "ROI", "actionable"
+
+## Blog Strategy
+- Primary topics: Growth, automation, marketing, SEO
+- Publishing frequency: 2-3x per week
+- Cornerstone content: "Complete Guide to Growth Automation"
+- Content calendar: [link to sheet]
+
+## SEO Preferences
+- Target keyword difficulty: 30-60 (mid-tail)
+- Preferred word count: 1500-2000 words
+- Internal linking: Always link to cornerstone
+- Image style: Clean, modern, no cheesy stock photos
+- Citation style: Use original research when possible
+
+## Publishing Defaults
+- Auto-publish: false (always review as draft first)
+- Default categories: ["Startup Tips", "Growth"]
+- Default tags: ["startup", "automation", "growth"]
+- Author: "Marketing Team"
+- Comments: Enabled
+- Social sharing: Enabled
+
+## Promotion Preferences
+- Primary channels: Twitter, LinkedIn
+- Secondary: Facebook, Instagram (occasionally)
+- Newsletter: Add to "Weekly Digest" segment
+- Optimal posting times:
+  - Twitter: 9am EST, 3pm EST
+  - LinkedIn: 8am EST
+  - Newsletter: Tuesday 10am EST
+
+## Quality Standards
+- Minimum SEO score: 85/100
+- Minimum readability: 65 (Flesch)
+- Minimum images: 3 per article
+- All statistics must be cited
+- Internal links: 3-5 per article
+- External links: 2-3 authoritative sources
+
+## Previous Blog Posts
+- "How to Automate Your Marketing in 5 Steps" (2000 words)
+- "SEO Tips for Startups: A Practical Guide" (1800 words)
+- "Content Marketing ROI: What Actually Works" (2200 words)
+
+## Brand Guidelines
+- Logo usage: Full logo (not wordmark) for featured images
+- Color palette: Primary #2563eb, Secondary #7c3aed
+- Fonts: System fonts only (no custom fonts)
+- Font sizes: H1 32px, H2 24px, body 16px
+```
+
+## Real-World Example Article Walkthrough
+
+### Input
+
+```
+Topic: "How to Automate Your Content Marketing Workflow"
+Target Length: 1500 words
+Auto-publish: false
+```
+
+### Phase 1: Planning Output
+
+```json
+{
+  "primary_keyword": {
+    "term": "automate content marketing workflow",
+    "volume": 890,
+    "difficulty": 35,
+    "cpc": "$1.20"
+  },
+  "secondary_keywords": [
+    "content marketing automation tools",
+    "marketing workflow automation",
+    "automated content creation",
+    "content automation platform"
+  ],
+  "outline": {
+    "title": "How to Automate Your Content Marketing Workflow in 2025",
+    "meta_description": "Learn to automate your content workflow and save 20+ hours/week. Step-by-step guide with tools and templates.",
+    "sections": [
+      {
+        "h2": "Why Automate Content Marketing?",
+        "h3": ["Save Time and Money", "Maintain Consistency", "Scale Production"],
+        "keywords": ["content marketing automation"]
+      },
+      {
+        "h2": "Common Content Marketing Bottlenecks",
+        "h3": ["Research and Planning", "Writing and Editing", "Publishing and Distribution"],
+        "keywords": ["content bottleneck", "workflow automation"]
+      },
+      {
+        "h2": "Best Tools for Content Automation",
+        "h3": ["Research Tools", "Writing Assistance", "Publishing Platforms"],
+        "keywords": ["content automation tools", "marketing automation platform"]
+      },
+      {
+        "h2": "Step-by-Step Automation Workflow",
+        "h3": ["Setup Phase", "Research Phase", "Creation Phase", "Publishing Phase", "Promotion Phase"],
+        "keywords": ["automate content creation", "content workflow automation"]
+      },
+      {
+        "h2": "Real Results: Case Study",
+        "h3": ["The Challenge", "Our Solution", "Results and ROI"],
+        "keywords": []
+      },
+      {
+        "h2": "Getting Started Today",
+        "h3": ["Quick Start Checklist"],
+        "keywords": ["content automation"]
+      }
+    ]
+  },
+  "competitor_insights": {
+    "avg_word_count": 1850,
+    "must_have_topics": ["benefits", "tools", "setup", "case study"],
+    "content_gaps": ["ROI calculator", "video tutorials", "free templates"]
+  }
+}
+```
+
+### Phase 2: Writing Output (Condensed)
+
+```json
+{
+  "article": {
+    "word_count": 1523,
+    "html": "<!-- Full HTML article here -->"
+  },
+  "metadata": {
+    "title": "How to Automate Your Content Marketing Workflow in 2025",
+    "meta_description": "Learn to automate your content workflow and save 20+ hours/week. Step-by-step guide with tools and templates.",
+    "url_slug": "automate-content-marketing-workflow",
+    "featured_image": "https://cdn.example.com/featured-content-automation.webp"
+  },
+  "seo_score": {
+    "overall": 87,
+    "keyword_optimization": 90,
+    "readability": 85,
+    "internal_linking": 80
+  },
+  "images": [
+    {
+      "url": "https://cdn.example.com/content-workflow-diagram.webp",
+      "alt": "Content marketing workflow automation diagram showing 5 phases"
+    },
+    {
+      "url": "https://cdn.example.com/tools-comparison.webp",
+      "alt": "Comparison table of 6 best content automation tools for 2025"
+    }
+  ]
+}
+```
+
+### Phase 3: Publishing Output
+
+```json
+{
+  "published_url": "https://example.com/blog/automate-content-marketing-workflow",
+  "post_id": 4521,
+  "status": "published",
+  "published_date": "2025-01-15T09:00:00Z",
+  "analytics": {
+    "utm_links": {
+      "twitter": "https://example.com/blog/...?utm_source=twitter&utm_medium=social&utm_campaign=launch",
+      "linkedin": "https://example.com/blog/...?utm_source=linkedin&utm_medium=social&utm_campaign=launch",
+      "newsletter": "https://example.com/blog/...?utm_source=newsletter&utm_medium=email&utm_campaign=weekly"
+    },
+    "dashboard_url": "https://analytics.google.com/dashboard/content-workflow-2025",
+    "search_console_submitted": true
+  }
+}
+```
+
+### Phase 4: Promotion Output
+
+```json
+{
+  "social_media": {
+    "twitter": [
+      {
+        "text": "🧵 Just published: How to Automate Your Content Marketing Workflow in 2025. We broke down the exact system we use to create content 10x faster. [link]",
+        "scheduled": "2025-01-15T09:00:00Z",
+        "type": "thread_opener"
+      },
+      {
+        "text": "Most teams waste 20+ hours/week on manual content work. Our automation system cuts that down to 2 hours. Here's how... [link]",
+        "scheduled": "2025-01-16T15:00:00Z",
+        "type": "stat_focused"
+      }
+    ],
+    "linkedin": [
+      {
+        "text": "Content marketing at most companies looks like this: Research → Write → Edit → Publish → Promote... all done manually.\n\nBut it doesn't have to be that way.\n\nWe automated our entire content pipeline. And the results are stunning:\n\n📊 20+ hours/week saved\n📈 10x more articles published\n✅ Consistent quality\n\nHow? [full article link]\n\nJust shared a step-by-step breakdown of our system. If you're drowning in content work, this might save your life. 🙏",
+        "scheduled": "2025-01-15T08:00:00Z"
+      }
+    ]
+  },
+  "newsletter": {
+    "subject_lines": [
+      "This One Tool Saves Us 20 Hours Per Week",
+      "How We Automate 90% of Our Content Work",
+      "The Content Marketing Shortcut Nobody Talks About"
+    ],
+    "html": "<!-- Full email HTML here -->",
+    "segments": ["interested_in_marketing", "active_users"]
+  },
+  "seo": {
+    "submitted_to": ["Google Search Console", "Bing Webmaster Tools"],
+    "indexing_status": "indexed",
+    "featured_snippet_eligible": true
+  }
+}
+```
+
+## MCP Configurations
+
+### Ahrefs MCP
+
+File: `~/.config/claude-code/config.json`
+
+```json
+{
+  "mcpServers": {
+    "ahrefs": {
+      "command": "npx",
+      "args": ["-y", "@ahrefs/mcp-server"],
+      "env": {
+        "AHREFS_API_KEY": "${AHREFS_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+Usage:
+- `mcp__ahrefs__keywords-explorer-overview` - Get keyword metrics
+- `mcp__ahrefs__keywords-explorer-matching-terms` - Find related keywords
+- `mcp__ahrefs__site-explorer-organic-keywords` - Analyze competitor keywords
+
+### Firecrawl MCP
+
+```json
+{
+  "mcpServers": {
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "@firecrawl/mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+Usage:
+- `mcp__firecrawl__firecrawl_search` - Find top SERP results
+- `mcp__firecrawl__firecrawl_scrape` - Extract competitor content
+- `mcp__firecrawl__firecrawl_map` - Map website structure
+
+## Complete Command Invocation
+
+```bash
+# From Claude Code terminal
+/blog-automation \
+  "How to automate content marketing workflow" \
+  1500 \
+  false
+
+# Expected output (50 minutes total):
+# ✅ Content brief validated (15min)
+# ✅ Article written and optimized (20min)
+# ✅ Published to WordPress (5min)
+# ✅ Social posts created (10min)
+# 📊 Total: 50 min (~$7 API cost)
+```
+
+## Cross-References
+
+- [See Overview for business context](./overview.qmd)
+- [See Diagrams for workflow visualizations](./diagrams.qmd)
+- [See Orchestration Principles](../orchestration-principles.md) for architecture patterns

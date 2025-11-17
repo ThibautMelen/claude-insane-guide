@@ -1,0 +1,971 @@
+---
+title: "Agent Orchestration - Diagrammes Visuels"
+subtitle: "20+ Visualisations Interactives des Patterns d'Exécution"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+    fig-width: 10
+    fig-height: 8
+---
+
+## 🎯 Pattern Selection & Decision Trees
+
+### 1. Arbre de Décision Complet
+
+Choisir le bon pattern selon le contexte de ta tâche.
+
+```{mermaid}
+%%| label: fig-pattern-decision-tree
+%%| fig-cap: "Arbre de décision pour choisir le pattern d'exécution"
+%%| fig-width: 12
+flowchart TD
+    Start([Nouvelle Tâche<br/>à Orchestrer]) --> Understand[Analyser la Tâche]
+
+    Understand --> Independent{Les tâches sont-elles<br/>INDÉPENDANTES?}
+
+    Independent -->|✅ Oui| CheckScale{Combien<br/>d'items?}
+    Independent -->|❌ Non| CheckDeps{Type de<br/>dépendances?}
+
+    CheckScale -->|2-10 items| SmallParallel[Small Parallel<br/>Single Wave]
+    CheckScale -->|11-50 items| MediumBatch[Medium Batch<br/>Waves of 10]
+    CheckScale -->|51-200 items| LargeBatch[Large Batch<br/>Waves of 20]
+    CheckScale -->|200+ items| XLBatch[XL Batch<br/>Progressive waves]
+
+    CheckDeps -->|Strictes<br/>Séquentielles| Sequential[Sequential Pattern]
+    CheckDeps -->|Conditionnelles| Dynamic{Logique<br/>Dynamique?}
+    CheckDeps -->|Hybrides| Hybrid[Hybrid Pattern]
+
+    Dynamic -->|Oui| Conditional[Conditional Pattern]
+    Dynamic -->|Non| Sequential
+
+    SmallParallel --> Metrics1[Speedup: 5-10x<br/>Cost: Medium<br/>Complexity: Low]
+    MediumBatch --> Metrics2[Speedup: 10-15x<br/>Cost: Medium<br/>Complexity: Medium]
+    LargeBatch --> Metrics3[Speedup: 15-20x<br/>Cost: High<br/>Complexity: High]
+    XLBatch --> Metrics4[Speedup: 20-50x<br/>Cost: Very High<br/>Complexity: Very High]
+
+    Sequential --> Metrics5[Speedup: 1x<br/>Cost: Low<br/>Quality: ⭐⭐⭐⭐⭐]
+    Conditional --> Metrics6[Speedup: Variable<br/>Cost: Variable<br/>Flexibility: ⭐⭐⭐⭐⭐]
+    Hybrid --> Metrics7[Speedup: 10-30x<br/>Cost: High<br/>Power: ⭐⭐⭐⭐⭐]
+
+    classDef pattern fill:#2196F3,stroke:#1565C0,color:#fff,font-weight:bold
+    classDef decision fill:#FF9800,stroke:#E65100,color:#fff
+    classDef metrics fill:#4CAF50,stroke:#2E7D32,color:#fff
+
+    class SmallParallel,MediumBatch,LargeBatch,XLBatch,Sequential,Conditional,Hybrid pattern
+    class Independent,CheckScale,CheckDeps,Dynamic decision
+    class Metrics1,Metrics2,Metrics3,Metrics4,Metrics5,Metrics6,Metrics7 metrics
+```
+
+### 2. Pattern Usage Distribution (Pie Chart)
+
+Répartition des patterns utilisés en production.
+
+```{mermaid}
+%%| label: fig-pattern-usage
+%%| fig-cap: "Distribution des patterns en production"
+pie title "Pattern Usage in Production Workflows"
+    "Parallel" : 35
+    "Sequential" : 25
+    "Batch" : 20
+    "Conditional" : 12
+    "Hybrid" : 8
+```
+
+### 3. Performance Comparison (Bar Chart)
+
+Comparaison du speedup par pattern.
+
+```{mermaid}
+%%| label: fig-speedup-comparison
+%%| fig-cap: "Speedup par pattern (15 tâches)"
+%%| fig-width: 10
+graph TB
+    subgraph "Performance Metrics"
+        direction LR
+        S[Sequential<br/>⏱️ 300 min<br/>💰 $5.00<br/>📊 1x]
+        B[Batch<br/>⏱️ 45 min<br/>💰 $5.00<br/>📊 6.7x]
+        P[Parallel<br/>⏱️ 20 min<br/>💰 $5.00<br/>📊 15x]
+    end
+
+    S -.6.7x slower.-> B
+    B -.2.25x slower.-> P
+
+    classDef slow fill:#F44336,stroke:#C62828,color:#fff,font-size:14px
+    classDef medium fill:#FF9800,stroke:#E65100,color:#fff,font-size:14px
+    classDef fast fill:#4CAF50,stroke:#2E7D32,color:#fff,font-size:14px
+
+    class S slow
+    class B medium
+    class P fast
+```
+
+---
+
+## 🔀 Parallel Execution Pattern
+
+### 4. Architecture Multi-Agents
+
+Architecture complète du parallel execution avec orchestrateur.
+
+```{mermaid}
+%%| label: fig-parallel-architecture
+%%| fig-cap: "Architecture détaillée Parallel Execution"
+%%| fig-width: 12
+graph TB
+    User[👤 User] -->|/translate-global| Command[🎯 Command Orchestrator]
+
+    Command --> Parse[1️⃣ Parse Args<br/>15 languages]
+    Parse --> Validate[2️⃣ Validate<br/>Translation Memory available]
+    Validate --> Launch{3️⃣ Launch Strategy}
+
+    Launch -->|Spawn All| Region1[🌍 EMEA Region]
+    Launch -->|Spawn All| Region2[🌏 APAC Region]
+    Launch -->|Spawn All| Region3[🌎 AMERICAS Region]
+
+    subgraph EMEA[EMEA Agents - 6 langues]
+        direction TB
+        ES[🇪🇸 Spanish Agent]
+        FR[🇫🇷 French Agent]
+        DE[🇩🇪 German Agent]
+        IT[🇮🇹 Italian Agent]
+        PT[🇵🇹 Portuguese Agent]
+        NL[🇳🇱 Dutch Agent]
+    end
+
+    subgraph APAC[APAC Agents - 6 langues]
+        direction TB
+        JA[🇯🇵 Japanese Agent]
+        KO[🇰🇷 Korean Agent]
+        ZH[🇨🇳 Chinese Agent]
+        HI[🇮🇳 Hindi Agent]
+        TH[🇹🇭 Thai Agent]
+        VI[🇻🇳 Vietnamese Agent]
+    end
+
+    subgraph AMERICAS[AMERICAS Agents - 3 langues]
+        direction TB
+        ES_LA[🇲🇽 Spanish LA Agent]
+        PT_BR[🇧🇷 Portuguese BR Agent]
+        FR_CA[🇨🇦 French CA Agent]
+    end
+
+    Region1 --> EMEA
+    Region2 --> APAC
+    Region3 --> AMERICAS
+
+    ES --> TM[(Translation<br/>Memory)]
+    FR --> TM
+    DE --> TM
+    IT --> TM
+    PT --> TM
+    NL --> TM
+    JA --> TM
+    KO --> TM
+    ZH --> TM
+    HI --> TM
+    TH --> TM
+    VI --> TM
+    ES_LA --> TM
+    PT_BR --> TM
+    FR_CA --> TM
+
+    TM --> Aggregate[4️⃣ Aggregate Results<br/>15 translations]
+    Aggregate --> Validate2[5️⃣ Validate Quality<br/>Completeness check]
+    Validate2 --> Report[6️⃣ Report to User<br/>✅ 15/15 success<br/>⏱️ 20 min<br/>💰 $0.45]
+
+    Report --> User
+
+    classDef user fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    classDef command fill:#2196F3,stroke:#1565C0,color:#fff
+    classDef agent fill:#FF9800,stroke:#E65100,color:#fff
+    classDef data fill:#4CAF50,stroke:#2E7D32,color:#fff
+
+    class User,Report user
+    class Command,Parse,Validate,Launch,Aggregate,Validate2 command
+    class ES,FR,DE,IT,PT,NL,JA,KO,ZH,HI,TH,VI,ES_LA,PT_BR,FR_CA agent
+    class TM data
+```
+
+### 5. Parallel Sequence Diagram
+
+Interactions temporelles entre command et agents.
+
+```{mermaid}
+%%| label: fig-parallel-sequence
+%%| fig-cap: "Séquence temporelle parallel execution"
+sequenceDiagram
+    autonumber
+    participant User
+    participant CMD as Command
+    participant TM as Translation Memory
+    participant A1 as Agent ES
+    participant A2 as Agent FR
+    participant A3 as Agent DE
+    participant A15 as Agent... (12 more)
+    participant AGG as Aggregator
+
+    User->>CMD: /translate-global "Launch new AI product"
+
+    Note over CMD: Parse args + Validate
+
+    CMD->>TM: Check availability
+    TM-->>CMD: ✅ Ready
+
+    Note over CMD,A15: PARALLEL SPAWN (all at once)
+
+    par Parallel Execution
+        CMD->>+A1: Task(translate ES)
+        CMD->>+A2: Task(translate FR)
+        CMD->>+A3: Task(translate DE)
+        CMD->>+A15: Task(12 more languages)
+    end
+
+    Note over A1,A15: All 15 agents run CONCURRENTLY
+
+    par Agent Execution (20 min)
+        A1->>TM: Query glossary
+        TM-->>A1: "AI" → "IA"
+        A1-->>-AGG: ✅ Spanish translation
+    and
+        A2->>TM: Query glossary
+        TM-->>A2: "AI" → "IA"
+        A2-->>-AGG: ✅ French translation
+    and
+        A3->>TM: Query glossary
+        TM-->>A3: "AI" → "KI"
+        A3-->>-AGG: ✅ German translation
+    and
+        A15-->>-AGG: ✅ 12 more translations
+    end
+
+    AGG->>CMD: Combined 15 results
+
+    CMD->>CMD: Validate completeness
+
+    CMD->>User: ✅ Report<br/>15/15 translations<br/>20 min (vs 300 min)<br/>15x speedup
+
+    Note over User: 🎉 Production ready!
+```
+
+### 6. Parallel Timeline (Gantt)
+
+Timeline montrant l'exécution parallèle vs séquentielle.
+
+```{mermaid}
+%%| label: fig-parallel-gantt
+%%| fig-cap: "Timeline Parallel vs Sequential"
+gantt
+    title Parallel Execution Timeline (15 languages)
+    dateFormat HH:mm
+    axisFormat %H:%M
+
+    section Sequential (Old)
+    Spanish (20min)       :seq1, 00:00, 20m
+    French (20min)        :seq2, after seq1, 20m
+    German (20min)        :seq3, after seq2, 20m
+    Italian (20min)       :seq4, after seq3, 20m
+    Portuguese (20min)    :seq5, after seq4, 20m
+    Dutch (20min)         :seq6, after seq5, 20m
+    Japanese (20min)      :seq7, after seq6, 20m
+    Korean (20min)        :seq8, after seq7, 20m
+    Chinese (20min)       :seq9, after seq8, 20m
+    Hindi (20min)         :seq10, after seq9, 20m
+    Thai (20min)          :seq11, after seq10, 20m
+    Vietnamese (20min)    :seq12, after seq11, 20m
+    Spanish LA (20min)    :seq13, after seq12, 20m
+    Portuguese BR (20min) :seq14, after seq13, 20m
+    French CA (20min)     :seq15, after seq14, 20m
+
+    section Parallel (New)
+    All 15 agents (20min) :crit, par1, 00:00, 20m
+    Aggregate (1min)      :milestone, done, after par1, 0m
+```
+
+### 7. Resource Allocation
+
+Allocation des ressources par pattern.
+
+```{mermaid}
+%%| label: fig-resource-allocation
+%%| fig-cap: "Allocation des ressources"
+pie title "Resource Allocation - Parallel Pattern"
+    "Agent Execution (15 agents)" : 75
+    "Translation Memory Queries" : 15
+    "Aggregation & Validation" : 7
+    "Reporting" : 3
+```
+
+---
+
+## ⛓️ Sequential Execution Pattern
+
+### 8. CI/CD State Machine
+
+Machine à états complète pour un pipeline CI/CD.
+
+```{mermaid}
+%%| label: fig-cicd-state-machine
+%%| fig-cap: "State Machine CI/CD Pipeline"
+%%| fig-height: 10
+stateDiagram-v2
+    [*] --> Idle : Pipeline Ready
+
+    Idle --> Build : Trigger Deploy
+
+    Build --> Building : Start Build
+    Building --> BuildSuccess : ✅ Artifacts OK
+    Building --> BuildFailed : ❌ Compilation Error
+
+    BuildSuccess --> Test : Proceed to Tests
+    BuildFailed --> Rollback : Revert Changes
+
+    Test --> Testing : Run Test Suite
+    Testing --> TestSuccess : ✅ All Pass (>80%)
+    Testing --> TestPartial : ⚠️ Some Pass (60-80%)
+    Testing --> TestFailed : ❌ Many Fail (<60%)
+
+    TestSuccess --> Deploy : Proceed to Deploy
+    TestPartial --> ManualReview : Require Approval
+    TestFailed --> Rollback
+
+    ManualReview --> Deploy : ✅ Approved
+    ManualReview --> Rollback : ❌ Rejected
+
+    Deploy --> Deploying : Deploy to Prod
+    Deploying --> HealthCheck : Monitor Health
+
+    HealthCheck --> DeploySuccess : ✅ Healthy (5min)
+    HealthCheck --> DeployDegraded : ⚠️ Warnings
+    HealthCheck --> DeployFailed : ❌ Critical Errors
+
+    DeploySuccess --> [*] : Pipeline Complete
+    DeployDegraded --> ManualDecision : Escalate
+    DeployFailed --> AutoRollback : Automatic Rollback
+
+    ManualDecision --> [*] : Accept Warnings
+    ManualDecision --> AutoRollback : Force Rollback
+
+    AutoRollback --> Rollback
+    Rollback --> [*] : Pipeline Aborted
+
+    note right of BuildFailed
+        Quality Gate 1:
+        Build must succeed
+    end note
+
+    note right of TestFailed
+        Quality Gate 2:
+        Coverage > 80%
+    end note
+
+    note right of DeployFailed
+        Quality Gate 3:
+        Health checks pass
+    end note
+```
+
+### 9. Sequential Execution Flow
+
+Flow détaillé des phases séquentielles.
+
+```{mermaid}
+%%| label: fig-sequential-flow
+%%| fig-cap: "Sequential Execution Flow"
+flowchart TD
+    Start([Command Triggered]) --> Phase1Init[Phase 1: BUILD<br/>Initialize]
+
+    Phase1Init --> BuildAgent[🔨 Builder Agent<br/>Compile Code]
+    BuildAgent --> BuildCheck{Build<br/>Success?}
+
+    BuildCheck -->|✅ Yes| BuildMetrics[📊 Log Metrics<br/>Time: 8min<br/>Artifacts: 45MB]
+    BuildCheck -->|❌ No| BuildError[❌ Report Error<br/>Compilation failed at line 342]
+
+    BuildError --> Abort1[⛔ ABORT Pipeline]
+
+    BuildMetrics --> Phase2Init[Phase 2: TEST<br/>Initialize]
+
+    Phase2Init --> TestAgent[🧪 Tester Agent<br/>Run Test Suite]
+    TestAgent --> TestCheck{Coverage<br/>>80%?}
+
+    TestCheck -->|✅ Yes| TestMetrics[📊 Log Metrics<br/>Coverage: 87%<br/>Tests: 342/342 pass]
+    TestCheck -->|❌ No| TestError[❌ Report Error<br/>Coverage only 65%]
+
+    TestError --> Abort2[⛔ ABORT Pipeline]
+
+    TestMetrics --> Phase3Init[Phase 3: DEPLOY<br/>Initialize]
+
+    Phase3Init --> DeployAgent[🚀 Deployer Agent<br/>Deploy to Prod]
+    DeployAgent --> DeployCheck{Health<br/>Checks?}
+
+    DeployCheck -->|✅ Yes| DeployMetrics[📊 Log Metrics<br/>Uptime: 100%<br/>Latency: 45ms]
+    DeployCheck -->|❌ No| DeployError[❌ Report Error<br/>Service timeout]
+
+    DeployError --> Abort3[⛔ ABORT + ROLLBACK]
+
+    DeployMetrics --> Success[✅ Pipeline Complete<br/>Total: 25min<br/>Quality: ⭐⭐⭐⭐⭐]
+
+    Abort1 --> End([End])
+    Abort2 --> End
+    Abort3 --> End
+    Success --> End
+
+    classDef phase fill:#2196F3,stroke:#1565C0,color:#fff
+    classDef agent fill:#FF9800,stroke:#E65100,color:#fff
+    classDef success fill:#4CAF50,stroke:#2E7D32,color:#fff
+    classDef error fill:#F44336,stroke:#C62828,color:#fff
+
+    class Phase1Init,Phase2Init,Phase3Init phase
+    class BuildAgent,TestAgent,DeployAgent agent
+    class BuildMetrics,TestMetrics,DeployMetrics,Success success
+    class BuildError,TestError,DeployError,Abort1,Abort2,Abort3 error
+```
+
+### 10. Sequential Timeline
+
+Timeline détaillée avec quality gates.
+
+```{mermaid}
+%%| label: fig-sequential-timeline
+%%| fig-cap: "Sequential Pipeline Timeline avec Quality Gates"
+gantt
+    title CI/CD Sequential Pipeline (Quality Gates)
+    dateFormat HH:mm
+    axisFormat %H:%M
+
+    section Phase 1: BUILD
+    Initialize Build Agent     :init1, 00:00, 1m
+    Compile Code              :build, after init1, 7m
+    Quality Gate: Build Check :milestone, qg1, after build, 0m
+    Log Build Metrics         :metrics1, after qg1, 30s
+
+    section Phase 2: TEST
+    Initialize Test Agent      :init2, after metrics1, 1m
+    Run Unit Tests (3min)      :test1, after init2, 3m
+    Run Integration Tests (4min):test2, after test1, 4m
+    Run E2E Tests (5min)       :test3, after test2, 5m
+    Calculate Coverage         :cov, after test3, 1m
+    Quality Gate: Coverage >80%:milestone, qg2, after cov, 0m
+    Log Test Metrics           :metrics2, after qg2, 30s
+
+    section Phase 3: DEPLOY
+    Initialize Deploy Agent    :init3, after metrics2, 1m
+    Deploy to Staging (2min)   :deploy1, after init3, 2m
+    Run Smoke Tests (1min)     :smoke, after deploy1, 1m
+    Deploy to Production (3min):deploy2, after smoke, 3m
+    Health Check (5min)        :health, after deploy2, 5m
+    Quality Gate: Health OK    :milestone, qg3, after health, 0m
+    Log Deploy Metrics         :metrics3, after qg3, 30s
+
+    section Reporting
+    Generate Report            :report, after metrics3, 1m
+    Pipeline Complete          :milestone, done, after report, 0m
+```
+
+---
+
+## 📦 Batch Processing Pattern
+
+### 11. Batch Wave Execution
+
+Architecture des vagues de traitement.
+
+```{mermaid}
+%%| label: fig-batch-waves
+%%| fig-cap: "Batch Processing avec Waves"
+%%| fig-width: 12
+graph TB
+    Start([Dataset: 500 Items]) --> Planner[Batch Planner<br/>Calculate waves]
+
+    Planner --> Config[Config:<br/>• Wave size: 20<br/>• Waves total: 25<br/>• Error threshold: 5%]
+
+    Config --> Wave1[Wave 1: Items 1-20]
+
+    subgraph W1[Wave 1 Execution]
+        direction LR
+        W1_A1[Agent 1] & W1_A2[Agent 2] & W1_A3[Agent 3] & W1_A20[... Agent 20]
+    end
+
+    Wave1 --> W1
+
+    W1 --> W1_Results[(Results 1-20)]
+    W1_Results --> W1_Check{Errors?}
+
+    W1_Check -->|0 errors| Wave2[Wave 2: Items 21-40]
+    W1_Check -->|1-3 errors| W1_Retry[Retry Failed Items]
+    W1_Check -->|4+ errors| W1_Abort[⛔ ABORT: High Error Rate]
+
+    W1_Retry --> Wave2
+
+    subgraph W2[Wave 2 Execution]
+        direction LR
+        W2_A1[Agent 21] & W2_A2[Agent 22] & W2_A3[Agent 23] & W2_A20[... Agent 40]
+    end
+
+    Wave2 --> W2
+
+    W2 --> W2_Results[(Results 21-40)]
+    W2_Results --> W2_Check{Errors?}
+
+    W2_Check -->|OK| Wave3[Wave 3: Items 41-60]
+    W2_Check -->|Retry| W2_Retry[Retry Failed]
+
+    W2_Retry --> Wave3
+
+    Wave3 --> WaveDots[... 22 more waves ...]
+
+    WaveDots --> Wave25[Wave 25: Items 481-500]
+
+    subgraph W25[Wave 25 Execution]
+        direction LR
+        W25_A1[Agent 481] & W25_A2[Agent 482] & W25_A20[... Agent 500]
+    end
+
+    Wave25 --> W25
+
+    W25 --> W25_Results[(Results 481-500)]
+    W25_Results --> Final[Final Aggregation]
+
+    Final --> Report[📊 Report:<br/>✅ 487/500 success (97.4%)<br/>⚠️ 13 warnings<br/>❌ 0 failures<br/>⏱️ 12.5 hours]
+
+    W1_Abort --> End([End with Error])
+    Report --> End2([End Success])
+
+    classDef wave fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    classDef agent fill:#FF9800,stroke:#E65100,color:#fff
+    classDef result fill:#4CAF50,stroke:#2E7D32,color:#fff
+    classDef error fill:#F44336,stroke:#C62828,color:#fff
+
+    class Wave1,Wave2,Wave3,Wave25 wave
+    class W1_A1,W1_A2,W1_A3,W1_A20,W2_A1,W2_A2,W2_A3,W2_A20,W25_A1,W25_A2,W25_A20 agent
+    class W1_Results,W2_Results,W25_Results,Report result
+    class W1_Abort error
+```
+
+### 12. Batch Error Handling
+
+Stratégie de gestion d'erreurs par batch.
+
+```{mermaid}
+%%| label: fig-batch-error-handling
+%%| fig-cap: "Batch Error Handling Strategy"
+flowchart TD
+    Wave([Wave N Completed]) --> Collect[Collect Results]
+
+    Collect --> Count{Count<br/>Errors}
+
+    Count -->|0 errors| NextWave[✅ Proceed to Wave N+1]
+    Count -->|1-5 errors| Analyze[Analyze Error Types]
+    Count -->|6-10 errors| Warning[⚠️ Warning Threshold]
+    Count -->|11+ errors| Critical[🔴 Critical Threshold]
+
+    Analyze --> ErrorTypes{Error<br/>Type?}
+
+    ErrorTypes -->|Timeout| Retry1[Retry with +30s timeout]
+    ErrorTypes -->|API Rate Limit| Wait[Wait 60s then retry]
+    ErrorTypes -->|Data Error| Skip[Skip + Log for manual review]
+    ErrorTypes -->|Unknown| Escalate[Escalate to user]
+
+    Retry1 --> RetryCheck{Retry<br/>Success?}
+    Wait --> RetryCheck
+
+    RetryCheck -->|✅ Yes| NextWave
+    RetryCheck -->|❌ No| Skip
+
+    Skip --> NextWave
+    Escalate --> UserDecision{User<br/>Decision?}
+
+    UserDecision -->|Continue| NextWave
+    UserDecision -->|Abort| Abort[⛔ ABORT All Waves]
+
+    Warning --> ReviewErrors[Review Error Patterns]
+    ReviewErrors --> WarningDecision{Continue?}
+
+    WarningDecision -->|Yes| NextWave
+    WarningDecision -->|No| Abort
+
+    Critical --> Abort
+
+    NextWave --> End([Continue Processing])
+    Abort --> End2([Pipeline Stopped])
+
+    classDef success fill:#4CAF50,stroke:#2E7D32,color:#fff
+    classDef warning fill:#FF9800,stroke:#E65100,color:#fff
+    classDef error fill:#F44336,stroke:#C62828,color:#fff
+
+    class NextWave,Retry1,RetryCheck success
+    class Warning,WarningDecision,Analyze warning
+    class Critical,Abort,Abort error
+```
+
+### 13. Batch Performance Metrics
+
+Métriques de performance par taille de batch.
+
+```{mermaid}
+%%| label: fig-batch-performance
+%%| fig-cap: "Batch Performance par Wave Size"
+pie title "Temps de traitement par stratégie (500 items)"
+    "Sequential (25h)" : 1500
+    "Parallel Brut (crashes)" : 0
+    "Batch 10/wave (18h)" : 1080
+    "Batch 20/wave (12.5h)" : 750
+    "Batch 50/wave (unstable)" : 900
+```
+
+---
+
+## 🔄 Conditional Execution Pattern
+
+### 14. Content Type Router
+
+Routing complexe basé sur le type de contenu.
+
+```{mermaid}
+%%| label: fig-content-router
+%%| fig-cap: "Conditional Content Router"
+%%| fig-width: 12
+flowchart TD
+    Input([User Input]) --> Detect[Detect Content Type]
+
+    Detect --> Type{Content<br/>Type?}
+
+    Type -->|Image| ImageFlow[Image Processing Flow]
+    Type -->|Video| VideoFlow[Video Processing Flow]
+    Type -->|Text| TextFlow[Text Processing Flow]
+    Type -->|Audio| AudioFlow[Audio Processing Flow]
+    Type -->|Code| CodeFlow[Code Processing Flow]
+    Type -->|Unknown| Fallback[Fallback Handler]
+
+    ImageFlow --> ImgFormat{Format?}
+    ImgFormat -->|PNG/JPG| ImgQuality{Quality?}
+    ImgFormat -->|SVG| VectorAgent[Vector Processor]
+    ImgFormat -->|GIF| AnimAgent[Animation Processor]
+
+    ImgQuality -->|High| OCRAgent[OCR + Analysis]
+    ImgQuality -->|Low| EnhanceAgent[Enhance + OCR]
+
+    VideoFlow --> VidDuration{Duration?}
+    VidDuration -->|<1min| ShortAgent[Short Video Processor]
+    VidDuration -->|1-10min| MediumAgent[Medium Video + Transcription]
+    VidDuration -->|>10min| LongAgent[Long Video + Chapters]
+
+    TextFlow --> Lang{Language?}
+    Lang -->|English| NLPAgent[Direct NLP Analysis]
+    Lang -->|Other| TranslateAgent[Translate + NLP]
+
+    AudioFlow --> AudioDuration{Duration?}
+    AudioDuration -->|<5min| QuickTranscribe[Quick Transcription]
+    AudioDuration -->|>5min| FullTranscribe[Full Transcription + Diarization]
+
+    CodeFlow --> CodeLang{Language?}
+    CodeLang -->|Python/JS/TS| LintAgent[Lint + Security Scan]
+    CodeLang -->|Other| GenericAgent[Generic Code Analysis]
+
+    Fallback --> UserInput[Ask User for Type]
+
+    OCRAgent & EnhanceAgent & VectorAgent & AnimAgent --> Output
+    ShortAgent & MediumAgent & LongAgent --> Output
+    NLPAgent & TranslateAgent --> Output
+    QuickTranscribe & FullTranscribe --> Output
+    LintAgent & GenericAgent --> Output
+    UserInput --> Output
+
+    Output[Aggregated Output]
+
+    classDef input fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    classDef decision fill:#FF9800,stroke:#E65100,color:#fff
+    classDef agent fill:#2196F3,stroke:#1565C0,color:#fff
+    classDef output fill:#4CAF50,stroke:#2E7D32,color:#fff
+
+    class Input,UserInput input
+    class Type,ImgFormat,ImgQuality,VidDuration,Lang,AudioDuration,CodeLang decision
+    class OCRAgent,EnhanceAgent,VectorAgent,AnimAgent,ShortAgent,MediumAgent,LongAgent,NLPAgent,TranslateAgent,QuickTranscribe,FullTranscribe,LintAgent,GenericAgent agent
+    class Output output
+```
+
+### 15. Conditional State Transitions
+
+Machine à états pour routing conditionnel.
+
+```{mermaid}
+%%| label: fig-conditional-states
+%%| fig-cap: "Conditional Pattern State Machine"
+stateDiagram-v2
+    [*] --> Receive : Input Received
+
+    Receive --> Analyze : Analyze Properties
+
+    Analyze --> RouteDecision : Evaluate Conditions
+
+    RouteDecision --> PathA : Priority = High
+    RouteDecision --> PathB : Priority = Medium
+    RouteDecision --> PathC : Priority = Low
+    RouteDecision --> PathDefault : No Match
+
+    PathA --> ExecuteA : Launch Agent A<br/>(Escalation Handler)
+    PathB --> ExecuteB : Launch Agent B<br/>(Standard Processor)
+    PathC --> ExecuteC : Launch Agent C<br/>(Batch Queue)
+    PathDefault --> ExecuteDefault : Launch Fallback
+
+    ExecuteA --> SuccessA : ✅ High Priority Handled
+    ExecuteB --> SuccessB : ✅ Medium Priority Handled
+    ExecuteC --> SuccessC : ✅ Low Priority Queued
+    ExecuteDefault --> SuccessDefault : ✅ Fallback Completed
+
+    SuccessA --> [*] : Return Result
+    SuccessB --> [*] : Return Result
+    SuccessC --> [*] : Return Result
+    SuccessDefault --> [*] : Return Result
+
+    note right of PathA
+        High Priority:
+        - Errors
+        - Urgent requests
+        - VIP users
+    end note
+
+    note right of PathB
+        Medium Priority:
+        - Regular requests
+        - Standard users
+    end note
+
+    note right of PathC
+        Low Priority:
+        - Batch jobs
+        - Non-urgent tasks
+    end note
+```
+
+---
+
+## 📊 Advanced Visualizations
+
+### 16. Pattern Complexity Matrix
+
+Matrice complexité vs performance.
+
+```{mermaid}
+%%| label: fig-complexity-matrix
+%%| fig-cap: "Pattern Complexity vs Performance Matrix"
+%%| fig-width: 10
+quadrantChart
+    title Pattern Complexity vs Performance
+    x-axis Low Complexity --> High Complexity
+    y-axis Low Performance --> High Performance
+    quadrant-1 Sweet Spot
+    quadrant-2 Overkill
+    quadrant-3 Poor Choice
+    quadrant-4 Good Trade-off
+    Sequential: [0.3, 0.2]
+    Parallel Small: [0.4, 0.7]
+    Parallel Medium: [0.6, 0.9]
+    Batch Small: [0.5, 0.7]
+    Batch Large: [0.8, 0.95]
+    Conditional: [0.6, 0.6]
+    Hybrid: [0.9, 0.98]
+```
+
+### 17. User Journey - EPCT Workflow
+
+Parcours utilisateur avec EPCT + patterns.
+
+```{mermaid}
+%%| label: fig-user-journey
+%%| fig-cap: "User Journey - Feature Implementation"
+journey
+    title User Journey: Implementing New Feature with EPCT
+    section Explore Phase
+      Launch /epct command: 5: User
+      Agent explores codebase: 4: Agent
+      Agent reads docs: 4: Agent
+      Agent analyzes architecture: 5: Agent
+      Exploration report generated: 5: Agent
+    section Plan Phase
+      Review exploration report: 5: User
+      Agent proposes plan: 5: Agent
+      User validates plan: 5: User
+      Plan approved: 5: User, Agent
+    section Code Phase (Parallel)
+      Agent 1 creates UI: 4: Agent
+      Agent 2 creates API: 4: Agent
+      Agent 3 creates tests: 4: Agent
+      All agents work concurrently: 5: Agent
+      Code merged: 5: Agent
+    section Test Phase (Sequential)
+      Run unit tests: 4: Agent
+      Run integration tests: 4: Agent
+      Run E2E tests: 5: Agent
+      All tests pass: 5: Agent, User
+    section Deploy
+      Deploy to staging: 5: Agent
+      Deploy to production: 5: Agent
+      Feature live: 5: User
+```
+
+### 18. Git Workflow Integration
+
+Intégration avec Git workflow.
+
+```{mermaid}
+%%| label: fig-git-integration
+%%| fig-cap: "Pattern Integration avec Git Workflow"
+gitGraph
+    commit id: "Initial state"
+    branch feature/ai-orchestration
+    checkout feature/ai-orchestration
+    commit id: "Explore: Read codebase" type: HIGHLIGHT
+    commit id: "Plan: Design architecture"
+    commit id: "Code: Implement (Parallel)"
+    branch agent-ui
+    branch agent-api
+    branch agent-tests
+    checkout agent-ui
+    commit id: "UI Component"
+    checkout agent-api
+    commit id: "API Endpoint"
+    checkout agent-tests
+    commit id: "Test Suite"
+    checkout feature/ai-orchestration
+    merge agent-ui
+    merge agent-api
+    merge agent-tests tag: "v1.0"
+    commit id: "Test: Sequential validation" type: HIGHLIGHT
+    checkout main
+    merge feature/ai-orchestration tag: "v1.0-release"
+    commit id: "Production deployment"
+```
+
+### 19. Timeline Comparison (All Patterns)
+
+Comparaison temporelle de tous les patterns.
+
+```{mermaid}
+%%| label: fig-timeline-all-patterns
+%%| fig-cap: "Timeline Comparison - All Patterns (50 tasks)"
+gantt
+    title Pattern Performance Comparison (50 tasks)
+    dateFormat HH:mm
+    axisFormat %H:%M
+
+    section Sequential
+    Task 1-50 (30s each)       :seq, 00:00, 1500m
+
+    section Parallel (No Batch)
+    All 50 tasks concurrently  :crit, par, 00:00, 30m
+
+    section Batch (Waves of 10)
+    Wave 1 (tasks 1-10)        :batch10-1, 00:00, 30m
+    Wave 2 (tasks 11-20)       :batch10-2, after batch10-1, 30m
+    Wave 3 (tasks 21-30)       :batch10-3, after batch10-2, 30m
+    Wave 4 (tasks 31-40)       :batch10-4, after batch10-3, 30m
+    Wave 5 (tasks 41-50)       :batch10-5, after batch10-4, 30m
+
+    section Batch (Waves of 20)
+    Wave 1 (tasks 1-20)        :batch20-1, 00:00, 30m
+    Wave 2 (tasks 21-40)       :batch20-2, after batch20-1, 30m
+    Wave 3 (tasks 41-50)       :batch20-3, after batch20-2, 30m
+
+    section Conditional
+    Analyze (10 tasks)         :cond1, 00:00, 10m
+    High Priority (5 parallel) :cond2, after cond1, 30m
+    Medium Priority (15 batch) :cond3, after cond2, 60m
+    Low Priority (20 batch)    :cond4, after cond3, 60m
+```
+
+### 20. Class Diagram - Pattern Architecture
+
+Architecture orientée objet des patterns.
+
+```{mermaid}
+%%| label: fig-class-diagram
+%%| fig-cap: "Class Diagram - Pattern Architecture"
+classDiagram
+    class Orchestrator {
+        +String name
+        +Pattern pattern
+        +execute()
+        +aggregate()
+        +report()
+    }
+
+    class Pattern {
+        <<interface>>
+        +String type
+        +execute()
+    }
+
+    class ParallelPattern {
+        +Int waveSize
+        +executeParallel()
+        +aggregateResults()
+    }
+
+    class SequentialPattern {
+        +List~Phase~ phases
+        +executeSequential()
+        +validatePhase()
+    }
+
+    class BatchPattern {
+        +Int batchSize
+        +Int totalWaves
+        +executeBatch()
+        +handleErrors()
+    }
+
+    class ConditionalPattern {
+        +Map~Condition, Agent~ routes
+        +evaluateConditions()
+        +routeToAgent()
+    }
+
+    class Agent {
+        +String id
+        +String type
+        +execute()
+        +report()
+    }
+
+    class Task {
+        +String description
+        +String status
+        +Result result
+    }
+
+    class Result {
+        +Boolean success
+        +String data
+        +List~Error~ errors
+    }
+
+    Orchestrator --> Pattern : uses
+    Pattern <|-- ParallelPattern : implements
+    Pattern <|-- SequentialPattern : implements
+    Pattern <|-- BatchPattern : implements
+    Pattern <|-- ConditionalPattern : implements
+
+    Orchestrator --> Agent : manages
+    Agent --> Task : executes
+    Task --> Result : produces
+
+    ParallelPattern --> Agent : spawns multiple
+    SequentialPattern --> Agent : spawns one at a time
+    BatchPattern --> Agent : spawns in waves
+    ConditionalPattern --> Agent : routes conditionally
+```
+
+---
+
+## 🔗 Navigation
+
+- **Vue d'ensemble** : [overview.qmd](overview.qmd)
+- **Exemples concrets** : [examples.qmd](examples.qmd)
+- **Documentation complète** : [agent-orchestration.md](agent-orchestration.md)
+
+---
+
+**© 2025 Documentation Claude Code - 20+ Diagrammes Interactifs**

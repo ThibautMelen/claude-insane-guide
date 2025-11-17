@@ -1,0 +1,106 @@
+---
+title: "Agent Orchestration - Vue d'Ensemble"
+subtitle: "Optimisation de l'exécution des agents"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+---
+
+## 📚 Qu'est-ce que l'Agent Orchestration?
+
+Le **Agent Orchestration Pattern** définit comment optimiser l'exécution d'agents pour maximiser performance, qualité et coût.
+
+::: {.callout-important}
+## Principe Fondamental
+**"Agents execute, NEVER coordinate. Choose pattern based on task dependencies."**
+:::
+
+## 🎯 Les 4 Patterns d'Exécution
+
+### Décision Tree
+
+Le choix du pattern dépend de la nature des tâches :
+
+| Pattern | Quand l'utiliser | Speedup | Ressources |
+|---------|------------------|---------|------------|
+| **Parallel** | Tâches indépendantes | 5-20x | High |
+| **Sequential** | Dépendances strictes | 1x | Low |
+| **Batch** | Large scale (100+ items) | 10-15x | Medium |
+| **Conditional** | Logique dynamique | Variable | Variable |
+
+## 📊 Caractéristiques Comparatives
+
+### Parallel Execution
+
+**Cas d'usage** :
+- Multi-language translation (15 langues)
+- Parallel data processing
+- Multi-region deployments
+- Batch file transformations
+
+**Métriques** :
+- **Time**: N tasks × T time → max(T)
+- **Example**: 15 × 20min = 300min → 20min = **15x speedup**
+
+### Sequential Execution
+
+**Cas d'usage** :
+- CI/CD pipelines (Build → Test → Deploy)
+- Data pipelines (Extract → Transform → Load)
+- Multi-step forms
+- Approval workflows
+
+**Métriques** :
+- **Time**: T1 + T2 + T3
+- **Quality**: Validation à chaque étape
+
+### Batch Processing
+
+**Cas d'usage** :
+- Large datasets (100+ items)
+- Community management (500+ membres)
+- Bulk operations
+
+**Métriques** :
+- **Batch Size**: 10-20 items/wave
+- **Speedup**: 10-15x
+- **Control**: Stop on errors, adaptive batching
+
+### Conditional Execution
+
+**Cas d'usage** :
+- Dynamic workflows
+- A/B testing
+- Error recovery
+- Adaptive processing
+
+**Métriques** :
+- **Flexibility**: Runtime decisions
+- **Efficiency**: Only necessary agents run
+
+## ⚡ Quick Reference
+
+::: {.callout-tip}
+## Choisir le Bon Pattern
+
+**Questions à se poser** :
+
+1. Les tâches sont-elles **indépendantes** ? → **Parallel**
+2. Y a-t-il des **dépendances** strictes ? → **Sequential**
+3. Traitement de **100+ items** ? → **Batch**
+4. Logique **conditionnelle** complexe ? → **Conditional**
+:::
+
+## 🔗 Ressources Associées
+
+- **Diagrammes visuels** : [diagrams.qmd](diagrams.qmd)
+- **Exemples concrets** : [examples.qmd](examples.qmd)
+- **Documentation complète** : [agent-orchestration.md](agent-orchestration.md)
+
+---
+
+**Niveau** : Production
+**Prérequis** : Agents, Orchestration Principles

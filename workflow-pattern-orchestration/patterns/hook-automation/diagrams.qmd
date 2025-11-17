@@ -1,0 +1,457 @@
+---
+title: "Hook Automation - Diagrams"
+subtitle: "Visual Flows and Lifecycle of Hook Automation"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    theme: cosmo
+    code-copy: true
+---
+
+## Hook Trigger Lifecycle
+
+The complete flow from event trigger through action to continuation:
+
+```mermaid
+flowchart TD
+    A["Event Triggered<br/>(User input, Tool use, Agent done)"] --> B["Hook Triggered"]
+    B --> C["Condition Check"]
+    C -->|Condition Met| D["Execute Action"]
+    C -->|Condition Not Met| E["Skip Hook"]
+    D --> F{Allow or Block?}
+    F -->|Allow| G["Continue Normal Flow"]
+    F -->|Block| H["Stop + Report Error"]
+    E --> G
+
+    style A fill:#bbdefb
+    style B fill:#fff9c4
+    style D fill:#c8e6c9
+    style G fill:#a5d6a7
+    style H fill:#ffccbc
+```
+
+---
+
+## Session-Wide Hook Lifecycle
+
+Complete hook execution order during a Claude Code session:
+
+```mermaid
+graph TD
+    S["Session Starts"] --> H1["SessionStart Hook<br/>Initialize context"]
+    H1 --> U["User Prompt"]
+    U --> H2["UserPromptSubmit Hook<br/>Validate input"]
+    H2 --> T["Tool Execution"]
+    T --> H3["PreToolUse Hook<br/>Validate before"]
+    H3 --> TE["Tool Executes"]
+    TE --> H4["PostToolUse Hook<br/>Audit after"]
+    H4 --> A["Agent Runs"]
+    A --> H5["SubagentStop Hook<br/>Aggregate results"]
+    H5 --> E["Session Ends"]
+    E --> H6["SessionEnd Hook<br/>Cleanup/Report"]
+
+    style H1 fill:#e1f5ff
+    style H2 fill:#f3e5f5
+    style H3 fill:#fff3e0
+    style H4 fill:#f3e5f5
+    style H5 fill:#e8f5e9
+    style H6 fill:#ede7f6
+```
+
+---
+
+## PreToolUse Hook - Validation Gate
+
+Hook that prevents tool execution if conditions fail:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Claude
+    participant Hook as PreToolUse Hook
+    participant Tool
+
+    User->>Claude: Execute tool (deploy)
+    Claude->>Hook: Trigger PreToolUse
+    Hook->>Hook: Check conditions<br/>(coverage, security, approval)
+    alt Conditions Pass
+        Hook->>Claude: ALLOW
+        Claude->>Tool: Execute
+        Tool-->>User: Success
+    else Conditions Fail
+        Hook->>Claude: BLOCK + Error message
+        Claude-->>User: ❌ Cannot proceed<br/>Fix issue and retry
+    end
+```
+
+---
+
+## PostToolUse Hook - Audit Trail
+
+Hook that logs and monitors after tool execution:
+
+```mermaid
+sequenceDiagram
+    participant Tool
+    participant Hook as PostToolUse Hook
+    participant Logger as Audit Log
+    participant Monitor as Health Check
+
+    Tool->>Hook: Tool execution complete
+    Hook->>Hook: Extract metrics<br/>(cost, result, time)
+    par Logging
+        Hook->>Logger: Write audit entry<br/>(timestamp, tool, args, user, result)
+    and Monitoring
+        Hook->>Monitor: Run health checks<br/>(API health, memory, errors)
+    end
+    alt Health Checks Pass
+        Monitor-->>Tool: ✅ OK
+    else Health Checks Fail
+        Monitor->>Hook: Trigger action<br/>(rollback, alert)
+    end
+```
+
+---
+
+## Hook State Machine
+
+Different states a hook can be in during execution:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle: Session starts
+    Idle --> Triggered: Event fires
+    Triggered --> Evaluating: Evaluate condition
+    Evaluating --> Executing: Condition met
+    Evaluating --> Skipped: Condition not met
+    Executing --> Allowed: Action succeeds
+    Executing --> Blocked: Action fails
+    Allowed --> [*]: Continue normal flow
+    Blocked --> [*]: Stop execution + Error
+    Skipped --> [*]: Continue normal flow
+
+    style Idle fill:#e1f5ff
+    style Triggered fill:#fff9c4
+    style Executing fill:#c8e6c9
+    style Allowed fill:#a5d6a7
+    style Blocked fill:#ffccbc
+```
+
+---
+
+## Hook vs Command vs Agent - Decision Tree
+
+When to use which automation mechanism:
+
+```mermaid
+graph TD
+    Q1{"Is automation<br/>automatic?"}
+    Q2{"Repeats every<br/>time?"}
+    Q3{"Complex<br/>workflow?"}
+    Q4{"User<br/>decides<br/>when?"}
+
+    Q1 -->|No| Q4
+    Q1 -->|Yes| Q2
+    Q2 -->|No| Q4
+    Q2 -->|Yes| Q3
+    Q3 -->|No| HOOK["⚙️ Use HOOK<br/>Validation/Logging"]
+    Q3 -->|Yes| AGENT["🤖 Use AGENT<br/>Complex orchestration"]
+    Q4 -->|Yes| CMD["📋 Use COMMAND<br/>User shortcut"]
+    Q4 -->|No| HOOK
+
+    style HOOK fill:#e8f5e9,stroke:#4caf50,stroke-width:3px
+    style CMD fill:#fff3e0,stroke:#ff9800,stroke-width:3px
+    style AGENT fill:#f3e5f5,stroke:#9c27b0,stroke-width:3px
+```
+
+---
+
+## Validation Chain Pattern
+
+Multiple hooks running in sequence for comprehensive validation:
+
+```mermaid
+graph TD
+    U["User: npm run deploy"] --> H1["PreToolUse Hook #1<br/>Quality Gate"]
+    H1 --> T1{Coverage<br/>Check}
+    T1 -->|✅ Pass| H2["PreToolUse Hook #2<br/>Security Scan"]
+    T1 -->|❌ Fail| E1["BLOCK + Report error<br/>Coverage too low"]
+    H2 --> T2{Security<br/>Check}
+    T2 -->|✅ Pass| H3["PreToolUse Hook #3<br/>Approval"]
+    T2 -->|❌ Fail| E2["BLOCK + Report error<br/>Vulnerabilities found"]
+    H3 --> T3{Approved<br/>by SOC?}
+    T3 -->|✅ Yes| TOOL["✅ Tool Executes<br/>npm run deploy"]
+    T3 -->|❌ No| E3["BLOCK + Report error<br/>Approval required"]
+
+    style H1 fill:#fff3e0
+    style H2 fill:#fff3e0
+    style H3 fill:#fff3e0
+    style TOOL fill:#c8e6c9
+    style E1 fill:#ffccbc
+    style E2 fill:#ffccbc
+    style E3 fill:#ffccbc
+```
+
+---
+
+## Auto-Rollback Pattern
+
+PostToolUse hook monitoring deployment health:
+
+```mermaid
+graph TD
+    D["Deploy to Production"] --> W["Wait 60 seconds<br/>for stabilization"]
+    W --> H["PostToolUse Hook:<br/>Health Monitor"]
+    H --> HC1["Check API<br/>response <500ms"]
+    H --> HC2["Check error<br/>rate <1%"]
+    H --> HC3["Check memory<br/>usage <80%"]
+    HC1 --> T1{All checks<br/>pass?}
+    HC2 --> T1
+    HC3 --> T1
+    T1 -->|✅ Yes| S["✅ Deployment Healthy<br/>Keep running"]
+    T1 -->|❌ No| R["⚠️ Health Check Failed"]
+    R --> RB["Execute Rollback<br/>restore-previous.sh"]
+    RB --> A["Alert DevOps Team"]
+    A --> F["❌ Rollback Complete"]
+
+    style D fill:#bbdefb
+    style S fill:#c8e6c9
+    style F fill:#ffccbc
+    style H fill:#fff3e0
+```
+
+---
+
+## Cost Tracking Timeline
+
+PostToolUse hook tracking costs across session:
+
+```mermaid
+timeline
+    title Session Cost Tracking (PostToolUse Hook)
+    section Session Start
+        Budget: $100
+    section Tool Uses
+        Context7 Call 1: $5 cost → Total: $5
+        Perplexity Query: $3 cost → Total: $8
+        Context7 Call 2: $7 cost → Total: $15
+    section Mid-Session
+        Budget Check: Total: $15, Remaining: $85
+    section More Tools
+        Firecrawl Crawl: $8 cost → Total: $23
+        Context7 Call 3: $4 cost → Total: $27
+    section Alert Zone
+        Approaching limit: Total: $45 (45% of $100)
+    section Session End
+        Final Cost: $65, Budget: $100
+        Remaining: $35 Available
+```
+
+---
+
+## SubagentStop - Progress Aggregation
+
+Tracking multiple agents completing in parallel:
+
+```mermaid
+graph TD
+    START["Translation Task<br/>15 languages"] --> A1["Agent-ES"]
+    START --> A2["Agent-FR"]
+    START --> A3["Agent-DE"]
+    START --> A4["..."]
+    START --> A15["Agent-ZH"]
+
+    A1 --> H1["SubagentStop Hook<br/>Progress: 1/15"]
+    A2 --> H2["SubagentStop Hook<br/>Progress: 2/15"]
+    A3 --> H3["SubagentStop Hook<br/>Progress: 3/15"]
+    A15 --> H15["SubagentStop Hook<br/>Progress: 15/15"]
+
+    H1 --> STORE["Store in<br/>Session Context"]
+    H2 --> STORE
+    H3 --> STORE
+    H15 --> STORE
+
+    STORE --> CHECK{All agents<br/>complete?}
+    CHECK -->|No| WAIT["Wait for next"]
+    CHECK -->|Yes| AGG["Aggregate:<br/>14 success, 1 failure"]
+    AGG --> REPORT["Report final<br/>summary to command"]
+
+    style START fill:#bbdefb
+    style H1 fill:#fff3e0
+    style H2 fill:#fff3e0
+    style H15 fill:#fff3e0
+    style AGG fill:#c8e6c9
+    style REPORT fill:#a5d6a7
+```
+
+---
+
+## Hook Timing vs Command Timing
+
+When hooks fire vs when commands run:
+
+```mermaid
+timeline
+    title Timeline: Hook Events vs Command Execution
+    section Session
+        SessionStart Hook: Initialize context
+        Load memory and config
+    section User Interaction
+        User types prompt: Waiting
+        UserPromptSubmit Hook: Validate input
+    section Tool Execution
+        PreToolUse Hook: Check before
+        /deploy Command: Optional user command
+        Bash Tool: Execute
+        PostToolUse Hook: Log after
+    section Agent Completion
+        SubagentStop Hook: Aggregate each agent
+        /summary Command: Optional user command
+    section End
+        SessionEnd Hook: Final cleanup
+        Generate report
+```
+
+---
+
+## Error Handling in Hooks
+
+Hook error flows and fallback strategies:
+
+```mermaid
+graph TD
+    HOOK["Hook Triggered"] --> TRY["Try to execute"]
+    TRY --> CHECK{Condition<br/>check?}
+    CHECK -->|Pass| ACT["Execute action"]
+    CHECK -->|Fail| ERR1["❌ Condition failed"]
+    ACT --> ERR_CHECK{Action<br/>success?}
+    ERR_CHECK -->|Yes| ALLOW["✅ Allow/Log"]
+    ERR_CHECK -->|No| ERR2["❌ Action failed"]
+    ERR1 --> FALLBACK["Use fallback strategy"]
+    ERR2 --> FALLBACK
+    FALLBACK --> DECIDE{Critical<br/>action?}
+    DECIDE -->|Yes| BLOCK["BLOCK execution<br/>Report error"]
+    DECIDE -->|No| ALLOW
+    ALLOW --> DONE["Hook complete"]
+    BLOCK --> DONE
+
+    style ERR1 fill:#ffccbc
+    style ERR2 fill:#ffccbc
+    style BLOCK fill:#ffccbc
+    style ALLOW fill:#c8e6c9
+```
+
+---
+
+## Real-World Example: CI/CD Pipeline Flow
+
+Complete deployment workflow with hooks at each stage:
+
+```mermaid
+graph TD
+    START["Developer: git push"] --> TEST["Run tests"]
+    TEST --> H1["PreToolUse Hook:<br/>Quality Gate<br/>Check coverage >80%"]
+    H1 --> COVERAGE{Coverage<br/>OK?}
+    COVERAGE -->|❌ No| FAIL1["BLOCK<br/>Run: npm test:coverage"]
+    COVERAGE -->|✅ Yes| BUILD["Build application"]
+    BUILD --> H2["PreToolUse Hook:<br/>Security Scan<br/>Check vuln"]
+    H2 --> SECURITY{Secure?}
+    SECURITY -->|❌ No| FAIL2["BLOCK<br/>Fix vulnerabilities"]
+    SECURITY -->|✅ Yes| DEPLOY["Deploy to prod"]
+    DEPLOY --> H3["PostToolUse Hook:<br/>Auto-Rollback<br/>Monitor health 60s"]
+    H3 --> HEALTH{Health<br/>checks OK?}
+    HEALTH -->|❌ No| ROLLBACK["ROLLBACK<br/>Restore previous"]
+    HEALTH -->|✅ Yes| H4["PostToolUse Hook:<br/>Audit Log<br/>Log to audit trail"]
+    H4 --> DONE["✅ Deployment complete"]
+
+    style H1 fill:#fff3e0
+    style H2 fill:#fff3e0
+    style H3 fill:#fff3e0
+    style H4 fill:#fff3e0
+    style DONE fill:#c8e6c9
+    style FAIL1 fill:#ffccbc
+    style FAIL2 fill:#ffccbc
+    style ROLLBACK fill:#ffccbc
+```
+
+---
+
+## Hook Architecture in Claude Code Stack
+
+Where hooks fit in the overall architecture:
+
+```mermaid
+graph TD
+    UI["Claude Code UI<br/>User Input"]
+    UI --> HOOKS["🎣 HOOKS LAYER<br/>Automation Interceptors"]
+    HOOKS --> EVENTS["🎯 EVENTS<br/>SessionStart, PreToolUse, etc."]
+    HOOKS --> COMMANDS["📋 COMMANDS<br/>User shortcuts"]
+    HOOKS --> CORE["⚙️ CORE<br/>Tools, Agents, Workflows"]
+    CORE --> MEMORY["🧠 MEMORY<br/>.claude/CLAUDE.md"]
+    CORE --> MCP["🔌 MCP SERVERS<br/>External integrations"]
+    CORE --> AGENTS["🤖 AGENTS<br/>Sub-agents"]
+
+    style HOOKS fill:#fff3e0,stroke:#ff9800,stroke-width:3px
+    style EVENTS fill:#fff3e0
+    style COMMANDS fill:#fff3e0
+    style CORE fill:#f3e5f5
+    style MEMORY fill:#e1f5ff
+    style MCP fill:#e1f5ff
+    style AGENTS fill:#f3e5f5
+```
+
+---
+
+## Hook Complexity vs Logic Lines
+
+Decision matrix for hook vs script vs agent:
+
+```mermaid
+graph TD
+    START["Start<br/>New Automation"] --> LINES["Count logic<br/>lines needed"]
+    LINES --> L1{"<20<br/>lines?"}
+    L1 -->|Yes| REPEAT{"Repeats<br/>every time?"}
+    L1 -->|No| L2{"<50<br/>lines?"}
+    REPEAT -->|Yes| HOOK1["✅ HOOK<br/>Simple validation"]
+    REPEAT -->|No| CMD["✅ COMMAND<br/>Manual trigger"]
+    L2 -->|Yes| REPEAT
+    L2 -->|No| L3{"Complex<br/>decision logic?"}
+    L3 -->|Yes| AGENT["✅ AGENT<br/>Complex orchestration"]
+    L3 -->|No| SCRIPT["✅ SCRIPT<br/>External tool"]
+
+    style HOOK1 fill:#e8f5e9
+    style CMD fill:#fff3e0
+    style AGENT fill:#f3e5f5
+    style SCRIPT fill:#f5f5f5
+```
+
+---
+
+## Key Diagrams Summary
+
+| Diagram | Purpose |
+|---------|---------|
+| **Hook Trigger Lifecycle** | How hooks detect events and take action |
+| **Session-Wide Lifecycle** | Order hooks fire during a session |
+| **Validation Gate** | PreToolUse blocking bad actions |
+| **Audit Trail** | PostToolUse logging everything |
+| **State Machine** | Hook states from Idle to Completion |
+| **Decision Tree** | Hook vs Command vs Agent choice |
+| **Validation Chain** | Multiple hooks in sequence |
+| **Auto-Rollback** | Monitoring deployment health |
+| **Cost Tracking** | Timeline of costs during session |
+| **Progress Aggregation** | SubagentStop tracking parallel agents |
+| **Timing** | When hooks fire vs commands run |
+| **Error Handling** | Fallback strategies for failures |
+| **CI/CD Example** | Real workflow with hooks at each stage |
+| **Architecture** | Hooks in Claude Code stack |
+| **Complexity Matrix** | Hook vs script vs agent decision |
+
+---
+
+## Related Documentation
+
+- 📖 [Hook Overview](./overview.qmd) — Concepts and types
+- 💻 [Hook Examples](./examples.qmd) — Real implementations
+- 📝 [Hook Automation Pattern](./hook-automation.md) — Complete reference

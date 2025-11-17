@@ -1,0 +1,365 @@
+---
+title: "Social Media Automation Startup - Diagrams"
+subtitle: "Content Flow, Platform Routing, and Timeline Visualization"
+date: 2025-11-17
+author: "Claude Code Documentation"
+format: html
+toc: true
+code-fold: false
+mermaid-format: svg
+---
+
+# Visual Architecture & Flows
+
+## 1. End-to-End Content Pipeline
+
+```{mermaid}
+graph TB
+    START["🚀 /social-generate Command<br/>Input: Idea, Variations, Platform List"]
+
+    START --> PHASE1["PHASE 1: Research & Ideation<br/>Subcommand: /social-ideate"]
+
+    PHASE1 --> TREND["Agent: Trend-Researcher<br/>Find: Hashtags, formats, hooks"]
+    PHASE1 --> IDEATE["Agent: Content-Ideator<br/>Create: Platform angles"]
+
+    TREND -.parallelProcess.-> IDEATE
+
+    IDEATE --> POLICY["🪝 HOOK: Content-Policy-Check<br/>Validate: Brand safety, compliance"]
+
+    POLICY -->|PASS| PHASE2["PHASE 2: Multi-Platform Generation<br/>Subcommand: /social-create"]
+    POLICY -->|FAIL| REVIEW["⚠️ Manual Review Required"]
+
+    PHASE2 --> TW["Agent: Twitter-Creator<br/>Output: Threads, polls, tweets"]
+    PHASE2 --> LI["Agent: LinkedIn-Creator<br/>Output: Stories, carousels"]
+    PHASE2 --> IG["Agent: Instagram-Creator<br/>Output: Posts, stories, reels"]
+    PHASE2 --> FB["Agent: Facebook-Creator<br/>Output: Questions, polls"]
+    PHASE2 --> TK["Agent: TikTok-Creator<br/>Output: Video scripts"]
+    PHASE2 --> VIS["Agent: Visual-Generator<br/>Output: Images, graphics"]
+
+    TW -.parallel.-> LI
+    LI -.parallel.-> IG
+    IG -.parallel.-> FB
+    FB -.parallel.-> TK
+    TK -.parallel.-> VIS
+
+    TW --> VISUAL_CHECK["🪝 HOOK: Visual-Validation<br/>Check: Dimensions, file size, brand"]
+    LI --> VISUAL_CHECK
+    IG --> VISUAL_CHECK
+    FB --> VISUAL_CHECK
+    TK --> VISUAL_CHECK
+    VIS --> VISUAL_CHECK
+
+    VISUAL_CHECK -->|PASS| PHASE3["PHASE 3: Scheduling & Publishing<br/>Subcommand: /social-schedule"]
+    VISUAL_CHECK -->|FAIL| REVIEW
+
+    PHASE3 --> SCHED["Agent: Scheduler<br/>Determine: Optimal times per platform"]
+
+    SCHED --> PUBLISH["Agent: Multi-Publisher<br/>Publish: To all platforms via APIs"]
+
+    PUBLISH --> OUTPUT["✅ Final Output<br/>📤 Posted or scheduled<br/>📊 Analytics tracking enabled<br/>🎨 Visuals delivered"]
+
+    REVIEW --> END["🔄 Return for manual adjustment"]
+    OUTPUT --> END
+
+    style START fill:#4ecdc4,color:#fff
+    style PHASE1 fill:#ffe66d
+    style PHASE2 fill:#a8dadc,stroke:#333,stroke-width:3px
+    style PHASE3 fill:#f1faee
+    style OUTPUT fill:#06d6d0,color:#fff
+    style POLICY fill:#ff6b6b,color:#fff
+    style VISUAL_CHECK fill:#ff6b6b,color:#fff
+```
+
+---
+
+## 2. Platform-Specific Content Routing
+
+```{mermaid}
+graph TB
+    IDEA["📝 Developed Idea<br/>(with platform angles)"]
+
+    IDEA --> TW["🐦 TWITTER ROUTE"]
+    IDEA --> LI["💼 LINKEDIN ROUTE"]
+    IDEA --> IG["📸 INSTAGRAM ROUTE"]
+    IDEA --> FB["👍 FACEBOOK ROUTE"]
+    IDEA --> TK["🎵 TIKTOK ROUTE"]
+
+    TW -->|280 char limit| TW_FORMAT["Threads (5-10)<br/>Polls<br/>Standalone tweets"]
+    TW_FORMAT -->|2-3 hashtags| TW_STYLE["Tone: Conversational<br/>Hook: Bold statement<br/>CTA: Join community"]
+    TW_STYLE --> TW_OUTPUT["✅ 3 variations<br/>Best time: 9am, 3pm"]
+
+    LI -->|1500 char optimum| LI_FORMAT["Personal Stories<br/>Document Carousel<br/>Native Video"]
+    LI_FORMAT -->|3-5 hashtags| LI_STYLE["Tone: Professional<br/>Hook: Vulnerability<br/>CTA: Connect"]
+    LI_STYLE --> LI_OUTPUT["✅ 3 variations<br/>Best time: 7-8am, 12pm"]
+
+    IG -->|150-300 char| IG_FORMAT["Feed Carousel<br/>Reel Script<br/>Story Template"]
+    IG_FORMAT -->|5-10 hashtags| IG_STYLE["Tone: Aspirational<br/>Hook: Visual + caption<br/>CTA: Link in bio"]
+    IG_STYLE --> IG_OUTPUT["✅ 3 variations<br/>Best time: 11am, 7pm"]
+
+    FB -->|500-1000 char| FB_FORMAT["Question Post<br/>Story Post<br/>Poll"]
+    FB_FORMAT -->|2-3 hashtags| FB_STYLE["Tone: Warm, community<br/>Hook: Relatable<br/>CTA: Drop comment"]
+    FB_STYLE --> FB_OUTPUT["✅ 3 variations<br/>Best time: 1-3pm"]
+
+    TK -->|30-60 sec| TK_FORMAT["POV Script<br/>Before/After<br/>Trend Participation"]
+    TK_FORMAT -->|3-5 hashtags| TK_STYLE["Tone: Authentic<br/>Hook: First 3 sec<br/>CTA: Follow for more"]
+    TK_STYLE --> TK_OUTPUT["✅ 3 variations<br/>Best time: 7-9am, 7-10pm"]
+
+    TW_OUTPUT --> AGGREGATE["📊 Aggregate Results<br/>15+ posts with visuals"]
+    LI_OUTPUT --> AGGREGATE
+    IG_OUTPUT --> AGGREGATE
+    FB_OUTPUT --> AGGREGATE
+    TK_OUTPUT --> AGGREGATE
+
+    style IDEA fill:#4ecdc4
+    style TW fill:#b4a7d6
+    style LI fill:#73a1c7
+    style IG fill:#f4a460
+    style FB fill:#6a94c9
+    style TK fill:#7d5ba6
+    style TW_OUTPUT fill:#e8d5f0
+    style LI_OUTPUT fill:#d4e5f0
+    style IG_OUTPUT fill:#fff5e6
+    style FB_OUTPUT fill:#e6f0ff
+    style TK_OUTPUT fill:#f0e6ff
+    style AGGREGATE fill:#06d6d0
+```
+
+---
+
+## 3. Weekly Posting Schedule Timeline
+
+```{mermaid}
+gantt
+    title Content Calendar - One Week Timeline (Optimized)
+    dateFormat YYYY-MM-DD
+
+    section Twitter
+    Tweet 1 🐦                     :tw1, 2025-11-18, 1d
+    Thread 📚                      :tw2, 2025-11-19, 1d
+    Poll 📊                        :tw3, 2025-11-20, 1d
+
+    section LinkedIn
+    Story Post 💡                  :li1, 2025-11-18, 1d
+    Carousel 📋                    :li2, 2025-11-21, 1d
+
+    section Instagram
+    Feed Post 📸                   :ig1, 2025-11-19, 1d
+    Carousel 🎞️                   :ig2, 2025-11-22, 1d
+    Story Series 📖               :ig3, 2025-11-20, 2d
+
+    section Facebook
+    Question Post ❓              :fb1, 2025-11-18, 1d
+    Community Post 👥             :fb2, 2025-11-23, 1d
+
+    section TikTok
+    Video Script 🎬               :tk1, 2025-11-19, 1d
+    Hook Video 🎯                 :tk2, 2025-11-21, 1d
+    Trend Participation 🔥        :tk3, 2025-11-24, 1d
+
+    section Visual Assets
+    Generated Assets 🎨           :vis, 2025-11-18, 3d
+```
+
+---
+
+## 4. Parallel Agent Execution Model
+
+```{mermaid}
+graph LR
+    START["Start<br/>T=0 min"] --> IDEA["Idea Development<br/>T=10 min<br/>2 agents"]
+
+    IDEA -->|T=10| GEN["Content Generation<br/>T=30 min<br/>6 agents PARALLEL"]
+
+    GEN -->|T=40| SCHEDULE["Scheduling<br/>T=50 min<br/>Sequential"]
+
+    SCHEDULE -->|T=60| PUBLISH["Publishing<br/>T=65 min<br/>Sequential"]
+
+    PUBLISH -->|T=65| END["Complete<br/>55 min total<br/>vs 6.75h manual"]
+
+    style START fill:#06d6d0
+    style IDEA fill:#ffe66d,stroke:#333,stroke-width:2px
+    style GEN fill:#a8dadc,stroke:#333,stroke-width:3px
+    style SCHEDULE fill:#f1faee,stroke:#333,stroke-width:2px
+    style PUBLISH fill:#e7f6f5,stroke:#333,stroke-width:2px
+    style END fill:#06d6d0,color:#fff
+```
+
+**Key Insight**: 6 agents working simultaneously compress 120 minutes of sequential work into 20 minutes.
+
+---
+
+## 5. Content Quality Gate System
+
+```{mermaid}
+graph TB
+    INPUT["Content Input<br/>from Agents"]
+
+    INPUT --> GATE1["🪝 GATE 1: Content Policy<br/>- Brand safety<br/>- Compliance check<br/>- Sensitive content<br/>- Promotional ratio"]
+
+    GATE1 -->|Pass| GATE2["🪝 GATE 2: Visual Validation<br/>- Dimensions check<br/>- File size (<1MB)<br/>- Brand consistency<br/>- Alt text"]
+
+    GATE2 -->|Pass| GATE3["🪝 GATE 3: Scheduling Optimization<br/>- Peak time alignment<br/>- Frequency limits<br/>- Conflict detection<br/>- Spread strategy"]
+
+    GATE3 -->|Pass| PUBLISH_SUCCESS["✅ Ready to Publish"]
+
+    GATE1 -->|Fail| REVIEW["⚠️ Manual Review"]
+    GATE2 -->|Fail| REVIEW
+    GATE3 -->|Fail| REVIEW
+
+    REVIEW --> ADJUST["🔧 Agent Adjustment"]
+    ADJUST --> GATE1
+
+    PUBLISH_SUCCESS --> LIVE["🚀 Published to Platforms"]
+
+    style GATE1 fill:#ff6b6b,color:#fff
+    style GATE2 fill:#ff6b6b,color:#fff
+    style GATE3 fill:#ff6b6b,color:#fff
+    style PUBLISH_SUCCESS fill:#95e1d3
+    style LIVE fill:#06d6d0,color:#fff
+    style REVIEW fill:#ffe66d
+    style ADJUST fill:#ffe66d
+```
+
+---
+
+## 6. Hashtag Strategy Pyramid
+
+```{mermaid}
+graph TB
+    subgraph TWITTER["🐦 Twitter<br/>1-2 Total"]
+        TW_T["1 Trending<br/>1 Branded"]
+    end
+
+    subgraph LINKEDIN["💼 LinkedIn<br/>3-5 Total"]
+        LI_B["2 Broad<br/>3 Niche"]
+    end
+
+    subgraph INSTAGRAM["📸 Instagram<br/>5-10 Total"]
+        IG_H["3 High Vol<br/>4 Medium<br/>3 Niche"]
+    end
+
+    subgraph FACEBOOK["👍 Facebook<br/>2-3 Total"]
+        FB_C["2-3 Community<br/>Focused"]
+    end
+
+    subgraph TIKTOK["🎵 TikTok<br/>3-5 Total"]
+        TK_T["2 Trending<br/>3 Content"]
+    end
+
+    style TWITTER fill:#b4a7d6
+    style LINKEDIN fill:#73a1c7
+    style INSTAGRAM fill:#f4a460
+    style FACEBOOK fill:#6a94c9
+    style TIKTOK fill:#7d5ba6
+```
+
+---
+
+## 7. Brand Voice Consistency Matrix
+
+```{mermaid}
+xychart-beta
+    title "Tone Spectrum Across Platforms"
+    x-axis [Formal, Casual]
+    y-axis [Professional, Entertainment] 0 --> 10
+
+    point [2, 9] "TikTok"
+    point [3, 8] "Instagram"
+    point [5, 5] "Facebook"
+    point [7, 7] "Twitter"
+    point [9, 3] "LinkedIn"
+```
+
+**Brand Voice Core**: Friendly expert, value-first, data-driven
+
+Each platform shifts on this core without losing identity.
+
+---
+
+## 8. Monthly Output Volume Comparison
+
+```{mermaid}
+graph LR
+    MANUAL["Manual Process<br/>6.75h/day"]
+    AUTO["Automated Process<br/>55min/day"]
+
+    MANUAL -->|30 days| OUT_MANUAL["60-90 posts<br/>20-30 visuals<br/>Inconsistent"]
+    AUTO -->|30 days| OUT_AUTO["300+ posts<br/>150+ visuals<br/>Perfect consistency"]
+
+    OUT_MANUAL --> GAIN["Gain: 3-5x output"]
+    OUT_AUTO --> GAIN
+
+    style MANUAL fill:#ff6b6b
+    style AUTO fill:#95e1d3
+    style GAIN fill:#06d6d0,color:#fff
+```
+
+---
+
+## 9. MCP Integration Architecture
+
+```{mermaid}
+graph TB
+    CLAUDE["Claude AI Core"]
+
+    CLAUDE -->|Agent Commands| SOCIAL["Social Media APIs<br/>mcp__social-apis"]
+    CLAUDE -->|Image Generation| IMAGE["Image MCP<br/>mcp__dalle"]
+    CLAUDE -->|Analytics Data| ANALYTICS["Analytics MCP<br/>mcp__social-analytics"]
+
+    SOCIAL -->|Twitter API| TW_PLATFORM["Twitter/X"]
+    SOCIAL -->|LinkedIn API| LI_PLATFORM["LinkedIn"]
+    SOCIAL -->|Instagram/FB API| IG_PLATFORM["Instagram/Facebook"]
+    SOCIAL -->|TikTok API| TK_PLATFORM["TikTok"]
+
+    IMAGE -->|Generate| ASSETS["Visual Assets"]
+
+    ANALYTICS -->|Retrieve| PERF["Performance Data"]
+
+    PERF -->|Feed into| FUTURE["Next Campaign Optimization"]
+
+    style CLAUDE fill:#4ecdc4,color:#fff
+    style SOCIAL fill:#a8dadc
+    style IMAGE fill:#a8dadc
+    style ANALYTICS fill:#a8dadc
+    style TW_PLATFORM fill:#b4a7d6
+    style LI_PLATFORM fill:#73a1c7
+    style IG_PLATFORM fill:#f4a460
+    style TK_PLATFORM fill:#7d5ba6
+```
+
+---
+
+## 10. Ideal Posting Schedule per Platform
+
+```{mermaid}
+quadrantChart
+    title "Weekly Posting Schedule Heatmap"
+    x-axis Morning --> Evening
+    y-axis Weekday --> Weekend
+
+    Twitter: 0.8, 0.3
+    LinkedIn: 0.7, 0.2
+    Instagram: 0.6, 0.7
+    Facebook: 0.5, 0.5
+    TikTok: 0.75, 0.8
+```
+
+**Optimal Times**:
+- **Twitter**: 9am, 12pm, 3pm, 6pm (workday breaks)
+- **LinkedIn**: 7-8am, 12pm (before work, lunch)
+- **Instagram**: 11am, 1pm, 7-9pm (lunch, evening)
+- **Facebook**: 1-3pm (afternoon browsing)
+- **TikTok**: 7-9am, 7-10pm (commute, evening)
+
+---
+
+## Key Architectural Principles
+
+1. **Parallel Processing** - 6 agents run simultaneously, not sequentially
+2. **Quality Gates** - Automatic validation at 3 checkpoints
+3. **Native Platform Feel** - Content optimized per platform, not copy-paste
+4. **Scalable Design** - Same system handles 1 or 100 posts/day
+5. **Data-Driven** - Scheduling based on analytics, not guesswork
+6. **Brand Consistency** - Core voice maintained across all platforms
+
+See [Examples](./examples.qmd) for command usage and agent implementation details.

@@ -871,10 +871,11 @@ SKILLS:
 ### Documentation Interne
 - 📄 [Memory Guide](../themes/1-memory/guide.md) - Quand utiliser Memory
 - 📄 [Commands Guide](../themes/2-commands/guide.md) - Créer commands
-- 📄 [Hooks Guide](../themes/6-hooks/guide.md) - Auto-trigger workflows
-- 📄 [Skills Guide](../themes/5-skills/guide.md) - Share knowledge
-- 📄 [Plugins Guide](../themes/8-plugins/guide.md) - Distribute workflows
-- 📄 [Sub-Agents Guide](../themes/7-subagents/guide.md) - Parallel execution
+- 📄 [Hooks Guide](../themes/3-hooks/guide.md) - Auto-trigger workflows
+- 📄 [Skills Guide](../themes/4-skills/guide.md) - Share knowledge
+- 📄 [Agents Guide](../themes/5-agents/guide.md) - Parallel execution
+- 📄 [Plugins Guide](../themes/6-plugins/guide.md) - Distribute workflows
+- 📄 [MCP Guide](../themes/7-mcp/guide.md) - External integrations
 - 📄 [Command/Agent Pattern](../patterns/command-agent-skill.md) - Orchestration
 
 ### Documentation Externe

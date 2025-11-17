@@ -1,0 +1,203 @@
+/* Material Design 3 Styles for Quarto */
+
+:root {
+  /* Material Design 3 Color Palette */
+  --md3-primary: #6366F1;
+  --md3-secondary: #EC4899;
+  --md3-accent: #10B981;
+  --md3-warning: #F59E0B;
+  --md3-error: #EF4444;
+  --md3-success: #10B981;
+  --md3-info: #3B82F6;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.12);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+  --shadow-xl: 0 12px 48px rgba(0,0,0,0.18);
+}
+
+/* Glassmorphism Callouts */
+.callout {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.callout-note {
+  border-left: 4px solid var(--md3-info);
+}
+
+.callout-warning {
+  border-left: 4px solid var(--md3-warning);
+}
+
+.callout-important {
+  border-left: 4px solid var(--md3-error);
+}
+
+.callout-tip {
+  border-left: 4px solid var(--md3-success);
+}
+
+/* Code Blocks */
+pre {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid var(--md3-primary);
+}
+
+code {
+  background: rgba(99, 102, 241, 0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+
+/* Headers */
+h1 {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  margin-top: 2rem;
+}
+
+h2 {
+  color: var(--md3-primary);
+  border-bottom: 2px solid var(--md3-primary);
+  padding-bottom: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+h3 {
+  color: var(--md3-secondary);
+  margin-top: 1rem;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow-md);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+thead {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+tbody tr:hover {
+  background: rgba(99, 102, 241, 0.05);
+  transition: background 0.2s ease;
+}
+
+/* Buttons */
+.btn {
+  background: var(--gradient-primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Mermaid Diagram Styling */
+.mermaid {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .callout {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  pre {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a;
+    --text: #e2e8f0;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--text);
+  }
+
+  .callout {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  td {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+}

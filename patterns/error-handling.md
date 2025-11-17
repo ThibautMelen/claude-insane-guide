@@ -671,9 +671,9 @@ LAUNCH agents → COLLECT results
 - 📄 [Command/Agent/Skill Pattern](./command-agent-skill.md) - Architecture base
 - 📄 [Parallel Execution](./parallel-execution.md) - Patterns concurrents
 - 📄 [State Management](./state-management.md) - Gestion état & recovery
-- 📄 [MCP Guide](../themes/4-mcp/guide.md) - Configuration MCP servers
-- 📄 [Hooks Guide](../themes/6-hooks/guide.md) - Automation avec hooks
-- 📄 [Interactive UI](../themes/10-interactive/guide.md) - AskUserQuestion patterns
+- 📄 [MCP Guide](../themes/7-mcp/guide.md) - Configuration MCP servers
+- 📄 [Hooks Guide](../themes/3-hooks/guide.md) - Automation avec hooks
+- 📄 [Interactive UI](../advanced/interactive-ui.md) - AskUserQuestion patterns
 
 ### Documentation Externe
 - 📄 [Claude Code Hooks](https://code.claude.com/docs/hooks) - Events et automation

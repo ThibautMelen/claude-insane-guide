@@ -1,0 +1,280 @@
+---
+title: "Command Coordination - Vue d'Ensemble"
+subtitle: "COMMAND orchestrate, NEVER execute"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+---
+
+## 📚 Qu'est-ce que le Command Coordination?
+
+Le **Command Coordination Pattern** implémente le principe fondamental d'Anthropic :
+
+::: {.callout-important}
+## Principe Fondamental
+
+**"COMMAND orchestrate, NEVER execute. Agents execute, NEVER coordinate."**
+
+Un COMMAND est un chef d'orchestre - il coordonne plusieurs agents sans jamais exécuter de tâches lui-même.
+:::
+
+## 🎯 Responsabilités d'une Command
+
+### Architecture Conceptuelle
+
+Une COMMAND a des responsabilités très précises et délimitées :
+
+```
+╔════════════════════════════════════╗
+║     COMMAND = ORCHESTRATOR         ║
+╚════════════════════════════════════╝
+             ↓
+   ┌────────────────────────┐
+   │ ✅ FAIT :               │
+   ├────────────────────────┤
+   │ • Parse arguments      │
+   │ • Validate inputs      │
+   │ • Launch agents        │
+   │ • Aggregate results    │
+   │ • Report to user       │
+   └────────────────────────┘
+             ↓
+   ┌────────────────────────┐
+   │ ❌ NE FAIT JAMAIS :     │
+   ├────────────────────────┤
+   │ • Execute tasks        │
+   │ • Read/Write files     │
+   │ • Call APIs            │
+   │ • Transform data       │
+   │ • Apply business logic │
+   └────────────────────────┘
+```
+
+### Les 5 Phases du Lifecycle
+
+| Phase | Responsabilité | Exemple |
+|-------|------------------|---------|
+| **1. Parse** | Extraire arguments utilisateur | Récupérer languages list de l'input |
+| **2. Validate** | Vérifier inputs + prérequis | Vérifier que les locales existent |
+| **3. Orchestrate** | Lancer agents selon stratégie | Lancer 15 traducteurs en parallèle |
+| **4. Aggregate** | Collecter résultats | Combiner 15 traductions |
+| **5. Report** | Résumé utilisateur | "15 langues traduites en 20min, $50" |
+
+## ⚡ Execution Strategies
+
+Le choix de stratégie dépend de la nature des tâches :
+
+::: {.callout-tip}
+## Choisir la Bonne Stratégie
+
+**Parallel** : Tâches indépendantes → 5-20x speedup
+- Example: Translation (15 languages)
+- Condition: No dependencies
+
+**Sequential** : Dépendances strictes → Quality gates
+- Example: CI/CD (Build → Test → Deploy)
+- Condition: Must complete in order
+
+**Batch** : Large datasets (100+ items) → 10-15x speedup
+- Example: Localization (174 locales)
+- Condition: Split into waves (20 items/wave)
+:::
+
+### 1. Parallel Execution (Indépendant)
+
+**Cas d'usage** : Tâches sans dépendances
+**Speedup** : 5-20x
+**Exemple** : Translation 15 langues
+
+```
+┌──────────────────────────────────────────┐
+│         COMMAND: PARSE                   │
+│  Languages: [es, fr, de, it, ...]        │
+│  Validate: All locales exist ✅          │
+└──────────────────────────────────────────┘
+                    ↓
+┌──────────────────────────────────────────┐
+│     LAUNCH (PARALLEL):                   │
+│  ┌────┐ ┌────┐ ┌────┐ ... ┌────┐        │
+│  │ES  │ │FR  │ │DE  │     │IT  │        │
+│  └────┘ └────┘ └────┘ ... └────┘        │
+│     (all run concurrently)               │
+└──────────────────────────────────────────┘
+                    ↓
+┌──────────────────────────────────────────┐
+│     AGGREGATE: 15/15 success ✅          │
+│     REPORT: "Translated 15 languages"    │
+│     Time: 20 min (vs 300 min sequential) │
+└──────────────────────────────────────────┘
+```
+
+### 2. Sequential Execution (Dépendant)
+
+**Cas d'usage** : Dépendances strictes, quality gates
+**Speedup** : 1x (qualité avant tout)
+**Exemple** : CI/CD pipeline (Build → Test → Deploy)
+
+```
+┌────────────────────────────────────────┐
+│        PHASE 1: BUILD                  │
+│   ↓                                    │
+│  ┌──────┐                              │
+│  │Build │ → ✅ Success                 │
+│  └──────┘                              │
+└────────────────────────────────────────┘
+              ↓
+┌────────────────────────────────────────┐
+│   PHASE 2: TEST (if build ok)          │
+│   ↓                                    │
+│  ┌──────┐                              │
+│  │Test  │ → ✅ Coverage 85%            │
+│  └──────┘                              │
+└────────────────────────────────────────┘
+              ↓
+┌────────────────────────────────────────┐
+│   PHASE 3: DEPLOY (if tests pass)      │
+│   ↓                                    │
+│  ┌────────┐                            │
+│  │Deploy  │ → ✅ Deployed              │
+│  └────────┘                            │
+└────────────────────────────────────────┘
+              ↓
+     Report: "Pipeline complete (60min)"
+```
+
+### 3. Batch Processing (Large Datasets)
+
+**Cas d'usage** : 100+ items à traiter
+**Speedup** : 10-15x
+**Batch Size** : 10-20 items par wave
+
+```
+Total: 174 locales
+Batch: 20 locales par wave
+Waves: 9 waves total
+
+┌─────────────────────────────────────┐
+│  Wave 1 (Locales 1-20)              │
+│  Agent1...Agent20 (parallel)         │
+│  ✅ 20/20 success                   │
+└─────────────────────────────────────┘
+              ↓
+┌─────────────────────────────────────┐
+│  Wave 2 (Locales 21-40)             │
+│  Agent21...Agent40 (parallel)        │
+│  ✅ 20/20 success                   │
+└─────────────────────────────────────┘
+              ↓
+          ... 7 more waves ...
+              ↓
+┌─────────────────────────────────────┐
+│  Wave 9 (Locales 161-174)           │
+│  Agent161...Agent174 (parallel)      │
+│  ✅ 14/14 success                   │
+└─────────────────────────────────────┘
+              ↓
+   Aggregate: 174/174 success ✅
+   Report: "Generated 174 locales (3.5h)"
+```
+
+## 🏗️ Anatomy of a COMMAND
+
+### Structure Template
+
+```yaml
+# .claude/commands/my-orchestrator.md
+---
+description: Coordinate [N] agents to [accomplish goal]
+allowed-tools: Task, AskUserQuestion, Bash (git only)
+---
+
+## 1️⃣ PARSE ARGUMENTS
+Extract inputs from user command.
+Handle multiple input formats.
+
+## 2️⃣ VALIDATE INPUTS
+Verify all required data present and valid.
+Use AskUserQuestion if missing/unclear.
+
+## 3️⃣ ORCHESTRATE AGENTS
+Choose execution strategy:
+- Parallel for independent tasks
+- Sequential for dependent tasks
+- Batch for large datasets
+
+Task(
+  subagent_type="agent-name",
+  description="What the agent does",
+  prompt="Instructions for the agent"
+)
+
+## 4️⃣ AGGREGATE RESULTS
+Collect outputs from all agents.
+Handle failures (retry once, then report).
+
+## 5️⃣ REPORT TO USER
+Provide comprehensive summary:
+- ✅ Successes (count + details)
+- ❌ Failures (count + reasons)
+- 📊 Metrics (time, cost, speedup)
+```
+
+## 💡 Key Differences: Command vs Agent
+
+### COMMAND (Orchestrator)
+
+✅ **DO**:
+- Coordinate multiple agents
+- Parse and validate inputs
+- Choose execution strategy
+- Aggregate results
+- Report comprehensive summary
+
+❌ **DON'T**:
+- Execute tasks directly
+- Read/Write files
+- Call APIs
+- Transform data
+- Apply business logic
+
+### AGENT (Executor)
+
+✅ **DO**:
+- Execute specific tasks
+- Read/Write files
+- Call APIs
+- Apply business logic
+- Report outcomes
+
+❌ **DON'T**:
+- Launch other agents (only COMMAND can)
+- Coordinate multiple steps
+- Make orchestration decisions
+- Parse complex inputs
+
+## 📊 Quick Reference
+
+| Aspect | COMMAND | AGENT |
+|--------|---------|-------|
+| **Role** | Chef d'orchestre | Musicien |
+| **Task** | Coordinate others | Execute specific task |
+| **Tools** | Task, AskUserQuestion, Bash(git) | Read, Write, Edit, APIs, etc. |
+| **Scope** | Cross-cutting | Focused domain |
+| **Launches** | ✅ Yes (other agents) | ❌ Never |
+| **Executes** | ❌ Never | ✅ Yes |
+
+## 🔗 Ressources Associées
+
+- **Diagrammes visuels** : [diagrams.qmd](diagrams.qmd)
+- **Exemples concrets** : [examples.qmd](examples.qmd)
+- **Documentation complète** : [command-coordination.md](command-coordination.md)
+- **Documentation officielle** : [Sub-Agents Coordination](https://code.claude.com/docs/en/sub-agents#coordination)
+
+---
+
+**Niveau** : Production
+**Prérequis** : Commands, Orchestration Principles
+**Voir aussi** : [Agent Orchestration](../agent-orchestration/overview.qmd)

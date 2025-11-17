@@ -257,9 +257,9 @@ claude
 ### Documentation Complète
 
 1. **Fondamentaux** : themes/1-memory → themes/3-hooks
-2. **Intégrations** : themes/4-mcp → themes/6-plugins
-3. **Avancé** : themes/7-agents → themes/10-interactive-ui
-4. **Expert** : advanced/ & showcase/
+2. **Intégrations** : themes/4-skills → themes/7-mcp
+3. **Orchestration** : workflow-pattern-orchestration/
+4. **Expert** : patterns/ & advanced/
 
 ### Ressources
 

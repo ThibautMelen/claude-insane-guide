@@ -1,0 +1,49 @@
+---
+title: "Document Title"
+subtitle: "Document Subtitle"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+    fig-width: 10
+    fig-height: 8
+    css: ../../../.claude/skills/quarto-formatter/assets/styles.css
+---
+
+# Introduction
+
+This is a template Quarto document with Material Design 3 styling.
+
+## Example Mermaid Diagram
+
+```{mermaid}
+%%| fig-width: 10
+%%| fig-height: 6
+
+flowchart LR
+    A[Start] --> B{Decision}
+    B -->|Yes| C[Option 1]
+    B -->|No| D[Option 2]
+    C --> E[End]
+    D --> E
+
+    classDef primaryClass fill:#6366F1,stroke:#6366F1,stroke-width:2px,color:#fff
+    classDef successClass fill:#10B981,stroke:#10B981,stroke-width:2px,color:#fff
+    classDef warningClass fill:#F59E0B,stroke:#F59E0B,stroke-width:2px,color:#fff
+
+    class A,E primaryClass
+    class C successClass
+    class D warningClass
+```
+
+## Color Palette
+
+Use Material Design 3 colors:
+
+- **Primary**: #6366F1 (Indigo)
+- **Secondary**: #EC4899 (Pink)
+- **Accent**: #10B981 (Green)
+- **Warning**: #F59E0B (Amber)
+- **Error**: #EF4444 (Red)

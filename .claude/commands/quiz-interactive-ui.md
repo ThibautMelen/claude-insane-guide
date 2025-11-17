@@ -53,4 +53,4 @@ d) b et c sont corrects
 **Score** :
 - 5/5 : Expert Interactive UI ! 🎮
 - 3-4/5 : Bonne compréhension 👍
-- 1-2/5 : Voir themes/10-interactive-ui/guide.md 📚
+- 1-2/5 : Voir advanced/interactive-ui.md 📚

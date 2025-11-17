@@ -1,0 +1,609 @@
+---
+title: "Community Management Workflow: Technical Diagrams"
+subtitle: "Visual Architecture and Process Flows"
+author: "Claude Code Patterns"
+date: "2025-11-17"
+format:
+  html:
+    toc: true
+    number-sections: true
+    mermaid-format: svg
+  pdf:
+    toc: true
+    number-sections: true
+---
+
+## 1. Batch Processing Flowchart
+
+Shows how 500 accumulated messages flow through monitoring, filtering, triage, and response phases.
+
+```mermaid
+graph TD
+    A["📬 Daily Message Collection<br/>500 total messages"] --> B["🪝 HOOK: Spam Filter<br/>Remove spam & duplicates"]
+    B --> B1["✅ 225 valid messages<br/>5 spam filtered"]
+
+    B1 --> C["📊 PHASE 1: Monitoring<br/>Multi-channel collection"]
+    C --> C1["🐦 Twitter<br/>80 messages"]
+    C --> C2["💼 LinkedIn<br/>20 messages"]
+    C --> C3["📷 Instagram<br/>50 messages"]
+    C --> C4["📧 Email<br/>45 messages"]
+    C --> C5["💬 Chat<br/>30 messages"]
+
+    C1 & C2 & C3 & C4 & C5 --> D["🪝 HOOK: Sentiment Check<br/>Analyze tone & urgency"]
+
+    D --> E["🏷️ PHASE 2: Triage<br/>Categorize & Prioritize"]
+    E --> E1["Support: 100"]
+    E --> E2["Sales: 40"]
+    E --> E3["Feedback: 30"]
+    E --> E4["Complaint: 20"]
+    E --> E5["Compliment: 30"]
+    E --> E6["Spam: 5"]
+
+    E1 & E2 & E3 & E4 & E5 & E6 --> F["⚡ PHASE 3: Response Logic<br/>Auto vs Escalate"]
+
+    F --> G{Complexity < 7?<br/>Mode = Respond?}
+
+    G -->|Yes: 70%<br/>140 messages| H["🤖 AUTO-RESPOND Branch"]
+    G -->|No: 30%<br/>60 messages| I["👤 ESCALATE Branch"]
+
+    H --> H1["📚 FAQ Responder<br/>60 responses"]
+    H --> H2["🔧 Support Responder<br/>50 responses"]
+    H --> H3["💰 Sales Responder<br/>30 responses"]
+
+    H1 & H2 & H3 --> J["🪝 HOOK: Response Quality<br/>Grammar, tone, links verified"]
+
+    I --> I1["📋 Create Support Ticket"]
+    I --> I2["💡 Generate Summary"]
+    I --> I3["📤 Notify Human"]
+    I1 & I2 & I3 --> J
+
+    J --> K["✅ Response Sent"]
+    K --> L["📊 PHASE 4: Analytics<br/>Track metrics & trends"]
+    L --> M["📈 Daily Report Generated"]
+```
+
+---
+
+## 2. Batch Wave Execution Timeline (Gantt)
+
+Shows how 500 messages are processed in 25 waves of 20 messages each, with parallel processing.
+
+```mermaid
+gantt
+    title Batch Processing Timeline: 500 Messages in 25 Waves
+    dateFormat YYYY-MM-DD HH:mm
+
+    section Monitoring
+    Social Monitor     :active, monitor1, 2025-11-17 08:00, 5m
+    Email Monitor      :active, monitor2, 2025-11-17 08:00, 5m
+    Chat Monitor       :active, monitor3, 2025-11-17 08:00, 5m
+    Merge & Dedup      :crit, merge, 2025-11-17 08:05, 2m
+
+    section Filtering
+    Spam Filter (Hook) :crit, spamfilter, 2025-11-17 08:07, 2m
+    Sentiment Check    :crit, sentiment, 2025-11-17 08:09, 3m
+
+    section Triage (Parallel)
+    Categorizer Agent  :active, cat, 2025-11-17 08:12, 5m
+    Prioritizer Agent  :active, pri, 2025-11-17 08:12, 5m
+
+    section Wave Processing
+    Waves 1-5 (Auto)   :active, wave1, 2025-11-17 08:17, 10m
+    Waves 1-5 (Escalate) :active, wave1e, 2025-11-17 08:17, 10m
+    Waves 6-15 (Auto)  :active, wave2, 2025-11-17 08:27, 20m
+    Waves 6-15 (Escalate) :active, wave2e, 2025-11-17 08:27, 20m
+    Waves 16-25 (Auto) :active, wave3, 2025-11-17 08:47, 20m
+    Waves 16-25 (Escalate) :active, wave3e, 2025-11-17 08:47, 20m
+
+    section QA & Output
+    Response Quality   :crit, qa, 2025-11-17 09:07, 5m
+    Analytics Report   :crit, report, 2025-11-17 09:12, 3m
+    Human Review Start :milestone, humstart, 2025-11-17 09:15, 0m
+
+    section Human Processing
+    Human Escalation Review :human, human1, 2025-11-17 09:15, 60m
+```
+
+**Timeline Summary**:
+- 08:00-08:07: Parallel monitoring (5 min) + dedup (2 min)
+- 08:07-08:12: Filtering hooks (5 min)
+- 08:12-08:17: Triage parallel (5 min)
+- 08:17-09:07: Wave processing (50 min for 25 waves)
+- 09:07-09:12: Quality check & reporting (5 min)
+- **Total automated**: ~62 minutes
+- **Human escalations**: ~60 minutes (parallel with automation)
+- **Total time**: ~2 hours
+
+---
+
+## 3. Sequence Diagram: Batch Coordinator & Agent Waves
+
+Shows the orchestration pattern: coordinator sends waves to parallel agent pools.
+
+```mermaid
+sequenceDiagram
+    participant BC as Batch Coordinator
+    participant MA as Monitor Agents
+    participant TG as Triage Agents
+    participant AR as Auto-Response Agents
+    participant ES as Escalation Agent
+    participant HM as Human Manager
+
+    BC->>MA: Start: Monitor all channels (parallel)
+    par
+        MA->>MA: Social Monitor (Twitter, LinkedIn, Instagram, Facebook)
+        MA->>MA: Email Monitor (support@, hello@, contact@)
+        MA->>MA: Chat Monitor (Discord, Slack, Intercom)
+    end
+    MA-->>BC: 500 messages collected
+
+    BC->>BC: Filter spam, deduplicate
+    Note over BC: 225 valid messages, 5 spam filtered
+
+    BC->>TG: Start: Categorize & Prioritize (parallel)
+    par
+        TG->>TG: Categorizer (6 categories)
+        TG->>TG: Prioritizer (P0-P3 + complexity)
+    end
+    TG-->>BC: Triaged messages with scores
+
+    BC->>BC: Branch decision: Complexity < 7?
+
+    par Auto-Respond Path
+        BC->>AR: Wave 1-25: Route easy messages (140 total)
+        par
+            AR->>AR: FAQ Responder (60 messages)
+            AR->>AR: Support Responder (50 messages)
+            AR->>AR: Sales Responder (30 messages)
+        end
+        AR-->>BC: 140 responses generated
+    and Escalation Path
+        BC->>ES: Route complex messages (60 total)
+        ES->>ES: Create tickets in support system
+        ES->>ES: Generate summaries & suggestions
+        ES->>HM: Notify via Slack (priority-based)
+        HM-->>ES: Human takes ownership
+        ES-->>BC: 60 escalations created
+    end
+
+    BC->>BC: Quality check (grammar, tone, links)
+    BC->>HM: Send responses to channels (auto)
+    BC->>HM: Create escalation queue (for human review)
+
+    Note over BC,HM: Total time: 2 hours (vs 8.3 manual)
+    BC-->>HM: Daily analytics report
+```
+
+**Key orchestration points**:
+1. **Batch Coordinator** manages all phases sequentially
+2. **Monitoring Agents** run in parallel (5 channels)
+3. **Triage Agents** run in parallel (categorize + prioritize)
+4. **Response branches** split: auto (parallel pool) vs escalate (sequential)
+5. **Human Manager** reviews escalations asynchronously
+
+---
+
+## 4. Message State Machine
+
+Shows the lifecycle of a single message through the workflow.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Collected: Message arrives<br/>from channel
+
+    Collected --> SpamCheck: Stored in buffer
+
+    SpamCheck --> Filtered: Spam detected<br/>(keywords, links, blocklist)
+    SpamCheck --> Categorized: Legitimate
+
+    Filtered --> Archived: Skip processing<br/>(add to spam logs)
+
+    Categorized --> Triaged: Assign category<br/>(Support/Sales/Feedback/etc)
+
+    Triaged --> Prioritized: Assign priority<br/>(P0-P3) & complexity
+
+    Prioritized --> DecisionPoint: Calculate<br/>escalation score
+
+    DecisionPoint --> AutoRespond: Complexity < 7?<br/>✅ YES (70%)
+    DecisionPoint --> Escalate: Complexity >= 7?<br/>❌ NO (30%)
+
+    AutoRespond --> Responding: Select responder<br/>(FAQ/Support/Sales)
+
+    Responding --> QualityCheck: Generate response<br/>text
+
+    Escalate --> EscalationTicket: Create support<br/>ticket
+
+    EscalationTicket --> HumanReview: Notify human<br/>via Slack
+
+    HumanReview --> QualityCheck: Human drafts<br/>response
+
+    QualityCheck --> QAPassed: Grammar OK?<br/>Tone OK?<br/>Links work?
+
+    QAPassed --> Sent: ✅ All checks<br/>passed
+
+    QAPassed --> Regenerate: ❌ Failed QA<br/>try again
+
+    Regenerate --> QualityCheck
+
+    Sent --> Archived: Mark as<br/>responded
+
+    Archived --> [*]
+
+    note right of Filtered
+        Spam messages logged
+        but not processed
+    end note
+
+    note right of AutoRespond
+        FAQ, Support, Sales
+        agents handle simple
+        messages automatically
+    end note
+
+    note right of HumanReview
+        Complex, sensitive, or
+        high-value messages
+        get human attention
+    end note
+```
+
+---
+
+## 5. Message Sentiment & Priority Routing
+
+Shows how sentiment analysis drives prioritization and routing decisions.
+
+```mermaid
+graph TD
+    A["📨 Message Arrives<br/>Analyze Sentiment"] --> B{Sentiment?}
+
+    B -->|😡 Very Negative| C["🚨 P0 - CRITICAL<br/>Escalate immediately"]
+    B -->|😕 Negative| D["📌 P1 - HIGH<br/>Escalate + 4hr SLA"]
+    B -->|😐 Neutral| E["📋 P2 - MEDIUM<br/>Auto-respond or<br/>24hr SLA"]
+    B -->|😊 Positive| F["⭐ P3 - LOW<br/>Low priority,<br/>acknowledge"]
+
+    C --> C1{VIP Customer?}
+    C1 -->|Yes| C2["🎯 Assign to<br/>Senior Agent"]
+    C1 -->|No| C3["🎯 Assign to<br/>Support Team"]
+
+    D --> D1{Product Broken?}
+    D1 -->|Yes| D2["🔧 Assign to<br/>Tech Support"]
+    D1 -->|No| D3["💼 Assign to<br/>Account Manager"]
+
+    E --> E1{Complexity < 5?}
+    E1 -->|Yes| E2["🤖 Auto-respond<br/>with FAQ"]
+    E1 -->|No| E3["👤 Route to<br/>Human"]
+
+    F --> F1["📝 Log as<br/>Positive feedback"]
+
+    C2 & C3 & D2 & D3 & E2 & E3 & F1 --> G["⏱️ Set SLA<br/>Target"]
+
+    G --> H["📊 Track in<br/>Dashboard"]
+```
+
+**Routing logic**:
+- **Very Negative + VIP** = Immediate human + senior agent
+- **Negative + Product Issue** = Tech support escalation
+- **Negative + Other** = Account manager
+- **Neutral + Simple** = FAQ auto-response
+- **Neutral + Complex** = Human support
+- **Positive** = Logged for morale/metrics
+
+---
+
+## 6. Auto-Moderation Decision Tree
+
+Shows how messages are filtered and moderated automatically.
+
+```mermaid
+graph TD
+    A["🔍 Content Analysis"] --> B{Spam Keywords?}
+
+    B -->|Yes| B1["🚫 REMOVE<br/>buy now, get rich,<br/>viagra, etc"]
+    B -->|No| C{Phishing?}
+
+    C -->|Yes| C1["⚠️ FLAG<br/>Suspicious links<br/>& requests"]
+    C -->|No| D{Excessive Links?}
+
+    D -->|>3 links| D1["⚠️ MARK SPAM<br/>Likely promotional"]
+    D -->|≤3 links| E{Known Spam Account?}
+
+    E -->|Yes| E1["🚫 AUTO-BLOCK<br/>From blocklist"]
+    E -->|No| F{Hateful Content?}
+
+    F -->|Yes| F1["⚠️ FLAG FOR<br/>HUMAN REVIEW<br/>Potential violation"]
+    F -->|No| G{Duplicate?}
+
+    G -->|Yes| G1["📋 DEDUPLICATE<br/>Keep first, remove copies"]
+    G -->|No| H["✅ LEGITIMATE<br/>Proceed to triage"]
+
+    B1 --> I["📊 Log Action<br/>Update spam score"]
+    C1 --> I
+    D1 --> I
+    E1 --> I
+    F1 --> I
+    G1 --> I
+
+    I --> J["📈 Update<br/>Moderation Stats"]
+
+    H --> K["➡️ Send to Triage<br/>Phase 2"]
+```
+
+**Filtering rules** (applied sequentially):
+1. **Spam keywords** - Common promotional phrases
+2. **Phishing patterns** - Suspicious requests for credentials
+3. **Link ratio** - More than 3 links = likely spam
+4. **Blocklist** - Known spam accounts
+5. **Hateful content** - Policy violations
+6. **Duplicates** - Same message from same/different users
+
+---
+
+## 7. Architecture Diagram: Multi-Channel Integration
+
+Shows how all channels feed into the unified community management system.
+
+```mermaid
+graph TB
+    subgraph Channels["📡 INPUT CHANNELS"]
+        TW["🐦 Twitter<br/>@mentions, DMs,<br/>comments"]
+        LI["💼 LinkedIn<br/>Post comments,<br/>DMs"]
+        IG["📷 Instagram<br/>Comments, DMs"]
+        FB["👍 Facebook<br/>Page comments,<br/>Messenger"]
+        EM["📧 Email<br/>support@, hello@,<br/>contact@"]
+        CH["💬 Chat<br/>Discord, Slack,<br/>Intercom"]
+    end
+
+    subgraph Orchestration["🤖 CLAUDE CODE ORCHESTRATION"]
+        CM["🎛️ /community-manage<br/>Main Command"]
+        MON["🔍 /community-monitor<br/>Subcommand"]
+        TRI["🏷️ /community-triage<br/>Subcommand"]
+        RES["📝 /community-respond<br/>Subcommand"]
+    end
+
+    subgraph Processing["⚙️ PROCESSING AGENTS"]
+        MA1["Social Monitor<br/>Agent"]
+        MA2["Email Monitor<br/>Agent"]
+        MA3["Chat Monitor<br/>Agent"]
+        CA["Categorizer<br/>Agent"]
+        PA["Prioritizer<br/>Agent"]
+        FA["FAQ Responder<br/>Agent"]
+        SA["Support Responder<br/>Agent"]
+        SLA["Sales Responder<br/>Agent"]
+        EA["Escalation<br/>Agent"]
+    end
+
+    subgraph Infrastructure["🔧 INFRASTRUCTURE"]
+        HOOKS["🪝 Hooks<br/>spam-filter<br/>sentiment-check<br/>response-quality"]
+        SKILLS["⚡ Skills<br/>FAQ-Database<br/>Customer-Context<br/>Compliance-Check"]
+        MCP["🔌 MCP Servers<br/>Social APIs<br/>Email APIs<br/>Chat APIs<br/>Support Systems"]
+    end
+
+    subgraph Output["📤 OUTPUT CHANNELS"]
+        SLACK["🔔 Slack<br/>Escalation<br/>notifications"]
+        EMAIL_OUT["📧 Email<br/>Responses<br/>to customers"]
+        SOCIAL_OUT["🐦 Social<br/>Media<br/>replies"]
+        TICKETS["📋 Support<br/>Tickets<br/>Zendesk, Linear"]
+        ANALYTICS["📊 Analytics<br/>Dashboard<br/>Metrics & Reports"]
+    end
+
+    TW --> MON
+    LI --> MON
+    IG --> MON
+    FB --> MON
+    EM --> MON
+    CH --> MON
+
+    MON --> MA1
+    MON --> MA2
+    MON --> MA3
+
+    MA1 --> CM
+    MA2 --> CM
+    MA3 --> CM
+
+    CM --> HOOKS
+    CM --> TRI
+
+    TRI --> CA
+    TRI --> PA
+
+    CA --> RES
+    PA --> RES
+
+    RES --> SKILLS
+    RES --> MCP
+
+    RES --> FA
+    RES --> SA
+    RES --> SLA
+    RES --> EA
+
+    FA --> SLACK
+    SA --> SLACK
+    SLA --> SLACK
+    EA --> SLACK
+
+    FA --> EMAIL_OUT
+    SA --> EMAIL_OUT
+    SLA --> EMAIL_OUT
+    EA --> EMAIL_OUT
+
+    FA --> SOCIAL_OUT
+    SA --> SOCIAL_OUT
+    SLA --> SOCIAL_OUT
+
+    EA --> TICKETS
+
+    CM --> ANALYTICS
+
+    classDef input fill:#e1f5ff,stroke:#01579b
+    classDef process fill:#fff3e0,stroke:#e65100
+    classDef output fill:#e8f5e9,stroke:#1b5e20
+    classDef infra fill:#f3e5f5,stroke:#4a148c
+
+    class Channels input
+    class Processing,Orchestration process
+    class Output output
+    class Infrastructure infra
+```
+
+---
+
+## 8. Daily Processing Timeline
+
+Hourly breakdown of community management workflow throughout the day.
+
+```mermaid
+gantt
+    title Daily Community Management Processing Timeline
+    dateFormat YYYY-MM-DD HH:mm
+
+    section Morning Batch
+    Collect messages (8-9am)     :active, collect1, 2025-11-17 08:00, 60m
+    Filter & triage              :active, triage1, 2025-11-17 09:00, 15m
+    Auto-respond (70%)           :active, auto1, 2025-11-17 09:15, 15m
+    Human escalations review      :crit, human1, 2025-11-17 09:15, 45m
+
+    section Afternoon Batch
+    Collect messages (12-1pm)    :active, collect2, 2025-11-17 12:00, 60m
+    Filter & triage              :active, triage2, 2025-11-17 13:00, 15m
+    Auto-respond (70%)           :active, auto2, 2025-11-17 13:15, 15m
+    Human escalations review      :crit, human2, 2025-11-17 13:15, 45m
+
+    section Evening Batch
+    Collect messages (4-5pm)     :active, collect3, 2025-11-17 16:00, 60m
+    Filter & triage              :active, triage3, 2025-11-17 17:00, 15m
+    Auto-respond (70%)           :active, auto3, 2025-11-17 17:15, 15m
+    Human escalations review      :crit, human3, 2025-11-17 17:15, 45m
+
+    section Overnight
+    Overnight monitoring          :active, overnight, 2025-11-17 18:00, 660m
+    Auto-escalation only         :active, over2, 2025-11-17 18:00, 660m
+```
+
+**Daily rhythm**:
+- **08:00-09:45** - Morning batch (3 parallel batches possible)
+- **09:45-12:00** - Human escalation review + monitoring continues
+- **12:00-13:45** - Afternoon batch
+- **13:45-16:00** - Human escalation review + monitoring continues
+- **16:00-17:45** - Evening batch
+- **17:45-18:00** - Final human review
+- **18:00-08:00** - Overnight automated monitoring (escalations only)
+
+**Total human time**: ~2 hours/day (3 × 45 min reviews = 2.25 hours)
+**Total automated**: ~1 hour/day (3 × 15 min = 45 min, but parallel processing reduces actual time)
+
+---
+
+## 9. Response Types & Complexity Matrix
+
+Shows how different message types are routed to different responders.
+
+```mermaid
+graph TD
+    A["Message Triaged<br/>Category + Complexity"] --> B{Category?}
+
+    B -->|Support| C{Complexity?}
+    B -->|Sales| D{Complexity?}
+    B -->|Feedback| E{Complexity?}
+    B -->|Complaint| F{Complexity?}
+    B -->|Compliment| G["→ Auto-acknowledge<br/>Quick P3 response"]
+
+    C -->|1-5<br/>Simple| C1["→ FAQ Responder<br/>Password reset, etc"]
+    C -->|6-7<br/>Moderate| C2["→ Support Responder<br/>Troubleshooting steps"]
+    C -->|8-10<br/>Complex| C3["→ Escalate to Human<br/>Engineering input needed"]
+
+    D -->|1-5<br/>Simple| D1["→ Sales Responder<br/>Pricing info, free trial"]
+    D -->|6-7<br/>Moderate| D2["→ Sales Responder<br/>Demo scheduling"]
+    D -->|8-10<br/>Complex| D3["→ Escalate to Sales<br/>Enterprise deal"]
+
+    E -->|1-10| E1["→ Acknowledge<br/>Send to product team<br/>P3 priority"]
+
+    F -->|1-5<br/>Simple| F1["→ Support Responder<br/>with empathy"]
+    F -->|6-7<br/>Moderate| F2["→ Escalate<br/>Customer recovery plan"]
+    F -->|8-10<br/>Complex| F3["→ Escalate to<br/>Management"]
+
+    C1 & D1 & G & E1 & F1 --> AUTO["🤖 Auto Response<br/>Sent immediately<br/>70% of messages"]
+
+    C2 & D2 & F2 --> MID["👥 Human Review<br/>Draft prepared<br/>Quick turnaround"]
+
+    C3 & D3 & F3 --> ESCAL["🚨 Escalation<br/>Assigned to specialist<br/>30% of messages"]
+
+    classDef simple fill:#c8e6c9,stroke:#2e7d32
+    classDef moderate fill:#fff9c4,stroke:#f57f17
+    classDef complex fill:#ffccbc,stroke:#d84315
+    classDef auto fill:#bbdefb,stroke:#0277bd
+    classDef human fill:#e1bee7,stroke:#6a1b9a
+
+    class C1,D1,G,E1,F1 auto
+    class C2,D2,F2 moderate
+    class C3,D3,F3 complex
+```
+
+---
+
+## 10. Escalation & Human-in-Loop Flow
+
+Shows the complete escalation process and human involvement.
+
+```mermaid
+graph TD
+    A["Message Flagged<br/>for Escalation"] --> B["📋 Create Ticket<br/>in Support System"]
+
+    B --> C["📝 Generate Summary<br/>Customer info<br/>Issue context<br/>Suggested response"]
+
+    C --> D["🎯 Assign Priority<br/>P0: 1hr SLA<br/>P1: 4hr SLA<br/>P2: 24hr SLA"]
+
+    D --> E["🔔 Notify Human<br/>via Slack"]
+
+    E --> F["🔗 Rich Slack Message<br/>Customer info<br/>Full context<br/>Suggested response<br/>[Take Ownership]"]
+
+    F --> G{Human<br/>Response?}
+
+    G -->|Uses<br/>Suggestion| G1["✏️ Review & Edit<br/>Suggested response"]
+    G -->|New<br/>Response| G2["✍️ Write Custom<br/>Response"]
+
+    G1 --> H["🪝 Quality Check<br/>Grammar, tone, links<br/>No sensitive data"]
+    G2 --> H
+
+    H --> H1{QA<br/>Pass?}
+
+    H1 -->|Yes| I["📤 Send Response<br/>to customer"]
+    H1 -->|No| J["❌ Reject<br/>Ask human to revise"]
+
+    J --> G2
+
+    I --> K["✅ Mark Resolved<br/>Update ticket status"]
+
+    K --> L["📊 Log Metrics<br/>Response time<br/>Resolution quality<br/>Human effort"]
+
+    G -->|No<br/>Response| M["⏰ SLA Timer<br/>Escalates to<br/>Manager"]
+
+    M --> N["👨‍💼 Manager Review<br/>Check SLA status<br/>Reallocate if needed"]
+```
+
+**Escalation workflow**:
+1. **Automatic ticket creation** in support system (Zendesk, Linear, etc.)
+2. **Human notification** via Slack with rich context
+3. **Response options**:
+   - Use AI-suggested response (edit)
+   - Write custom response
+   - Delegate to specialist
+4. **Quality check** before sending
+5. **Metrics tracking** for improvement
+
+---
+
+## Summary: Key Architectural Patterns
+
+| Pattern | Purpose | Benefit |
+|---------|---------|---------|
+| **Batch Processing** | Group messages into waves (500 → 25 waves of 20) | Efficient parallel processing, predictable timing |
+| **Conditional Branching** | Auto-respond if simple, escalate if complex | Optimal resource allocation |
+| **Human-in-Loop** | Humans review 30% of messages | Quality + context-awareness for edge cases |
+| **Multi-stage Filtering** | Spam → Sentiment → Complexity → Routing | Catch problems early, reduce noise |
+| **Parallel Agents** | 3 monitors, 2 triagers, 3 responders | Maximum throughput with minimal latency |
+| **Hook-based Integration** | Spam filter, sentiment check, quality check | Extensible, testable, maintainable |
+
+All diagrams reference the [Overview](overview.qmd) and [Examples](examples.qmd) documents.

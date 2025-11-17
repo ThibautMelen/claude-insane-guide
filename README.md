@@ -37,34 +37,37 @@ Chaque thème suit une structure identique :
 Suivez cet ordre pour une progression optimale :
 
 ```
+🎯 PARCOURS DÉBUTANT (8-10 heures)
 1️⃣ MEMORY
    ↓ Base - Persistance des instructions
 2️⃣ COMMANDS
    ↓ Automatisation - Prompts réutilisables
 3️⃣ HOOKS
-   ↓ Événements - Automatisation avancée
-4️⃣ MCP
-   ↓ Intégration - Protocole externe
-5️⃣ SKILLS
-   ↓ Capacités - Spécialisations
+   ↓ Événements - Automatisation lifecycle
+4️⃣ SKILLS
+   ↓ Capacités - Connaissances spécialisées
+5️⃣ AGENTS
+   ↓ Orchestration - Délégation tâches isolées
 6️⃣ PLUGINS
-   ↓ Empaquetage - Distribution
-7️⃣ AGENTS
-   ↓ Orchestration - Délégation tâches
-8️⃣ WORKFLOWS
-   ↓ Orchestration avancée - Pipelines
-9️⃣ BEST PRACTICES
-   ↓ Synthèse - Stratégies production
-🔟 INTERACTIVE UI
-   ↓ Dialogues - AskUserQuestion avancé
-1️⃣1️⃣ VS CODE EXTENSION
-   ↓ Extension - Intégration IDE
-1️⃣2️⃣ STATUS LINE
-   └─> Dashboard - Tracking temps réel
+   ↓ Empaquetage - Extensions modulaires
+7️⃣ MCP
+   └─> Intégration - Protocol externe
 
-Pour Experts :
-💪 ADVANCED PATTERNS → Multi-dialog & Decision Trees
-🎯 SHOWCASE → Cas réels production
+🚀 PARCOURS INTERMÉDIAIRE → EXPERT (6-8 heures)
+WORKFLOW-PATTERN-ORCHESTRATION
+   ├─> Workflows (EPCT, Parallel, Sequential, Hybrid)
+   ├─> Patterns (Command coordination, Hooks automation)
+   └─> Best Practices (Performance, Cost, Resilience)
+
+💪 PARCOURS EXPERT (4-6 heures)
+PATTERNS & ADVANCED
+   ├─> Patterns (Orchestration réutilisables)
+   └─> Advanced (Multi-dialog, Enterprise, AI orchestration)
+
+🔧 OPTIONNEL
+ADD-ONS
+   ├─> VS Code Extension
+   └─> Statusline Dashboard
 ```
 
 ---
@@ -74,7 +77,7 @@ Pour Experts :
 ```
 claude-anthropic-comprhension/
 ┃
-┣━━ 📁 themes/                  ⭐ PARCOURS COMPLET (ordre pédagogique)
+┣━━ 📁 themes/                  🎯 FEATURES CORE (1-7 uniquement)
 ┃   ┃
 ┃   ┣━━ 📁 1-memory/
 ┃   ┃   ├── 📄 guide.md         → Persistance instructions (.claude/CLAUDE.md)
@@ -88,57 +91,56 @@ claude-anthropic-comprhension/
 ┃   ┃   ├── 📄 guide.md         → Gestionnaires d'événements système
 ┃   ┃   └── 📄 cheatsheet.md    → Hooks bloquants & patterns
 ┃   ┃
-┃   ┣━━ 📁 4-mcp/
-┃   ┃   ├── 📄 guide.md         → Model Context Protocol
-┃   ┃   └── 📄 cheatsheet.md    → Serveurs populaires
-┃   ┃
-┃   ┣━━ 📁 5-skills/
+┃   ┣━━ 📁 4-skills/
 ┃   ┃   ├── 📄 guide.md         → Capacités spécialisées
 ┃   ┃   └── 📄 cheatsheet.md    → Structure skills
+┃   ┃
+┃   ┣━━ 📁 5-agents/
+┃   ┃   ├── 📄 guide.md         → Sub-agents & orchestration
+┃   ┃   └── 📄 cheatsheet.md    → Agents built-in
 ┃   ┃
 ┃   ┣━━ 📁 6-plugins/
 ┃   ┃   ├── 📄 guide.md         → Système d'extensibilité modulaire
 ┃   ┃   └── 📄 cheatsheet.md    → Marketplaces & distribution
 ┃   ┃
-┃   ┣━━ 📁 7-agents/
-┃   ┃   ├── 📄 guide.md         → Sub-agents & orchestration
-┃   ┃   └── 📄 cheatsheet.md    → Agents built-in
-┃   ┃
-┃   ┣━━ 📁 8-workflows/
-┃   ┃   ├── 📄 guide.md         → Pipelines automatisés
-┃   ┃   └── 📄 cheatsheet.md    → Patterns orchestration
-┃   ┃
-┃   ┣━━ 📁 9-best-practices/
-┃   ┃   ├── 📄 guide.md         → Stratégies production
-┃   ┃   └── 📄 cheatsheet.md    → DO/DON'T essentiels
-┃   ┃
-┃   ┣━━ 📁 10-interactive-ui/   🆕
-┃   ┃   ├── 📄 guide.md         → AskUserQuestion avancé
-┃   ┃   └── 📄 cheatsheet.md    → Patterns dialogues
-┃   ┃
-┃   ┣━━ 📁 11-vs-code-extension/
+┃   ┗━━ 📁 7-mcp/
+┃       ├── 📄 guide.md         → Model Context Protocol
+┃       └── 📄 cheatsheet.md    → Serveurs populaires
+┃
+┣━━ 📁 workflow-pattern-orchestration/  🚀 ORCHESTRATION AVANCÉE
+┃   ┣━━ 📁 workflows/           → EPCT, Parallel, Sequential, Hybrid
+┃   ┣━━ 📁 patterns/            → Coordination commands, hooks automation
+┃   ┣━━ 📁 best-practices/      → Performance, Cost, Resilience
+┃   └── 📄 README.md            → Navigation orchestration
+┃
+┣━━ 📁 patterns/                🏗️ PATTERNS RÉUTILISABLES
+┃   ├── 📄 command-agent-skill.md → Hierarchical orchestration
+┃   ├── 📄 error-handling.md    → Fallback chains & recovery
+┃   ├── 📄 parallel-execution.md → Concurrent agents (5-10x speedup)
+┃   ├── 📄 state-management.md  → Context persistence
+┃   └── 📄 README.md            → Navigation patterns
+┃
+┣━━ 📁 advanced/                💪 GUIDES EXPERT
+┃   ├── 📄 multi-dialog-patterns.md → Sequential, Conditional, Parallel dialogs
+┃   ├── 📄 interactive-ui.md    → AskUserQuestion workflows complexes 🆕
+┃   ├── 📄 enterprise-patterns.md → Governance, RBAC, Compliance
+┃   ├── 📄 ai-orchestration.md  → Multi-LLM routing (70-85% cost savings)
+┃   ├── 📄 decision-trees.md    → Framework sélection features
+┃   └── 📄 README.md            → Navigation advanced
+┃
+┣━━ 📁 add-ons/                 🔧 EXTENSIONS OPTIONNELLES
+┃   ┣━━ 📁 vs-code-extension/
 ┃   ┃   └── 📄 guide.md         → Extension VS Code
-┃   ┃
-┃   ┗━━ 📁 12-statusline/       🆕
+┃   ┗━━ 📁 statusline/
 ┃       ├── 📄 guide.md         → Dashboard temps réel
 ┃       └── 📄 cheatsheet.md    → Templates & config
-┃
-┣━━ 📁 advanced/                💪 Patterns experts 🆕
-┃   ├── 📄 multi-dialog-patterns.md → Decision trees complexes
-┃   └── 📁 examples/
-┃
-┣━━ 📁 showcase/                🎯 Cas réels production 🆕
-┃   └── 📁 supernovae-studio/
-┃       ├── 📄 README.md        → Vue d'ensemble
-┃       ├── 📄 architecture.md  → Architecture technique
-┃       └── 📄 quick-start.md   → Setup rapide
 ┃
 ┣━━ 📁 ressources/              📹📄 Vidéos & articles
 ┃   ┣━━ 📁 videos/
 ┃   ┃   ├── terminal-ai-workflow.md
 ┃   ┃   ├── skills-vs-mcp-vs-subagents.md
 ┃   ┃   └── 800h-claude-code-edmund-yong.md
-┃   └── 📁 articles/            🆕 Articles techniques
+┃   └── 📁 articles/
 ┃
 ┣━━ 📁 .claude/                 ⚙️ Configuration projet
 ┃   ├── 📄 CLAUDE.md            → Memory & règles projet
@@ -146,7 +148,6 @@ claude-anthropic-comprhension/
 ┃
 ┣━━ 📄 README.md                📚 Ce fichier
 ┣━━ 📄 STATUS.md                ⚠️ État de la documentation
-┣━━ 📄 QUICK_START.md           🚀 Guide démarrage rapide 🆕
 ┗━━ 📄 ressources.md            🔗 Index ressources
 ```
 
@@ -193,74 +194,113 @@ Chaque thème contient :
 
 ## 🗺️ Navigation
 
-### 🎯 Themes Core (Essentiels - Ordre Pédagogique)
+### 🎯 Themes Core (Features Essentielles - 1 à 7)
 
-1. [Memory](themes/1-memory/guide.md) - Mémoire persistante
-2. [Commands](themes/2-commands/guide.md) - Commandes slash
-3. [Hooks](themes/3-hooks/guide.md) - Automation lifecycle
-4. [MCP](themes/4-mcp/guide.md) - Model Context Protocol
-5. [Skills](themes/5-skills/guide.md) - Capacités spécialisées
-6. [Plugins](themes/6-plugins/guide.md) - Extensions modulaires
-7. [Agents](themes/7-agents/guide.md) - Sub-agents orchestration
-8. [Workflows](themes/8-workflows/guide.md) - Pipelines automatisés
-9. [Best Practices](themes/9-best-practices/guide.md) - Production tips
-10. [Interactive UI](themes/10-interactive-ui/guide.md) - AskUserQuestion
+**Ordre pédagogique optimal** :
+
+1. [Memory](themes/1-memory/guide.md) - Mémoire persistante (.claude/CLAUDE.md)
+2. [Commands](themes/2-commands/guide.md) - Commandes slash automatisées
+3. [Hooks](themes/3-hooks/guide.md) - Automation lifecycle events
+4. [Skills](themes/4-skills/guide.md) - Capacités spécialisées auto-activées
+5. [Agents](themes/5-agents/guide.md) - Sub-agents pour travail isolé
+6. [Plugins](themes/6-plugins/guide.md) - Extensions modulaires combinées
+7. [MCP](themes/7-mcp/guide.md) - Model Context Protocol integration
+
+**🎓 Parcours débutant** : Maîtrise 1-7 (~8-10 heures)
+
+---
+
+### 🚀 Orchestration Avancée
+
+#### [Workflow-Pattern-Orchestration](workflow-pattern-orchestration/README.md)
+**Coordination intelligente de Memory + Commands + Hooks + Skills + Agents + Plugins**
+
+**Contenu** :
+- 📋 [Workflows](workflow-pattern-orchestration/workflows/README.md) - EPCT, Parallel, Sequential, Conditional, Hybrid
+- 🏗️ [Patterns](workflow-pattern-orchestration/patterns/README.md) - Command coordination, Hook automation, Agent orchestration
+- ⚡ [Best Practices](workflow-pattern-orchestration/best-practices/README.md) - Performance, Cost, Resilience, Team collaboration
+
+**Exemples production** :
+- 174 locales generation (8.3x speedup)
+- PR review automation (4 parallel agents)
+- Documentation generator (Skills + MCP)
+- Monorepo setup wizard (20+ decision branches)
+
+**🆕 Workflows Startup** (Production-Ready) :
+- 📝 [Blog Automation](workflow-pattern-orchestration/workflows/blog-automation-startup.md) - Pipeline complet création/publication (96% time reduction)
+- 🌍 [Multi-Language Content](workflow-pattern-orchestration/workflows/multi-language-content-startup.md) - 13-15 langues simultanées (99% time reduction)
+- 📱 [Social Media Automation](workflow-pattern-orchestration/workflows/social-media-automation-startup.md) - 5 plateformes multi-posts (86% time reduction)
+- 👥 [Community Management](workflow-pattern-orchestration/workflows/community-management-startup.md) - Monitoring + auto-réponse (76% time reduction)
+- ♻️ [Content Repurposing](workflow-pattern-orchestration/workflows/content-repurposing-startup.md) - 1 contenu → 10+ formats (92% time reduction)
+
+**Validation** : ✅ [Rapport de validation complet](workflow-pattern-orchestration/VALIDATION_REPORT.md) (100% conforme docs Anthropic)
+
+**🎓 Parcours intermédiaire → expert** (~6-8 heures)
+
+---
 
 ### 🎓 Patterns & Advanced
 
-- [Patterns](patterns/README.md) - Architecture & orchestration
-  - [Command-Agent-Skill](patterns/command-agent-skill.md)
-  - [Error Handling](patterns/error-handling.md)
-  - [Parallel Execution](patterns/parallel-execution.md)
-  - [State Management](patterns/state-management.md)
-- [Advanced](advanced/README.md) - Expert-level guides
-  - [Multi-Dialog Patterns](advanced/multi-dialog-patterns.md)
-  - [Enterprise Patterns](advanced/enterprise-patterns.md)
-  - [AI Orchestration](advanced/ai-orchestration.md)
-  - [Decision Trees](advanced/decision-trees.md)
+#### [Patterns](patterns/README.md) - Architecture & Orchestration
+**Patterns réutilisables pour coordonner features Claude Code**
 
-### 🔧 Add-ons (Optional)
+- [Command-Agent-Skill](patterns/command-agent-skill.md) - Hierarchical orchestration
+- [Error Handling](patterns/error-handling.md) - Fallback chains & recovery (3 niveaux)
+- [Parallel Execution](patterns/parallel-execution.md) - Concurrent agents (5-10x speedup)
+- [State Management](patterns/state-management.md) - Context persistence & memory
 
-- [VS Code Extension](add-ons/vs-code-extension/guide.md)
-- [Statusline](add-ons/statusline/guide.md)
+#### [Advanced](advanced/README.md) - Expert-Level Guides
+**Guides niveau expert pour use cases complexes**
+
+- [Multi-Dialog Patterns](advanced/multi-dialog-patterns.md) - Sequential, Conditional, Parallel, Validation
+- [Interactive UI](advanced/interactive-ui.md) - AskUserQuestion workflows complexes
+- [Enterprise Patterns](advanced/enterprise-patterns.md) - Governance, RBAC, Compliance (GDPR/SOC2)
+- [AI Orchestration](advanced/ai-orchestration.md) - Multi-LLM routing (70-85% cost savings)
+- [Decision Trees](advanced/decision-trees.md) - Framework complet de sélection features
+
+**🎓 Parcours expert** (~4-6 heures)
+
+---
+
+### 🔧 Add-ons (Optionnel)
+
+- [VS Code Extension](add-ons/vs-code-extension/guide.md) - Intégration IDE
+- [Statusline](add-ons/statusline/guide.md) - Dashboard temps réel
 
 ---
 
 ## 🧭 Quel Outil Utiliser ?
 
-Pas sûr de quelle feature utiliser ? Consultez :
+**Quick Guide** :
+- **Context permanent** → [Memory](themes/1-memory/guide.md)
+- **Action répétitive** → [Command](themes/2-commands/guide.md)
+- **Automation lifecycle** → [Hook](themes/3-hooks/guide.md)
+- **Connaissance partagée** → [Skill](themes/4-skills/guide.md)
+- **Travail isolé complexe** → [Agent](themes/5-agents/guide.md)
+- **Package combiné** → [Plugin](themes/6-plugins/guide.md)
+- **Orchestration multi-features** → [Workflow-Pattern-Orchestration](workflow-pattern-orchestration/README.md)
 
+**Pour approfondir** :
 - 📊 [Decision Trees](advanced/decision-trees.md) - Arbre de décision complet
 - 🏗️ [Patterns](patterns/README.md) - Patterns d'orchestration
-- 🎯 [Best Practices](themes/9-best-practices/guide.md) - Recommendations
-
-**Quick Guide** :
-
-- **Context permanent** → Memory
-- **Action répétitive** → Command
-- **Automation lifecycle** → Hook
-- **Connaissance partagée** → Skill
-- **Travail isolé complexe** → Agent
-- **Package combiné** → Plugin
+- 🚀 [Workflows](workflow-pattern-orchestration/README.md) - Workflows production-ready
 
 ---
 
-## 📚 Thèmes du Parcours
+## 📊 Statistiques Documentation
 
-| # | Thème | Description |
-|---|-------|-------------|
-| 1 | memory | Persistance instructions (.claude/CLAUDE.md) |
-| 2 | commands | Slash commands réutilisables |
-| 3 | hooks | Gestionnaires d'événements système |
-| 4 | mcp | Model Context Protocol |
-| 5 | skills | Capacités spécialisées |
-| 6 | plugins | Système d'extensibilité modulaire |
-| 7 | agents | Sub-agents & orchestration |
-| 8 | workflows | Pipelines automatisés |
-| 9 | best-practices | Stratégies production |
-| 10 | interactive-ui | AskUserQuestion avancé |
-| 11 | vs-code-extension | Extension VS Code |
-| 12 | statusline | Dashboard temps réel |
+- 📚 **7 themes core** (features essentielles)
+- 🚀 **1 dossier orchestration** (workflows + patterns + best-practices)
+  - 🆕 **5 workflows startup** production-ready (150 KB)
+  - 📋 **1 rapport validation** (100% conforme Anthropic)
+- 🎓 **5 guides advanced** (expert-level)
+- 🏗️ **4 patterns** réutilisables
+- 🔧 **2 add-ons** optionnels
+- 📝 **~450 KB** documentation totale
+- 🔗 **60+ ressources** externes
+- 💾 **~25,000 lignes** de contenu pédagogique
+
+**Total apprentissage** : ~20-28 heures (débutant → expert)
 
 
 ---

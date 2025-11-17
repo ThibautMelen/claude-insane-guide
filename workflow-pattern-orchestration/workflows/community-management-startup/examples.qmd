@@ -1,0 +1,1255 @@
+---
+title: "Community Management Workflow: Implementation Examples"
+subtitle: "Real Code, Configuration, and Algorithms"
+author: "Claude Code Patterns"
+date: "2025-11-17"
+format:
+  html:
+    toc: true
+    number-sections: true
+    code-fold: true
+    embed-resources: true
+  pdf:
+    toc: true
+    number-sections: true
+---
+
+## 1. Command Structure: `/community-manage`
+
+Main command that orchestrates the entire workflow.
+
+### Command Definition
+
+File: `.claude/commands/community-manage.md`
+
+```yaml
+---
+name: community-manage
+description: Automate community management across all channels
+args:
+  channels: Comma-separated channels or "all" (default all)
+  mode: "monitor" (read-only) or "respond" (auto-respond enabled)
+  escalation_threshold: Complexity score 1-10 for human escalation (default 7)
+---
+
+# Community Management Automation
+
+You are orchestrating community monitoring, triage, and response.
+
+## Input Parameters
+
+- **channels**: {{channels}} (twitter, linkedin, instagram, facebook, email, discord, slack)
+- **mode**: {{mode}} (monitor=read-only, respond=auto-respond enabled)
+- **escalation_threshold**: {{escalation_threshold}} (1-10, higher=more escalations)
+
+## Execution Flow
+
+### Phase 1: Monitoring & Collection
+
+Execute `/community-monitor {{channels}}` to collect messages from:
+- Social platforms (Twitter, LinkedIn, Instagram, Facebook)
+- Email inboxes (support@, hello@, contact@)
+- Chat systems (Discord, Slack, Intercom)
+
+Expected output: 200-500 messages from last 24 hours.
+
+### Phase 2: Triage & Classification
+
+Execute `/community-triage {{messages}}` to:
+- Categorize by type (Support, Sales, Feedback, Complaint, Compliment, Spam)
+- Assign priority (P0, P1, P2, P3)
+- Calculate complexity score (1-10)
+
+Expected output: Categorized & prioritized messages with scores.
+
+### Phase 3: Response or Escalation
+
+Execute `/community-respond {{triaged_messages}} {{mode}} {{escalation_threshold}}` to:
+- Auto-respond to simple messages (complexity < threshold)
+- Escalate complex messages to human review
+- Enforce response quality checks
+- Send responses to channels or create tickets
+
+Expected output: 200+ messages processed, 70% auto-resolved, 30% escalated.
+
+### Phase 4: Analytics & Reporting
+
+Generate daily report:
+- Messages processed: [count]
+- Auto-responded: [count] ([%])
+- Escalated: [count] ([%])
+- Average response time (auto): [minutes]
+- Average response time (human): [minutes]
+- Sentiment distribution: [breakdown]
+- Top 5 issues detected: [list]
+- Time saved vs manual: [hours]
+
+## Success Criteria
+
+- ✅ 100% of messages categorized
+- ✅ 60-70% auto-responded (in respond mode)
+- ✅ <5 minutes response time for P0/P1
+- ✅ Zero spam in escalated messages
+- ✅ Total time < 2 hours/day (vs 8+ hours manual)
+- ✅ Sentiment trend tracked
+- ✅ VIP customers prioritized
+```
+
+### Usage Examples
+
+```bash
+# Monitor all channels, read-only (no auto-responses)
+/community-manage all monitor 7
+
+# Full automation with default threshold
+/community-manage all respond 7
+
+# Only Twitter and LinkedIn, lower escalation threshold (more human review)
+/community-manage twitter,linkedin respond 5
+
+# High escalation threshold (more automation, less human review)
+/community-manage all respond 9
+```
+
+---
+
+## 2. Subcommand: `/community-monitor`
+
+Collects messages from all channels in parallel.
+
+File: `.claude/commands/community-monitor.md`
+
+```yaml
+---
+name: community-monitor
+description: Monitor and collect messages from all channels
+args:
+  channels: Target channels to monitor
+---
+
+# Community Monitoring Subcommand
+
+Collect all unread/unanswered messages from the last 24 hours.
+
+## Parallel Agents
+
+### Agent 1: Social Media Monitor
+
+Monitor Twitter, LinkedIn, Instagram, Facebook for:
+- @mentions and replies
+- Direct messages
+- Comment threads
+- Unread inbox
+
+Data to extract:
+```json
+{
+  "platform": "twitter",
+  "message_id": "twitter_12345",
+  "author": {
+    "username": "customer_handle",
+    "display_name": "Customer Name",
+    "followers": 5000,
+    "verified": false,
+    "profile_url": "https://twitter.com/..."
+  },
+  "content": "How do I reset my password?",
+  "timestamp": "2025-11-17T14:30:00Z",
+  "type": "mention|dm|comment|quote",
+  "engagement": {
+    "likes": 2,
+    "retweets": 0,
+    "replies": 0
+  },
+  "parent_url": "https://twitter.com/.../status/..."
+}
+```
+
+### Agent 2: Email Monitor
+
+Monitor support inboxes (Gmail API, IMAP):
+- support@yourcompany.com
+- hello@yourcompany.com
+- contact@yourcompany.com
+
+Data to extract:
+```json
+{
+  "platform": "email",
+  "message_id": "email_abc123",
+  "from": {
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "subject": "Feature request: Dark mode",
+  "body": "Hi team, I'd love if you added...",
+  "timestamp": "2025-11-17T10:15:00Z",
+  "is_reply": false,
+  "thread_id": "email_thread_xyz"
+}
+```
+
+### Agent 3: Chat Monitor
+
+Monitor Discord, Slack, Intercom, etc.:
+- Open conversations
+- Unanswered messages
+- Mentions
+
+Data to extract:
+```json
+{
+  "platform": "discord|slack|intercom",
+  "conversation_id": "conv_xyz789",
+  "user": {
+    "username": "user_handle",
+    "email": "user@example.com",
+    "id": "user_id_123"
+  },
+  "messages": [
+    {
+      "message_id": "msg_001",
+      "from": "user",
+      "text": "Is there a free trial?",
+      "timestamp": "2025-11-17T16:00:00Z"
+    }
+  ],
+  "context": {
+    "page_visited": "/pricing",
+    "referrer": "google",
+    "location": "US"
+  }
+}
+```
+
+## Wait for All Agents
+
+Use parallel task execution.
+
+## Output Format
+
+```json
+{
+  "batch_id": "batch_2025_11_17_morning",
+  "timestamp": "2025-11-17T09:00:00Z",
+  "all_messages": [
+    {
+      "unified_id": "msg_001",
+      "platform": "twitter",
+      "author": {...},
+      "content": "...",
+      "timestamp": "...",
+      "metadata": {...}
+    }
+  ],
+  "summary": {
+    "total_messages": 225,
+    "by_platform": {
+      "twitter": 80,
+      "linkedin": 20,
+      "instagram": 50,
+      "email": 45,
+      "discord": 20,
+      "slack": 10
+    }
+  }
+}
+```
+```
+
+---
+
+## 3. Batch Configuration
+
+File: `.claude/config.yaml` (batch processing settings)
+
+```yaml
+community_management:
+  # Batch processing
+  batch:
+    enabled: true
+    wave_size: 20  # Process 20 messages per wave
+    max_waves_parallel: 5  # Run up to 5 waves in parallel
+    max_total_messages: 500  # Max messages per batch
+    error_recovery: true
+
+  # Timing
+  schedules:
+    morning_batch:
+      time: "08:00"
+      timezone: "America/New_York"
+    afternoon_batch:
+      time: "12:00"
+    evening_batch:
+      time: "16:00"
+    overnight:
+      time: "20:00"
+      escalations_only: true
+
+  # Channels
+  monitors:
+    twitter:
+      enabled: true
+      api: "twitter_api"
+      check_interval: 15  # minutes
+    linkedin:
+      enabled: true
+      api: "linkedin_api"
+      check_interval: 30
+    instagram:
+      enabled: true
+      api: "instagram_graph"
+      check_interval: 30
+    facebook:
+      enabled: true
+      api: "facebook_graph"
+      check_interval: 30
+    email:
+      enabled: true
+      inboxes: ["support@", "hello@", "contact@"]
+      check_interval: 10
+    discord:
+      enabled: true
+      check_interval: 5
+    slack:
+      enabled: true
+      check_interval: 5
+
+  # Auto-response
+  auto_response:
+    enabled: true
+    complexity_threshold: 7  # 1-10, < threshold = auto-respond
+    quality_check: true
+    validate_links: true
+
+  # Escalation
+  escalation:
+    enabled: true
+    slack_channel: "#community-escalations"
+    email_notif: "manager@company.com"
+    sla:
+      P0: 1  # hour
+      P1: 4
+      P2: 24
+      P3: 48
+
+  # Analytics
+  analytics:
+    track_sentiment: true
+    track_response_time: true
+    track_resolution_rate: true
+    daily_report: true
+    report_time: "17:30"
+    report_email: "team@company.com"
+```
+
+---
+
+## 4. Message Analysis Agent
+
+Real agent prompt for analyzing and categorizing messages.
+
+### Categorizer Agent Prompt
+
+```markdown
+# Message Categorizer Agent
+
+You analyze community messages and categorize them by type.
+
+## Your Task
+
+For each message, determine:
+1. **Category** (required): Support, Sales, Feedback, Complaint, Compliment, Spam
+2. **Confidence**: 0.0-1.0 (how sure you are)
+3. **Keywords**: 3-5 relevant words
+4. **Entities**: Product, feature, or component mentioned
+
+## Categories
+
+### Support
+- User asking how to do something
+- Technical problem they're experiencing
+- Questions about features or functionality
+- Need help with account/setup
+
+Examples:
+- "How do I reset my password?"
+- "The export button isn't working"
+- "Can I use this with Zapier?"
+
+### Sales
+- Asking about pricing
+- Feature inquiry
+- Comparison with competitors
+- Demo request
+- Free trial questions
+
+Examples:
+- "How much does the Pro plan cost?"
+- "Do you support API integrations?"
+- "Can I schedule a demo?"
+
+### Feedback
+- Feature request
+- Suggestion for improvement
+- Product idea
+- Workflow enhancement
+
+Examples:
+- "I wish you had dark mode"
+- "It would be great if we could bulk export"
+- "Would love to see Slack integration"
+
+### Complaint
+- Negative experience
+- Bug report
+- Dissatisfaction
+- Problem not resolved
+
+Examples:
+- "Your app keeps crashing on my phone"
+- "I've been waiting 3 days for support response"
+- "This is way too expensive for what it does"
+
+### Compliment
+- Positive feedback
+- Appreciation
+- Thank you message
+- Praise for feature/service
+
+Examples:
+- "Love your product! Best decision ever"
+- "Thanks for the quick response!"
+- "Your customer service is amazing"
+
+### Spam
+- Unrelated promotional content
+- Bot messages
+- Phishing attempts
+- Duplicate spam
+- Irrelevant links
+
+Examples:
+- "BUY NOW - Get rich quick!"
+- "Check out my course: [unrelated link]"
+- Automated bot response
+
+## Analysis Instructions
+
+For each message:
+
+1. **Read** the content carefully
+2. **Extract** key intent clues (question marks, imperative verbs, sentiment words)
+3. **Match** against category definitions above
+4. **Check** for multiple possible categories (assign primary + secondary if applicable)
+5. **Rate** your confidence (0.0-1.0)
+
+## Output Format
+
+```json
+{
+  "message_id": "msg_001",
+  "primary_category": "support",
+  "secondary_category": null,
+  "confidence": 0.95,
+  "reasoning": "Contains 'How do I' + technical issue",
+  "keywords": ["password", "reset", "account"],
+  "entities": {
+    "product": "Authentication",
+    "feature": "Password reset",
+    "issue_type": "how_to"
+  }
+}
+```
+
+## Edge Cases
+
+- **Multi-category**: Pick PRIMARY category based on main intent. List secondary if equally important.
+- **Unclear**: Rate confidence 0.6-0.7. Include explanation.
+- **Context needed**: If you need customer history, note it in reasoning.
+
+---
+
+## Example Batch
+
+Input messages:
+```
+1. "Hi, I forgot my password. How do I reset it?"
+   → Support, confidence 0.98, keywords: password, reset, how
+
+2. "Your app is terrible. It crashes every 5 minutes"
+   → Complaint, confidence 0.96, keywords: crash, broken, negative
+
+3. "Would love dark mode!"
+   → Feedback, confidence 0.94, keywords: feature request, dark mode
+
+4. "BUY CRYPTO NOW - LIMITED TIME"
+   → Spam, confidence 0.99, keywords: spam, promotional, crypto
+
+5. "Just upgraded to Pro - loving it so far!"
+   → Compliment, confidence 0.97, keywords: positive, grateful, upgrade
+
+6. "Is there a free trial?"
+   → Sales, confidence 0.93, keywords: pricing, free trial, inquiry
+```
+
+Success: 6/6 correct (100% accuracy on batch)
+```
+```
+
+---
+
+## 5. Auto-Moderation Rules
+
+File: `.claude/rules/moderation-rules.yaml`
+
+```yaml
+moderation:
+  # Spam filtering
+  spam_detection:
+    keywords:
+      block_list:
+        - "buy now"
+        - "click here"
+        - "limited time"
+        - "get rich"
+        - "free money"
+        - "viagra"
+        - "casino"
+        - "lottery"
+        - "inheritance"
+        - "nigerian prince"
+
+      suspicious_list:
+        - "check this out"
+        - "make money fast"
+        - "click link"
+        - "dm for details"
+
+    phishing_patterns:
+      - "verify your account"
+      - "confirm password"
+      - "click here to activate"
+      - "unusual activity detected"
+      - "update payment method"
+
+    link_ratio:
+      max_links_per_message: 3
+      action: "mark_spam"
+
+  # Hateful content & policy violations
+  content_policy:
+    blocked_patterns:
+      - "slurs|hate_speech|harassment"
+      - "threats|violence|illegal"
+      - "doxxing|personal_info"
+
+    escalation: "flag_for_human_review"
+    action: "remove_and_notify_author"
+
+  # Duplicate detection
+  deduplication:
+    enabled: true
+    check_exact_match: true
+    check_semantic_similarity: true
+    similarity_threshold: 0.85
+    action: "keep_first_remove_copies"
+
+  # Blocklist management
+  blocklist:
+    sources:
+      - "manual_blocks"
+      - "spam_repeat_offenders"
+      - "abuse_reports"
+
+    auto_block_criteria:
+      spam_messages_in_24h: 5
+      action: "auto_block_account"
+
+  # Response rate limiting
+  rate_limiting:
+    per_user_per_hour: 10  # Max 10 messages per user per hour
+    per_user_per_day: 50   # Max 50 messages per user per day
+    action: "flag_for_review"
+
+  # Escalation rules
+  escalation:
+    very_negative_sentiment: true
+    escalate_to_human: "immediately"
+
+    vip_customer: true
+    escalate_to_senior: true
+
+    mentions_outage: true
+    escalate_to_engineering: true
+```
+
+---
+
+## 6. Engagement Scoring Algorithm
+
+Calculate engagement priority for each customer/message.
+
+```python
+def calculate_engagement_score(message: dict, customer: dict) -> float:
+    """
+    Calculate engagement priority score (0-100).
+    Higher = more important to respond quickly.
+
+    Factors:
+    - Customer LTV (Lifetime Value)
+    - Message urgency (sentiment + category)
+    - Customer influence (followers on social)
+    - Account tenure
+    - Churn risk
+    """
+
+    score = 0.0
+
+    # 1. Customer value (0-30 points)
+    ltv = customer.get('lifetime_value', 0)
+    if ltv > 10000:
+        score += 30  # Enterprise customer
+    elif ltv > 5000:
+        score += 25  # High-value customer
+    elif ltv > 1000:
+        score += 15  # Standard paying customer
+    elif ltv > 0:
+        score += 5   # Trial/free customer
+
+    # 2. Message urgency (0-40 points)
+    sentiment = message.get('sentiment', 'neutral')
+    category = message.get('category', 'other')
+
+    sentiment_score = {
+        'very_negative': 40,
+        'negative': 25,
+        'neutral': 10,
+        'positive': 5
+    }.get(sentiment, 10)
+
+    category_score = {
+        'complaint': 35,
+        'support': 25,
+        'sales': 20,
+        'feedback': 10,
+        'compliment': 5,
+        'spam': 0
+    }.get(category, 15)
+
+    # Use max to avoid double-counting negative sentiment + complaint
+    score += max(sentiment_score, category_score)
+
+    # 3. Customer influence (0-15 points)
+    followers = message.get('author', {}).get('followers', 0)
+    if followers > 100000:
+        score += 15  # Major influencer
+    elif followers > 50000:
+        score += 12
+    elif followers > 10000:
+        score += 8
+    elif followers > 1000:
+        score += 3
+
+    # 4. Account tenure (0-10 points)
+    import datetime
+    signup_date = customer.get('signup_date')
+    if signup_date:
+        days_active = (datetime.datetime.now() - signup_date).days
+        if days_active > 365:
+            score += 10  # Long-term customer
+        elif days_active > 30:
+            score += 5
+
+    # 5. Churn risk (0-5 bonus points)
+    if customer.get('churn_risk_score', 0) > 0.7:
+        score += 5  # At-risk customer needs attention
+
+    # Clamp to 0-100
+    return min(100.0, max(0.0, score))
+
+
+# Example usage:
+message = {
+    'id': 'msg_001',
+    'content': 'Your app keeps crashing!',
+    'sentiment': 'very_negative',
+    'category': 'complaint',
+    'author': {
+        'username': 'influencer_user',
+        'followers': 50000
+    }
+}
+
+customer = {
+    'email': 'vip@company.com',
+    'lifetime_value': 15000,
+    'signup_date': datetime.datetime(2022, 1, 1),
+    'churn_risk_score': 0.8
+}
+
+score = calculate_engagement_score(message, customer)
+print(f"Engagement score: {score}/100")  # Output: ~95 (very urgent)
+```
+
+---
+
+## 7. Sentiment Analysis & Routing
+
+Analyze sentiment and route to appropriate handler.
+
+```python
+def analyze_sentiment(text: str) -> dict:
+    """
+    Analyze sentiment of message.
+    Returns: {sentiment, confidence, emotion_indicators}
+    """
+
+    # Sentiment keywords (simplified; use ML in production)
+    very_negative = {
+        'words': ['terrible', 'awful', 'useless', 'broken', 'hate', 'worst',
+                  'disaster', 'disgusting', 'pathetic'],
+        'patterns': ['will never', 'complete waste', 'refund', 'lawsuit']
+    }
+
+    negative = {
+        'words': ['bad', 'poor', 'issue', 'problem', 'crash', 'disappointed',
+                  'frustrated', 'unhappy', 'angry'],
+        'patterns': ["doesn't work", 'not working', 'broken']
+    }
+
+    positive = {
+        'words': ['great', 'love', 'awesome', 'excellent', 'perfect',
+                  'amazing', 'thanks', 'appreciate', 'grateful'],
+        'patterns': ['so helpful', 'best ever', 'highly recommend']
+    }
+
+    text_lower = text.lower()
+
+    # Count matches
+    very_neg_count = sum(1 for w in very_negative['words'] if w in text_lower)
+    very_neg_count += sum(1 for p in very_negative['patterns'] if p in text_lower)
+
+    neg_count = sum(1 for w in negative['words'] if w in text_lower)
+    neg_count += sum(1 for p in negative['patterns'] if p in text_lower)
+
+    pos_count = sum(1 for w in positive['words'] if w in text_lower)
+    pos_count += sum(1 for p in positive['patterns'] if p in text_lower)
+
+    # Determine sentiment
+    if very_neg_count > 0:
+        sentiment = 'very_negative'
+        confidence = min(0.95, 0.7 + (very_neg_count * 0.1))
+    elif neg_count > pos_count:
+        sentiment = 'negative'
+        confidence = 0.6 + (neg_count * 0.1)
+    elif pos_count > 0:
+        sentiment = 'positive'
+        confidence = 0.6 + (pos_count * 0.1)
+    else:
+        sentiment = 'neutral'
+        confidence = 0.5
+
+    return {
+        'sentiment': sentiment,
+        'confidence': min(1.0, confidence),
+        'indicators': {
+            'very_negative_words': very_neg_count,
+            'negative_words': neg_count,
+            'positive_words': pos_count
+        }
+    }
+
+
+def route_by_sentiment(message: dict) -> dict:
+    """Route message based on sentiment analysis."""
+
+    sentiment_analysis = analyze_sentiment(message['content'])
+    routing = {
+        'very_negative': {
+            'priority': 'P0',
+            'escalate': True,
+            'route_to': 'senior_support_agent',
+            'sla_minutes': 60
+        },
+        'negative': {
+            'priority': 'P1',
+            'escalate': False,
+            'route_to': 'support_agent_or_escalation',
+            'sla_minutes': 240
+        },
+        'neutral': {
+            'priority': 'P2',
+            'escalate': False,
+            'route_to': 'support_agent_or_auto',
+            'sla_minutes': 1440
+        },
+        'positive': {
+            'priority': 'P3',
+            'escalate': False,
+            'route_to': 'acknowledge',
+            'sla_minutes': 2880
+        }
+    }
+
+    sentiment = sentiment_analysis['sentiment']
+    routing_info = routing[sentiment]
+
+    return {
+        'sentiment_analysis': sentiment_analysis,
+        'routing': routing_info,
+        'priority': routing_info['priority'],
+        'escalate': routing_info['escalate']
+    }
+
+
+# Example
+message = {
+    'id': 'msg_001',
+    'content': 'Your app is terrible! It crashed and I lost all my data. This is a disaster!'
+}
+
+result = route_by_sentiment(message)
+print(f"Sentiment: {result['sentiment_analysis']['sentiment']}")
+# Output: very_negative → P0 → Escalate immediately to senior agent
+```
+
+---
+
+## 8. Example Batch Processing Results
+
+Output from a real batch (morning: 8am-9am):
+
+```json
+{
+  "batch_id": "batch_2025_11_17_morning",
+  "timestamp": "2025-11-17T09:15:00Z",
+  "execution_time_minutes": 75,
+
+  "phase_1_monitoring": {
+    "status": "complete",
+    "duration_minutes": 5,
+    "messages_collected": {
+      "twitter": 80,
+      "linkedin": 20,
+      "instagram": 50,
+      "email": 45,
+      "discord": 15,
+      "slack": 10,
+      "total": 220
+    }
+  },
+
+  "phase_2_triage": {
+    "status": "complete",
+    "duration_minutes": 10,
+    "categorization": {
+      "support": {
+        "count": 100,
+        "avg_complexity": 5.2
+      },
+      "sales": {
+        "count": 40,
+        "avg_complexity": 4.8
+      },
+      "feedback": {
+        "count": 30,
+        "avg_complexity": 2.1
+      },
+      "complaint": {
+        "count": 20,
+        "avg_complexity": 7.3
+      },
+      "compliment": {
+        "count": 25,
+        "avg_complexity": 1.2
+      },
+      "spam": {
+        "count": 5,
+        "filtered": true
+      }
+    },
+    "prioritization": {
+      "P0_critical": 2,
+      "P1_high": 30,
+      "P2_medium": 150,
+      "P3_low": 33
+    }
+  },
+
+  "phase_3_response": {
+    "status": "complete",
+    "duration_minutes": 30,
+    "auto_responses": {
+      "faq_responder": {
+        "messages_handled": 60,
+        "avg_response_time_sec": 8,
+        "satisfaction_score": 0.92,
+        "examples": [
+          {
+            "message": "How do I reset my password?",
+            "response": "Hi [Name], click Forgot Password on login page → Check email → Click link → Create new password.",
+            "confidence": 0.98
+          },
+          {
+            "message": "Is there a free trial?",
+            "response": "Yes! 14-day free trial, no credit card required. Sign up here: [link]",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "support_responder": {
+        "messages_handled": 50,
+        "avg_response_time_sec": 15,
+        "satisfaction_score": 0.88,
+        "examples": [
+          {
+            "message": "The export button isn't working",
+            "response": "I'm sorry to hear that. Let's troubleshoot: 1. Try clearing browser cache 2. Try different browser 3. Logout/login. If still not working, reply here."
+          }
+        ]
+      },
+      "sales_responder": {
+        "messages_handled": 30,
+        "avg_response_time_sec": 12,
+        "satisfaction_score": 0.90
+      },
+      "total_auto_responses": 140,
+      "success_rate": 0.99,
+      "failed_responses": 1
+    },
+    "escalations": {
+      "escalations_created": 60,
+      "by_priority": {
+        "P0": 2,
+        "P1": 25,
+        "P2": 33
+      },
+      "escalation_reasons": {
+        "high_complexity": 35,
+        "very_negative_sentiment": 15,
+        "vip_customer": 8,
+        "refund_request": 2
+      }
+    }
+  },
+
+  "phase_4_analytics": {
+    "sentiment_analysis": {
+      "positive": {
+        "count": 166,
+        "percentage": 75.5,
+        "trend": "up"
+      },
+      "neutral": {
+        "count": 40,
+        "percentage": 18.2,
+        "trend": "stable"
+      },
+      "negative": {
+        "count": 14,
+        "percentage": 6.4,
+        "trend": "down"
+      },
+      "very_negative": {
+        "count": 0,
+        "percentage": 0,
+        "escalations": 2
+      }
+    },
+    "top_issues_detected": [
+      {
+        "rank": 1,
+        "issue": "Password reset instructions",
+        "mentions": 25,
+        "action": "FAQ up-to-date, maybe add video tutorial"
+      },
+      {
+        "rank": 2,
+        "issue": "Pricing/plans comparison",
+        "mentions": 20,
+        "action": "Sales team should update pricing page"
+      },
+      {
+        "rank": 3,
+        "issue": "Feature request: Dark mode",
+        "mentions": 15,
+        "action": "Product team to prioritize"
+      },
+      {
+        "rank": 4,
+        "issue": "Export functionality bug",
+        "mentions": 10,
+        "action": "Engineering team investigating"
+      },
+      {
+        "rank": 5,
+        "issue": "Account upgrade process",
+        "mentions": 8,
+        "action": "Onboarding to improve flow"
+      }
+    ],
+    "vip_customer_engagement": {
+      "total_vip_messages": 12,
+      "responded_within_30min": 11,
+      "response_rate": 0.92,
+      "satisfaction_score": 0.94
+    },
+    "time_savings": {
+      "messages_processed": 220,
+      "time_if_manual": 9.17,
+      "time_automated": 1.25,
+      "hours_saved": 7.92,
+      "percentage_reduction": 86.4
+    }
+  },
+
+  "quality_metrics": {
+    "response_quality_check": {
+      "grammar_errors": 0,
+      "tone_violations": 0,
+      "broken_links": 0,
+      "sensitive_data_leaked": 0,
+      "qa_pass_rate": 1.0
+    },
+    "accuracy_metrics": {
+      "categorization_accuracy": 0.98,
+      "prioritization_accuracy": 0.96,
+      "sentiment_analysis_accuracy": 0.94,
+      "escalation_decisions_accuracy": 0.97
+    }
+  },
+
+  "recommendations": [
+    "Update FAQ for password reset (top issue)",
+    "Schedule pricing page review with Sales",
+    "Dark mode feature request trending - escalate to Product",
+    "Export bug affecting 10 users - assign to Engineering",
+    "Consider hiring 1 support agent due to growth (currently 2h/day human time)"
+  ]
+}
+```
+
+---
+
+## 9. Dashboard Metrics Template
+
+Daily community management dashboard showing key metrics:
+
+```yaml
+dashboard:
+  date: "2025-11-17"
+
+  summary_cards:
+    messages_processed:
+      value: 220
+      trend: "up 10%"
+      target: 200
+      status: "good"
+
+    auto_resolution_rate:
+      value: "63.6%"
+      trend: "up 2%"
+      target: "70%"
+      status: "approaching_target"
+
+    avg_response_time:
+      value: "12 minutes"
+      trend: "down 5 min"
+      target: "<15 min"
+      status: "excellent"
+
+    team_hours_saved:
+      value: "7.9 hours"
+      trend: "consistent"
+      monthly_savings: "$2,850"
+      status: "excellent"
+
+  sentiment_gauge:
+    positive: 75.5%
+    neutral: 18.2%
+    negative: 6.4%
+    very_negative: 0%
+    trend: "positive trend ↑"
+
+  priority_distribution:
+    P0_critical: 2
+    P1_high: 30
+    P2_medium: 150
+    P3_low: 38
+    chart_type: "stacked_bar"
+
+  channel_breakdown:
+    twitter: 36%
+    email: 20%
+    instagram: 23%
+    linkedin: 9%
+    slack: 6%
+    discord: 6%
+
+  top_5_issues:
+    - issue: "Password reset"
+      count: 25
+      resolution: "FAQ answer"
+      trend: "stable"
+
+    - issue: "Pricing inquiry"
+      count: 20
+      resolution: "Sales response"
+      trend: "up 3"
+
+    - issue: "Dark mode request"
+      count: 15
+      resolution: "Feature request (Product)"
+      trend: "up 5"
+
+    - issue: "Export bug"
+      count: 10
+      resolution: "Engineering (in progress)"
+      trend: "stable"
+
+    - issue: "Upgrade help"
+      count: 8
+      resolution: "Support guide"
+      trend: "down 2"
+
+  escalation_summary:
+    escalations_today: 60
+    by_priority:
+      P0: 2
+      P1: 25
+      P2: 33
+    avg_resolution_time: "45 minutes"
+    sla_compliance: "98%"
+
+  vip_customer_metrics:
+    vip_messages: 12
+    response_rate: "92%"
+    avg_response_time: "18 minutes"
+    satisfaction: 4.7/5
+
+  quality_scores:
+    response_quality: 100%
+    categorization_accuracy: 98%
+    sentiment_analysis_accuracy: 94%
+    escalation_decisions: 97%
+
+  alerts:
+    - type: "feature_trending"
+      message: "Dark mode requests trending up (15 mentions)"
+      action: "Discuss in product meeting"
+
+    - type: "bug_report"
+      message: "Export functionality affected 10 users"
+      action: "Engineering investigating"
+
+    - type: "vip_churn_risk"
+      message: "2 enterprise customers showing churn signals"
+      action: "Account manager outreach scheduled"
+```
+
+---
+
+## 10. Integration Example: Slack Escalation Notification
+
+Example of what escalation notification looks like in Slack:
+
+```json
+{
+  "type": "escalation_notification",
+  "channel": "#community-escalations",
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "🚨 P1 Community Escalation",
+        "emoji": true
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Customer:* Sarah Chen (@sarah_tech) | *Plan:* Enterprise | *LTV:* $15,000\n*Issue:* App keeps crashing on export\n*Sentiment:* 😡 Very Negative\n*Complexity:* 8/10"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Original Message:*\n> Your app is completely broken! Every time I try to export, it crashes. I've lost data THREE times now. This is unacceptable for an enterprise product. I want a refund or this needs fixed TODAY."
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Suggested Response:*\n> Hi Sarah, I'm deeply sorry to hear about this critical issue. This is absolutely unacceptable, and I understand your frustration. I'm immediately escalating this to our engineering team as P0.\n>\n> Can you please reply with: 1) Your OS/browser version 2) Steps to reproduce the crash\n>\n> I'll personally monitor this and follow up with you within 1 hour.\n>\n> Again, very sorry for the impact on your data."
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Take Ownership"
+          },
+          "action_id": "escalation_take_ownership"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Edit Response"
+          },
+          "action_id": "escalation_edit_response"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "View Full Context"
+          },
+          "action_id": "escalation_view_context"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "⏰ SLA: 1 hour | 📊 Ticket: TICKET-5432 | 🔗 Twitter: [@sarah_tech](https://twitter.com/sarah_tech)"
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## Summary
+
+This section provided:
+
+✅ **Command structure** - How `/community-manage` orchestrates the workflow
+✅ **Batch configuration** - YAML settings for automation
+✅ **Message analysis** - Categorization and sentiment algorithms
+✅ **Auto-moderation** - Rules for spam, phishing, and policy violations
+✅ **Engagement scoring** - Priority calculation based on multiple factors
+✅ **Real results** - Example batch output with metrics
+✅ **Dashboard** - Daily metrics template
+✅ **Integration** - Slack notification format
+
+For visual architecture, see [Diagrams](diagrams.qmd).
+For workflow overview, see [Overview](overview.qmd).
