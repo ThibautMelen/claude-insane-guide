@@ -38,6 +38,26 @@ Fonctionnalités complémentaires pour améliorer l'expérience Claude Code, mai
 
 ---
 
+### [Ralph Wiggum](./ralph-wiggum/guide.md)
+**Génération autonome 24/7** : Loop infini pour projets greenfield
+
+**Fonctionnalités** :
+- Boucle infinie `while :; do cat PROMPT.md | agent; done`
+- Génération code autonome jusqu'à complétion
+- Eventual consistency
+- Prompt tuning via "signes"
+
+**Quand utiliser** :
+- ✅ Projets greenfield (0 code existant)
+- ✅ Prototypes rapides
+- ✅ Remplacer outsourcing
+- ❌ Legacy code
+- ❌ Sans surveillance
+
+**ROI documenté** : Contrat $50K USD livré pour $297 USD d'API
+
+---
+
 ## 🎯 Priorité d'Apprentissage
 
 ```

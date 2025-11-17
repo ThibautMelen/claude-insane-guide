@@ -686,6 +686,15 @@ cat .claude-plugin/plugin.json | jq .
 - [Awesome Claude Code Plugins](https://github.com/VoltAgent/awesome-claude-code#plugins) - Collection de plugins
 - [Edmund Yong Setup](https://github.com/edmund-io/edmunds-claude-code) - Configuration plugins
 - [Community Marketplaces](https://github.com/VoltAgent/awesome-claude-code#marketplaces) - Marketplaces communautaires
+- [Ralph Wiggum Plugin](https://github.com/anthropics/claude-code/tree/main/plugins/ralph-wiggum) - Plugin officiel Anthropic pour génération autonome
+
+### 📖 Plugins Avancés
+
+- **Ralph Wiggum** ([🔗 GitHub](https://github.com/anthropics/claude-code/tree/main/plugins/ralph-wiggum) | [🔗 Article](https://ghuntley.com/ralph/))
+  - Génération code autonome 24/7 via loop infini
+  - Plugin officiel Anthropic
+  - ROI documenté : $50K → $297 USD
+  - Voir [Add-on Ralph Wiggum](../../themes/9-add-ons/ralph-wiggum/guide.md)
 
 ---
 
