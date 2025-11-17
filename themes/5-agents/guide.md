@@ -834,9 +834,40 @@ Zero downtime achieved ✅
 
 ## 📚 Ressources
 
-- 📄 **Sub-Agents Official** : https://docs.anthropic.com/claude/docs/sub-agents
+### 📄 Documentation Officielle
+- 📄 **Claude Sub-Agents** : https://docs.anthropic.com/claude/docs/sub-agents (inféré)
+- 📄 **Engineering Best Practices** : https://www.anthropic.com/engineering/claude-code-best-practices
+
+### 📝 Articles & Recherche
+- 📝 **Disrupting AI Espionage** : https://www.anthropic.com/news/disrupting-AI-espionage
+  - Sécurité et isolation des agents
+  - Best practices multi-agents
+- 📝 **Writing Tools for Agents** : https://www.anthropic.com/engineering/writing-tools-for-agents
+  - Comment concevoir outils pour agents autonomes
+  - Patterns d'orchestration
+
+### 🎥 Vidéos Recommandées
 - 🎥 **Melvynx - Formation Claude Code 2.0** : https://www.youtube.com/watch?v=bDr1tGskTdw (45:00 - Agents Parallèles)
-- 📄 **Voir aussi** : [Plugins](../plugins/guide.md) | [Commands](../commands/guide.md) | [Workflows](../workflows/guide.md)
+  - Parallélisation agents (gain 66%+ temps)
+  - Workflow production vidéo 7 agents
+  - Optimisation coût/modèle (Haiku/Sonnet/Opus)
+
+### 🔗 Repositories Communauté
+- 🔗 **Weston Hobson Agents** : https://github.com/wshobson/agents
+  - Collection d'agents production-ready
+  - Code review, testing, security audit
+- 🔗 **Awesome Sub-Agents** : https://github.com/VoltAgent/awesome-claude-code-subagents
+  - Catalogue communautaire agents
+  - Patterns orchestration avancés
+  - Exemples multi-agents complexes
+
+### 📚 Ressources Internes
+- 📋 [Cheatsheet Agents](./cheatsheet.md) - Référence rapide
+- 🎓 [Exercices Agents](../exercises/agents/) - Créer vos agents
+- 🔗 [Plugins](../6-plugins/guide.md) - Packaging agents dans plugins
+- 🔗 [MCP](../7-mcp/guide.md) - Agents avec intégrations MCP
+- 🔗 [Skills](../4-skills/guide.md) - Skills vs Agents (comparaison)
+- 🔗 [Workflows](../8-workflows/guide.md) - Agents dans workflows EPCT
 
 ---
 

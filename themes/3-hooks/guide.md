@@ -1093,15 +1093,17 @@ chmod +x scripts/my-hook.sh  # Si nécessaire
 
 ### 📄 Documentation Officielle
 
-- 📄 [Claude Code Hooks](https://code.claude.com/docs/hooks)
-- 📄 [Claude Code Plugins](https://code.claude.com/docs/plugins)
-- 📄 [Claude Code Settings](https://code.claude.com/docs/settings)
+- 📄 **Claude Code Hooks** : https://code.claude.com/docs/en/hooks
+- 📄 **Hooks Guide Complet** : https://code.claude.com/docs/en/hooks-guide
+- 📄 **Engineering Best Practices** : https://www.anthropic.com/engineering/claude-code-best-practices
 
-### 🔗 Guides Connexes
+### 📝 Articles & Guides
 
-- 📖 [Guide Plugins](../6-plugins/guide.md) - Hooks dans plugins
-- 📖 [Guide Commands](../2-commands/guide.md) - Commands vs Hooks
-- 📖 [Guide Best Practices](../9-best-practices/guide.md) - Patterns hooks avancés
+- 📝 **Hooks Best Practices (Anthropic)** : https://www.anthropic.com/engineering/claude-code-best-practices
+  - Événements système, automation patterns
+  - Guidelines officielles sécurité
+- 📝 **How I Use Hooks** : https://blog.sshh.io/p/how-i-use-every-claude-code-feature
+  - Workflow production avec hooks
 
 ### 🎥 Vidéos Recommandées
 
@@ -1110,11 +1112,31 @@ chmod +x scripts/my-hook.sh  # Si nécessaire
   - Yolo Mode + hook sécurité (`alias cc`)
   - Workflow création avec Claude + documentation
 
-### 🧪 Exemples Communautaires
+### 🔗 Repositories Communauté
 
-- 🔗 [Weston Hobson Commands](https://github.com/wshobson/commands) - Exemples hooks
-- 🔗 [Edmund Yong Setup](https://github.com/edmund-io/edmunds-claude-code) - Hooks production
-- 🔧 **CCLI Blueprint (Melvynx)** : https://mlv.sh/ccli - Pack hooks sécurité
+- 🔗 **Disler Hooks Mastery** : https://github.com/disler/claude-code-hooks-mastery
+  - Patterns avancés hooks production
+  - Exemples sécurité, validation, automation
+  - Best practices testées en production
+- 🔗 **Weston Hobson Commands** : https://github.com/wshobson/commands
+  - Exemples hooks intégrés aux commands
+- 🔗 **Edmund Yong Setup** : https://github.com/edmund-io/edmunds-claude-code
+  - Hooks production (linting, testing, security)
+
+### 🔧 Outils & Packs
+
+- 🔧 **CCLI Blueprint (Melvynx)** : https://mlv.sh/ccli
+  - Pack hooks sécurité pré-configurés
+  - Yolo Mode setup sécurisé
+  - Status line avec hooks monitoring
+
+### 📚 Ressources Internes
+
+- 📋 [Cheatsheet Hooks](./cheatsheet.md) - Référence rapide API
+- 🎓 [Exercices Hooks](../exercises/hooks/) - Création hooks custom
+- 🔗 [Commands](../2-commands/guide.md) - Quand utiliser Commands vs Hooks
+- 🔗 [Plugins](../6-plugins/guide.md) - Packaging hooks dans plugins
+- 🔗 [Best Practices](../9-best-practices/guide.md) - Patterns hooks avancés
 
 ### 💡 Use Cases Inspirants
 

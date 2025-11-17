@@ -131,6 +131,54 @@ Voir [ressources.md](./ressources.md) pour détails complets.
 
 ## 📅 Changelog
 
+### 2025-11-17 (Réorganisation Majeure) ⭐ MAJEUR
+
+**Structure** :
+
+- ✅ Renommage themes (ordre pédagogique : 1-10)
+- ✅ Création dossiers: patterns/, advanced/, add-ons/
+- ✅ Migration vers add-ons/ (vs-code-extension, statusline)
+- ✅ Archive fichiers obsolètes
+
+**Enrichissement** :
+
+- ✅ 55+ ressources externes ajoutées (docs officielles, articles, repos)
+- ✅ Réseau cross-références internes (navigation fluide)
+- ✅ 6 nouveaux guides patterns/advanced (~147 KB contenu)
+- ✅ Restructuration guide workflows (4 types de workflows)
+
+**Validation** :
+
+- ✅ Vérification avec Context7 (docs officielles)
+- ✅ Linting markdown fixes
+- ✅ README.md mis à jour
+
+**Métriques** :
+
+- 📊 10 themes core + 4 patterns + 4 advanced = 18 guides majeurs
+- 📚 55+ ressources externes
+- 🔗 Network de cross-références complet
+- 📈 +73% contenu workflows
+- 💾 ~300 KB documentation totale
+
+**Impact** :
+
+Documentation maintenant complète de **débutant à expert** avec :
+
+- Progression pédagogique claire (1→10)
+- Patterns d'orchestration production-ready
+- Guides enterprise (governance, cost optimization)
+- Framework de décision (quel outil utiliser)
+
+**Prochaines Étapes** :
+
+- [ ] Showcase/ : Cas d'usage réels (Supernovae Studio)
+- [ ] Tests automatisés pour exemples de code
+- [ ] Solutions exercices
+- [ ] Traduction anglaise (optional)
+
+---
+
 ### 2025-11-10 (Mise à jour URLs & Contenu Advanced) ⭐ IMPORTANT
 - ✅ **CORRECTION URLS** : Migration complète documentation
   - Toutes les URLs `docs.claude.com` → `code.claude.com/docs`

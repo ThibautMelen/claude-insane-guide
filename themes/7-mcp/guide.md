@@ -1029,11 +1029,40 @@ Add to `~/.config/claude-code/config.json`:
 
 ## 📚 Ressources
 
-- 📄 **MCP Official** : https://modelcontextprotocol.io/
+### 📄 Documentation Officielle
+- 📄 **Model Context Protocol** : https://modelcontextprotocol.io/
+  - Spécification complète MCP
+  - Architecture et concepts
 - 📄 **Context7** : https://context7.co
-- 📄 **GitHub CLI** : https://cli.github.com
+  - Seul MCP recommandé pour documentation
+
+### 📝 Articles & Intégrations
+- 📝 **Understanding Claude Code Full Stack** : https://alexop.dev/posts/understanding-claude-code-full-stack/
+  - MCP dans l'écosystème Claude Code
+  - Quand utiliser MCP vs CLI
+  - Patterns d'intégration
+
+### 🎥 Vidéos Recommandées
 - 🎥 **Melvynx - Formation Claude Code 2.0** : https://www.youtube.com/watch?v=bDr1tGskTdw (42:00 - MCP)
-- 📄 **Voir aussi** : [Commands](../commands/guide.md) | [Best Practices](../best-practices/guide.md)
+  - ⚠️ Pourquoi éviter MCP (pollution contexte)
+  - ✅ Exception Context7 (seul recommandé)
+  - CLI alternatives recommandées
+
+### 🔧 CLI Alternatives (Recommandées)
+- 📄 **GitHub CLI** : https://cli.github.com
+  - `gh` > MCP GitHub (performance + contexte)
+- 📄 **PostgreSQL CLI** : https://www.postgresql.org/docs/current/app-psql.html
+  - `psql` > MCP Database
+- 📄 **httpie** : https://httpie.io/
+  - `http` > MCP Fetch/HTTP
+
+### 📚 Ressources Internes
+- 📋 [Cheatsheet MCP](./cheatsheet.md) - Référence rapide
+- 🔗 [Skills](../4-skills/guide.md) - MCP vs Skills (comparaison)
+- 🔗 [Agents](../5-agents/guide.md) - Agents avec MCP (patterns)
+- 🔗 [Plugins](../6-plugins/guide.md) - Packaging MCP dans plugins
+- 🔗 [Best Practices](../9-best-practices/guide.md) - CLI > MCP (règle)
+- 🔗 [Commands](../2-commands/guide.md) - Commands avec CLI natifs
 
 ---
 

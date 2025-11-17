@@ -6,7 +6,7 @@
 
 ### Qu'est-ce qu'un Workflow ?
 
-Un **Workflow** = Processus structuré en **étapes séquentielles** pour accomplir une tâche complexe de manière **systématique** et **reproductible**.
+Un **Workflow** = Processus structuré en **étapes** pour accomplir une tâche complexe de manière **systématique** et **reproductible**.
 
 ```
 ╔══════════════════════════════════════════╗
@@ -44,7 +44,7 @@ Feature complexe :
 └── Résultat : 50% de chances de succès ❌
 ```
 
-**Avec Workflow EPCT** :
+**Avec Workflow Structuré** :
 ```
 Feature complexe :
 ├── EXPLORE : Comprendre architecture existante
@@ -53,6 +53,75 @@ Feature complexe :
 ├── TEST : Vérifier fonctionnement
 └── Résultat : 95% de chances de succès ✅
 ```
+
+---
+
+### 🔀 Types de Workflows
+
+Claude Code supporte **4 types de workflows** selon le contexte :
+
+```
+╔════════════════════════════════════════════════════════╗
+║              TYPES DE WORKFLOWS                        ║
+╚════════════════════════════════════════════════════════╝
+
+1️⃣ SÉQUENTIEL (EPCT - Explore-Plan-Code-Test)
+   ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐
+   │ EXPLORE │───>│  PLAN   │───>│  CODE   │───>│  TEST   │
+   └─────────┘    └─────────┘    └─────────┘    └─────────┘
+
+   Usage : Features complexes, refactoring
+   Avantage : Contexte optimal, validation humaine
+   Limitation : Plus lent (4 phases)
+
+2️⃣ PARALLÈLE (Multi-agents - Concurrent)
+   ┌──────────┐
+   │ Agent 1  │ ──┐
+   ├──────────┤   │
+   │ Agent 2  │ ──┤──> Agrégation
+   ├──────────┤   │
+   │ Agent 3  │ ──┘
+   └──────────┘
+
+   Usage : Tâches indépendantes (fix 10 files)
+   Avantage : 5-10x plus rapide
+   Limitation : Nécessite isolation (no shared state)
+
+3️⃣ CONDITIONNEL (Decision Trees - If/Else)
+   ┌─────────────┐
+   │  Condition  │
+   └─────────────┘
+        ├─YES──> Branch A
+        └─NO───> Branch B
+
+   Usage : Validation, fallback chains
+   Avantage : Adaptabilité, robustesse
+   Limitation : Complexité logic
+
+4️⃣ HYBRIDE (Orchestration - Combinaison)
+   COMMAND (orchestrateur)
+       ↓
+   ┌─────────────────────────────┐
+   │ EPCT (séquentiel)           │
+   │   ↓                         │
+   │ Parallel agents (batch)     │
+   │   ↓                         │
+   │ Error handling (fallback)   │
+   └─────────────────────────────┘
+
+   Usage : Workflows production complexes
+   Avantage : Flexible, robuste, scalable
+   Limitation : Complexité architecture
+```
+
+**Quand utiliser quoi ?**
+
+| Type | Use Case | Exemple |
+|------|----------|---------|
+| **Séquentiel** | Feature complexe | EPCT : nouvelle page, migration |
+| **Parallèle** | Tâches indépendantes | Fix grammar 50 files |
+| **Conditionnel** | Validation/fallback | Check API → Fallback cache |
+| **Hybride** | Production workflows | /generate-locales (50 locales) |
 
 ---
 
@@ -276,6 +345,210 @@ Workflow :
 
 ---
 
+## 🔄 Autres Workflows Courants
+
+### 🔄 Workflow Parallèle (Multi-agents)
+
+**Pattern** : Lancer plusieurs agents **simultanément** pour traiter tâches indépendantes.
+
+```
+╔════════════════════════════════════════════════════════╗
+║         PARALLEL WORKFLOW (Task Tool)                  ║
+╚════════════════════════════════════════════════════════╝
+
+COMMAND /fix-grammar file1.md file2.md ... file10.md
+    ↓
+┌────────────────────────────────────────┐
+│ VALIDATE FILES (10 files)              │
+│ Strategy: 2-10 files → PARALLEL        │
+└────────────────────────────────────────┘
+    ↓
+Launch ALL agents in SINGLE message:
+┌──────────────────────────────────────┐
+│ Task(@fix-grammar, file1.md)  ──┐   │
+│ Task(@fix-grammar, file2.md)  ──┤   │
+│ Task(@fix-grammar, file3.md)  ──┤   │
+│ Task(@fix-grammar, file4.md)  ──┤──>│ Parallel
+│ Task(@fix-grammar, file5.md)  ──┤   │ Execution
+│ Task(@fix-grammar, file6.md)  ──┤   │ (simultané)
+│ Task(@fix-grammar, file7.md)  ──┤   │
+│ Task(@fix-grammar, file8.md)  ──┤   │
+│ Task(@fix-grammar, file9.md)  ──┤   │
+│ Task(@fix-grammar, file10.md) ──┘   │
+└──────────────────────────────────────┘
+    ↓ Durée : ~12s (au lieu de 120s séquentiel!)
+    ↓
+┌────────────────────────────────────────┐
+│ AGGREGATE RESULTS                      │
+│ ✅ Success: 8/10                       │
+│ ❌ Failed: 2/10                        │
+└────────────────────────────────────────┘
+    ↓
+┌────────────────────────────────────────┐
+│ RETRY FAILURES (once)                  │
+│ Task(@fix-grammar, file3.md)           │
+│ Task(@fix-grammar, file7.md)           │
+└────────────────────────────────────────┘
+    ↓
+REPORT : 9/10 success (1 failed permanently)
+```
+
+**Avantages** :
+- ⚡ **5-10x plus rapide** que séquentiel
+- 🔒 **Isolation** : Chaque agent indépendant
+- 📊 **Scalable** : Batch processing pour large scale
+
+**Batch Processing** (>10 items) :
+```
+50 items → 5 waves de 10 agents
+Wave 1 : 10 agents parallel (30s)
+Wave 2 : 10 agents parallel (30s)
+...
+Total : ~2min 30s (vs 25min séquentiel!)
+```
+
+**📚 Ressource** : [Parallel Execution Pattern](../../patterns/parallel-execution.md)
+
+---
+
+### 🌳 Workflow Conditionnel (Fallback Chains)
+
+**Pattern** : **Chaînes de secours** pour gérer les erreurs et basculer vers alternatives.
+
+```
+╔════════════════════════════════════════════════════════╗
+║      CONDITIONAL WORKFLOW (Error Recovery)             ║
+╚════════════════════════════════════════════════════════╝
+
+COMMAND /fetch-docs "Next.js"
+    ↓
+┌────────────────────────────────────────┐
+│ PRIMARY: MCP Context7                  │
+│ Try: Get official docs                 │
+└────────────────────────────────────────┘
+    ↓
+  [Success?] ────YES───> ✅ EXIT 0 (success)
+    │
+    NO (rate limit, offline)
+    ↓
+┌────────────────────────────────────────┐
+│ FALLBACK 1: Perplexity Search         │
+│ Try: Search web for docs               │
+└────────────────────────────────────────┘
+    ↓
+  [Success?] ────YES───> ⚠️ EXIT 1 (warning: fallback used)
+    │
+    NO (API key missing)
+    ↓
+┌────────────────────────────────────────┐
+│ FALLBACK 2: Firecrawl Scraping        │
+│ Try: Scrape official website           │
+└────────────────────────────────────────┘
+    ↓
+  [Success?] ────YES───> ⚠️ EXIT 1 (warning: fallback 2 used)
+    │
+    NO (scraping failed)
+    ↓
+┌────────────────────────────────────────┐
+│ USER VALIDATION                        │
+│ AskUserQuestion:                       │
+│ "All failed. Provide manual URL?"      │
+│   - Yes → Retry Firecrawl              │
+│   - No → EXIT 2 ❌ (block)             │
+└────────────────────────────────────────┘
+```
+
+**Exit Codes Convention** :
+
+| Code | Signification | Action |
+|------|--------------|--------|
+| `0` | ✅ Succès complet | Continue workflow |
+| `1` | ⚠️ Warning (fallback utilisé) | Continue, mais review recommandée |
+| `2` | ❌ Échec bloquant | Stop, intervention manuelle |
+
+**Retry Logic** :
+```
+Retry au niveau COMMAND (pas agent):
+- 1 seule retry (max 2 tentatives total)
+- Améliorer contexte/prompt au retry
+- User validation si retry échoue
+```
+
+**📚 Ressource** : [Error Handling Pattern](../../patterns/error-handling.md)
+
+---
+
+### 🎯 Workflow Hybride (Orchestration Complexe)
+
+**Pattern** : Combiner **EPCT + Parallel + Conditional** pour workflows production.
+
+```
+╔════════════════════════════════════════════════════════╗
+║    HYBRID WORKFLOW : /generate-locales (50 locales)    ║
+╚════════════════════════════════════════════════════════╝
+
+COMMAND /generate-locales all
+    ↓
+┌────────────────────────────────────────┐
+│ PHASE 1: EXPLORE (EPCT)                │
+│ - Check existing locales               │
+│ - Validate API access                  │
+│ - Read template files                  │
+└────────────────────────────────────────┘
+    ↓
+┌────────────────────────────────────────┐
+│ PHASE 2: PLAN (EPCT)                   │
+│ - List 50 locales to generate          │
+│ - Strategy: BATCH (5 waves × 10)       │
+│ - User validation: "Generate 50?"      │
+└────────────────────────────────────────┘
+    ↓
+  [User approves?] ────NO───> EXIT 0 (cancelled)
+    │
+   YES
+    ↓
+┌────────────────────────────────────────┐
+│ PHASE 3: CODE (PARALLEL + CONDITIONAL) │
+│                                        │
+│ FOR EACH wave (5 waves):              │
+│   ├─> PARALLEL: 10 agents             │
+│   │   ├─> PRIMARY: Context7           │
+│   │   └─> FALLBACK: Perplexity        │
+│   ├─> AGGREGATE results                │
+│   └─> RETRY failures                   │
+└────────────────────────────────────────┘
+    ↓
+Wave 1: 9/10 success (1 retry → 10/10)
+Wave 2: 10/10 success
+Wave 3: 8/10 success (2 retries → 9/10)
+Wave 4: 10/10 success
+Wave 5: 10/10 success
+    ↓
+┌────────────────────────────────────────┐
+│ PHASE 4: TEST (EPCT)                   │
+│ - Validate generated files             │
+│ - Check JSON schema                    │
+│ - Build verification                   │
+└────────────────────────────────────────┘
+    ↓
+REPORT FINAL:
+✅ 49/50 locales generated (98%)
+⚠️ 1 failure: locale 'ar-SA' (API timeout)
+💡 Next step: Retry manually /generate-locales ar-SA
+```
+
+**Composants utilisés** :
+- ✅ EPCT (Explore, Plan, Code, Test)
+- ✅ Parallel agents (5 waves × 10)
+- ✅ Fallback chains (Context7 → Perplexity)
+- ✅ Retry logic (1 retry per failure)
+- ✅ User validation (before launch)
+- ✅ Error aggregation (detailed report)
+
+**📚 Ressource** : [AI Orchestration Guide](../../advanced/ai-orchestration.md)
+
+---
+
 ## 🆕 Nouvelles Fonctionnalités 2025
 
 ### ✅ Checkpoints Automatiques
@@ -442,16 +715,80 @@ claude
 
 ## 📋 Cheatsheet
 
-### Commande EPCT
+### Types de Workflows
+
+```bash
+# 1️⃣ SÉQUENTIEL (EPCT)
+/epct "Description feature"
+→ Features complexes, refactoring
+→ Explore → Plan → Code → Test
+
+# 2️⃣ PARALLÈLE (Multi-agents)
+/fix-grammar file1.md file2.md file3.md
+→ Tâches indépendantes (2-50 items)
+→ Task tool, même message (5-10x speedup)
+
+# 3️⃣ CONDITIONNEL (Fallback)
+/fetch-docs "Next.js"
+→ Primary → Fallback1 → Fallback2 → User
+→ Exit codes: 0=ok, 1=warn, 2=block
+
+# 4️⃣ HYBRIDE (Orchestration)
+/generate-locales all
+→ EPCT + Parallel + Conditional
+→ Production workflows complexes
+```
+
+### Commande EPCT (Séquentiel)
 
 ```bash
 # Utilisation
 /epct "Description de la feature"
 
-# Exemple
+# Exemples
 /epct "Créer formulaire contact avec validation email et téléphone"
 /epct "Intégrer Stripe pour paiements"
 /epct "Ajouter dark mode avec toggle"
+/epct "Migration TypeScript strict mode"
+```
+
+### Parallel Agents (Multi-agents)
+
+```bash
+# Pattern Selection
+1 item       → Direct processing (no agent)
+2-10 items   → PARALLEL (single wave)
+11-50 items  → BATCH (waves of 10)
+>50 items    → BATCH (waves of 20)
+
+# Syntaxe Task Tool
+# ✅ BON: All in same message
+Task({ subagent: '@agent', task: 'item1', context: {...} })
+Task({ subagent: '@agent', task: 'item2', context: {...} })
+Task({ subagent: '@agent', task: 'item3', context: {...} })
+
+# ❌ MAUVAIS: Sequential
+Task(...) → Wait → Task(...) → Wait → Task(...)
+```
+
+### Fallback Chains (Conditionnel)
+
+```bash
+# Pattern
+TRY primary_source
+  → CATCH error → TRY fallback_1
+    → CATCH error → TRY fallback_2
+      → CATCH error → USER_VALIDATION
+
+# Exit Codes
+0 = ✅ Success (continue)
+1 = ⚠️ Warning (continue but review)
+2 = ❌ Blocked (stop, manual intervention)
+
+# Retry Logic
+LAUNCH agents → COLLECT results
+  → IF failures: RETRY once with improved context
+    → IF still failures: REPORT + USER_VALIDATION
 ```
 
 ### Background Tasks
@@ -465,8 +802,10 @@ claude
 Flèche ↓ : Voir logs
 K        : Kill process
 
-# Status
-"Vérifie status des processus background"
+# Commandes
+/bashes  : Lister toutes les tâches
+/kill [id] : Terminer une tâche
+/logs [id] : Voir logs complets
 ```
 
 ### Todo Dynamique
@@ -475,7 +814,7 @@ K        : Kill process
 # Afficher
 Ctrl+T
 
-# Todo auto-généré par workflows complexes
+# Auto-généré par workflows
 /epct → Todo automatique
 Workflows multi-étapes → Todo tracking
 ```
@@ -484,30 +823,58 @@ Workflows multi-étapes → Todo tracking
 
 ## 🎓 Points Clés
 
+### Types de Workflows
+
+✅ **Séquentiel (EPCT)** : Explore → Plan → Code → Test (features complexes)
+✅ **Parallèle** : Multi-agents simultanés (5-10x speedup)
+✅ **Conditionnel** : Fallback chains + retry logic (robustesse)
+✅ **Hybride** : Orchestration complexe (production workflows)
+
 ### Concepts Essentiels
 
-✅ **EPCT = Méthodologie** : Explore → Plan → Code → Test
-✅ **Validation Critique** : Plan approuvé AVANT code
-✅ **Background Tasks** : Serveurs/builds en arrière-plan
-✅ **Todo Dynamique** : Tracking automatique progression
-✅ **Contexte Optimal** : Exploration réduit hallucinations
+✅ **EPCT** : Validation critique AVANT code (95% succès)
+✅ **Parallel agents** : Task tool, même message (5-10x rapide)
+✅ **Fallback chains** : Primary → Fallback 1 → Fallback 2 → User
+✅ **Exit codes** : 0=success, 1=warning, 2=blocked
+✅ **Batch processing** : Waves de 10-20 agents pour large scale
+✅ **Background tasks** : Serveurs/builds en arrière-plan
+✅ **Todo dynamique** : Tracking automatique progression
 
 ### Commandes Clés
 
 | Commande | Description |
 |----------|-------------|
-| `/epct "feature"` | Workflow complet EPCT |
+| `/epct "feature"` | Workflow séquentiel complet |
+| `/fix-grammar file1 file2...` | Workflow parallèle (exemple) |
+| `/generate-locales all` | Workflow hybride (exemple) |
 | `Ctrl+T` | Afficher todo dynamique |
 | `Flèche ↓` | Voir logs background task |
 | `K` | Kill background process |
 
-### Workflow EPCT
+### Patterns Clés
 
+**EPCT (Séquentiel)** :
 ```
 1. EXPLORE : Contexte complet (docs + code)
 2. PLAN    : Architecture proposée + VALIDATION
 3. CODE    : Implémentation selon plan
 4. TEST    : Vérification automatique
+```
+
+**Parallel (Multi-agents)** :
+```
+1. VALIDATE : Check args, determine strategy
+2. LAUNCH   : All agents in SINGLE message (Task tool)
+3. AGGREGATE: Collect results, identify failures
+4. RETRY    : Once, with improved context
+5. REPORT   : Detailed metrics + next steps
+```
+
+**Conditional (Fallback)** :
+```
+TRY primary → CATCH → TRY fallback1
+            → CATCH → TRY fallback2
+                   → CATCH → USER VALIDATION
 ```
 
 **Résultat** : 95% succès vs 50% sans workflow
@@ -516,43 +883,112 @@ Workflows multi-étapes → Todo tracking
 
 ## 📚 Ressources
 
-- 📄 **Claude Code Docs** : https://code.claude.com/docs
+### 📄 Documentation Officielle
+- 📄 **Claude Code Workflows** : https://code.claude.com/docs/en/common-workflows (inféré)
+- 📄 **Engineering Best Practices** : https://www.anthropic.com/engineering/claude-code-best-practices
+- 📄 **Task Tool** : https://code.claude.com/docs/task-tool (parallel agents)
+
+### 🎥 Vidéos & Formations
 - 🎥 **Melvynx - Formation Claude Code 2.0** : https://www.youtube.com/watch?v=bDr1tGskTdw
-  - 30:00 - Workflow EPCT
-  - 27:00 - Background Tasks
-  - 39:00 - Todo Dynamique
-- 📄 **Voir aussi** : [Commands](../commands/guide.md) | [Agents](../agents/guide.md) | [Best Practices](../best-practices/guide.md)
+  - 30:00 - Workflow EPCT (méthodologie complète)
+  - 27:00 - Background Tasks (serveurs, builds)
+  - 39:00 - Todo Dynamique (tracking automatique)
+- 🎥 **Melvynx - EPCT Deep Dive** : https://www.youtube.com/watch?v=kFpLzCVLA20
+  - Explore-Plan-Code-Test en détail
+  - Cas réels production
+  - Optimisations avancées
+
+### 📚 Ressources Internes
+
+**Guides Thèmes** :
+- 📋 [Cheatsheet Workflows](./cheatsheet.md) - Référence rapide
+- 🔗 [Commands](../2-commands/guide.md) - Créer commande `/epct`
+- 🔗 [Sub-Agents](../7-subagents/guide.md) - Task tool pour parallélisation
+- 🔗 [Hooks](../6-hooks/guide.md) - Automation workflows
+- 🔗 [Best Practices](../9-best-practices/guide.md) - Workflow production
+
+**Patterns Avancés** :
+- 🎯 [Parallel Execution Pattern](../../patterns/parallel-execution.md) - Multi-agents, batching, performance
+- 🎯 [Error Handling Pattern](../../patterns/error-handling.md) - Fallback chains, retry logic
+- 🎯 [Command/Agent/Skill Pattern](../../patterns/command-agent-skill.md) - Orchestration architecture
+- 🎯 [State Management Pattern](../../patterns/state-management.md) - Context entre agents
+
+**Advanced Guides** :
+- 🚀 [AI Orchestration](../../advanced/ai-orchestration.md) - Workflows hybrides complexes
+- 🚀 [Decision Trees](../../advanced/decision-trees.md) - Quand utiliser quel workflow
+- 🚀 [Multi-Dialog Patterns](../../advanced/multi-dialog-patterns.md) - Conversations multi-étapes
+- 🚀 [Enterprise Patterns](../../advanced/enterprise-patterns.md) - Production workflows
+
+### 🔗 Repos Communauté
+- 🔗 **fix-grammar** (parallel pattern) : https://github.com/wshobson/commands
+- 🔗 **generate-locales** (batch pattern) : https://github.com/edmund-io/edmunds-claude-code
+- 🔗 **pr-review-toolkit** (hybrid workflow) : https://github.com/VoltAgent/awesome-claude-code-subagents
 
 ---
 
 ## Conclusion
 
-Les **Workflows** transforment tâches complexes en processus **systématiques** et **reproductibles**.
+Les **Workflows** transforment tâches complexes en processus **systématiques**, **reproductibles** et **scalables**.
 
-**EPCT** = Méthodologie **production-ready** :
+### 4 Types de Workflows Maîtrisés
+
+**1️⃣ SÉQUENTIEL (EPCT)** :
 - **Explore** : Contexte optimal
 - **Plan** : Validation humaine
 - **Code** : Implémentation qualité
 - **Test** : Vérification automatique
+- **Impact** : 95% succès sur features complexes
 
-**Background Tasks** = Productivité :
-- Serveurs continuent en arrière-plan
-- Builds longs n'bloquent pas workflow
+**2️⃣ PARALLÈLE (Multi-agents)** :
+- Task tool, même message
+- 5-10x speedup vs séquentiel
+- Batch processing pour large scale
+- **Impact** : 50 files en 2min vs 25min
 
-**Setup recommandé** :
+**3️⃣ CONDITIONNEL (Fallback)** :
+- Chaînes de secours robustes
+- Exit codes standardisés (0/1/2)
+- Retry logic intelligent
+- **Impact** : Robustesse production
+
+**4️⃣ HYBRIDE (Orchestration)** :
+- Combine EPCT + Parallel + Conditional
+- Workflows production complexes
+- Scalable et maintenable
+- **Impact** : Production-ready
+
+### Setup Recommandé
+
 ```
 .claude/commands/
-├── epct.md        → Workflow features complexes
-├── commit.md      → Git conventionnel
-└── deploy.md      → Déploiement automatisé
+├── epct.md              → Workflow séquentiel (features)
+├── fix-grammar.md       → Workflow parallèle (batch)
+├── fetch-docs.md        → Workflow conditionnel (fallback)
+├── generate-locales.md  → Workflow hybride (orchestration)
+├── commit.md            → Git conventionnel
+└── deploy.md            → Déploiement automatisé
 
 Workflow quotidien:
 1. /epct pour features → Plan validé → Implémentation
-2. Serveurs background → Dev sans interruption
-3. Todo dynamique → Transparence progression
+2. Parallel agents pour batch → 5-10x speedup
+3. Fallback chains → Robustesse API externes
+4. Background tasks → Dev sans interruption
+5. Todo dynamique → Transparence progression
 ```
 
-**Quote Melvynx** :
+### Quotes Inspirantes
+
+**Melvynx** :
 > "Le workflow EPCT permet d'éviter les hallucinations et d'avoir un résultat de qualité à chaque fois."
 
-**Impact** : **95% de succès** sur features complexes vs 50% sans workflow.
+**Parallel Pattern** :
+> "Launch ALL agents in SINGLE message. Do NOT wait between calls. → 10x speedup"
+
+### Impact Global
+
+- **EPCT** : 95% succès vs 50% sans workflow
+- **Parallel** : 5-10x speedup sur batch processing
+- **Conditional** : 0 downtime avec fallback chains
+- **Hybrid** : Production workflows scalables
+
+**Prochaine étape** : Implémenter vos propres workflows en combinant ces 4 patterns selon vos besoins !

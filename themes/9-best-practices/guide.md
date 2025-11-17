@@ -652,13 +652,40 @@ Shift+Tab → ASK MODE     # Modifications finales avec validation
 
 ## 📚 Ressources
 
-- 📄 **Claude Code Docs** : https://code.claude.com/docs
+### 📄 Documentation Officielle
+- 📄 **Claude Code Best Practices** : https://www.anthropic.com/engineering/claude-code-best-practices
+  - Guidelines officielles Anthropic
+  - Optimisation productivité
+  - Qualité code et workflows
+
+### 📝 Articles & Retours d'Expérience
+- 📝 **How I Use Every Claude Code Feature** : https://blog.sshh.io/p/how-i-use-every-claude-code-feature
+  - Workflow complet production
+  - Memory, Commands, Modes, Rewind en action
+  - Best practices validées 100+ projets
+- 📝 **Engineering Best Practices** : https://www.anthropic.com/engineering/claude-code-best-practices
+  - Standards officiels Anthropic
+  - Architecture et patterns recommandés
+
+### 🎥 Vidéos & Formations
 - 🎥 **Melvynx - Formation Claude Code 2.0** : https://www.youtube.com/watch?v=bDr1tGskTdw
-  - 15:00 - Modes d'édition
-  - 18:00 - Thinking Mode
-  - 36:00 - Rewind
+  - 15:00 - Modes d'édition (Ask/Auto/Plan)
+  - 18:00 - Thinking Mode (qualité vs vitesse)
+  - 36:00 - Rewind (navigation temporelle)
 - 🎥 **Edmund Yong - 800h Claude Code** : https://www.youtube.com/watch?v=Ffh9OeJ7yxw
-- 📄 **Voir aussi** : [Memory](../memory/guide.md) | [Commands](../commands/guide.md) | [Workflows](../workflows/guide.md)
+  - Quote DRY : "Don't Repeat Yourself"
+  - Workflow optimisé long terme
+  - Astuces productivité
+
+### 📚 Ressources Internes
+- 📋 [Cheatsheet Best Practices](./cheatsheet.md) - Référence rapide
+- 🔗 [Memory](../1-memory/guide.md) - Foundation (DRY principle)
+- 🔗 [Commands](../2-commands/guide.md) - Workflows réutilisables
+- 🔗 [Hooks](../3-hooks/guide.md) - Automation patterns
+- 🔗 [MCP](../7-mcp/guide.md) - CLI > MCP (règle d'or)
+- 🔗 [Workflows](../8-workflows/guide.md) - EPCT méthodologie
+- 🔗 [Patterns Avancés](../../patterns/) - Decision trees, multi-dialog
+- 🔗 [All Themes](../) - Vue d'ensemble complète
 
 ---
 

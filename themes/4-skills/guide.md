@@ -213,16 +213,39 @@ Generate reports from data sources.
 ## 📚 Ressources
 
 ### 📄 Documentation Officielle
-- 📄 [Claude Code Skills](https://code.claude.com/docs/skills)
-- 📄 [Plugins](../6-plugins/guide.md) - Package skills
+- 📄 **Claude Code Skills** : https://code.claude.com/docs/en/skills
+- 📄 **Engineering Best Practices** : https://www.anthropic.com/engineering/claude-code-best-practices
 
-### 🔗 Guides Connexes
-- 📖 [Commands](../2-commands/guide.md) - Commands vs Skills
-- 📖 [MCP](../4-mcp/guide.md) - MCP vs Skills
-- 📖 [Plugins](../6-plugins/guide.md) - Distribution skills
+### 📝 Articles & Deep Dives
+- 📝 **Skills Deep Dive** : https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/
+  - Architecture interne des Skills
+  - Comparaison avec Prompts traditionnels
+  - Quand utiliser Skills vs autres patterns
+- 📝 **Skills Explained (Reddit)** : https://www.reddit.com/r/ClaudeAI/comments/1ow9cka/skills_explained_how_skills_compares_to_prompts/
+  - Comparaison Skills vs Prompts
+  - Cas d'usage communauté
 
-### 🧪 Exemples Communautaires
-- 🔗 [PDF Skill Example](https://github.com/anthropics/claude-code-skills)
-- 🔗 [Excel Handler](https://github.com/community/excel-skill)
+### ⚠️ Sécurité & Limitations
+- 🔒 **Claude Skill Hijack Warning** : https://securetrajectories.substack.com/p/claude-skill-hijack-invisible-sentence
+  - Risques injection malveillante dans Skills
+  - Best practices sécurité
+  - Validation inputs utilisateur
+
+### 🔗 Repositories Communauté
+- 🔗 **Anthropic Official Skills** : https://github.com/anthropics/skills
+  - Skills officielles maintenues par Anthropic
+  - Templates et exemples production
+- 🔗 **Awesome Claude Skills** : https://github.com/travisvn/awesome-claude-skills
+  - Catalogue communautaire de Skills
+  - PDF, Excel, Image processing, API integrations
+  - Voting communautaire best skills
+
+### 📚 Ressources Internes
+- 📋 [Cheatsheet Skills](./cheatsheet.md) - Référence rapide
+- 🎓 [Exercices Skills](../exercises/skills/) - Créer vos Skills
+- 🔗 [Commands](../2-commands/guide.md) - Quand utiliser Commands vs Skills
+- 🔗 [MCP](../7-mcp/guide.md) - MCP vs Skills (intégration externe)
+- 🔗 [Plugins](../6-plugins/guide.md) - Packaging Skills dans plugins
+- 🔗 [Agents](../5-agents/guide.md) - Skills utilisés par agents
 
 ---

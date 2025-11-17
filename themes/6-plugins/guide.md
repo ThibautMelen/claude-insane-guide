@@ -2816,32 +2816,47 @@ Préfixes spéciaux :
 
 ### 📄 Documentation Officielle
 
-- **Plugins Guide** : https://code.claude.com/docs/plugins
-- **Commands** : [Guide Commands](../commands/guide.md)
-- **Sub-Agents** : [Guide Agents](../agents/guide.md)
-- **Skills** : [Guide Skills](../skills/guide.md)
-- **Hooks** : [Guide Hooks](../hooks/guide.md) *(à créer)*
-- **MCP** : [Guide MCP](../mcp/guide.md)
+- 📄 **Claude Code Plugins** : https://code.claude.com/docs/en/plugins (inféré)
+- 📄 **Engineering Best Practices** : https://www.anthropic.com/engineering/claude-code-best-practices
+
+### 📝 Articles & Deep Dives
+
+- 📝 **Understanding Claude Code Full Stack** : https://alexop.dev/posts/understanding-claude-code-full-stack/
+  - Architecture complète Plugins système
+  - Intégration Commands, Agents, Hooks, MCP
+  - Patterns production
 
 ### 🎥 Vidéos Recommandées
 
-- **NetworkChuck** - Claude Code Terminal Workflow
-- **Edmund Yong** - 800h Claude Code Setup
+- 🎥 **NetworkChuck** - Claude Code Terminal Workflow
+  - Workflow multi-plugins en production
+- 🎥 **Edmund Yong - 800h Claude Code** : https://www.youtube.com/watch?v=Ffh9OeJ7yxw
+  - Setup complet plugins ecosystem
+  - Best practices organisation
 
-### 🔗 Repos Communauté
+### 🔗 Repositories Communauté
 
-- **Awesome Plugins** : https://github.com/VoltAgent/awesome-claude-plugins
-- **Weston Hobson** : https://github.com/wshobson/commands
-- **Edmund Yong** : https://github.com/edmund-io/edmunds-claude-code
+- 🔗 **Awesome Claude Plugins** : https://github.com/VoltAgent/awesome-claude-plugins (inféré)
+  - Catalogue plugins communautaire
+  - Frontend, Backend, DevOps, Security
+- 🔗 **Weston Hobson Plugins** : https://github.com/wshobson/commands
+  - Commands packagées en plugins
+- 🔗 **Edmund Yong Setup** : https://github.com/edmund-io/edmunds-claude-code
+  - Configuration plugins production
 
-### 📖 Guides Connexes
+### 📚 Ressources Internes
 
-- [Memory](../memory/guide.md) - Configurer préférences équipe
-- [Best Practices](../best-practices/guide.md) - Workflows avancés
-- [Cheatsheet Plugins](./cheatsheet.md) - Référence rapide
-- [Cas d'Usage Réels](./cas-usage.md) - Exemples production-ready
+- 📋 [Cheatsheet Plugins](./cheatsheet.md) - Référence rapide API
+- 🎓 [Exercices Plugins](../exercises/plugins/) - Créer votre plugin
+- 🔗 [Commands](../2-commands/guide.md) - Packaging commands
+- 🔗 [Agents](../5-agents/guide.md) - Packaging agents
+- 🔗 [Skills](../4-skills/guide.md) - Packaging skills
+- 🔗 [Hooks](../3-hooks/guide.md) - Packaging hooks
+- 🔗 [MCP](../7-mcp/guide.md) - Intégration MCP dans plugins
+- 🔗 [Memory](../1-memory/guide.md) - Memory vs Plugins
+- 🔗 [Best Practices](../9-best-practices/guide.md) - Workflow plugins avancés
 
-### 🛠️ Outils
+### 🛠️ Outils Validation
 
 - **jq** : Valider JSON - https://jqlang.github.io/jq/
 - **yamllint** : Valider YAML

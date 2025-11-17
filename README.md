@@ -191,6 +191,60 @@ Chaque thème contient :
 
 ---
 
+## 🗺️ Navigation
+
+### 🎯 Themes Core (Essentiels - Ordre Pédagogique)
+
+1. [Memory](themes/1-memory/guide.md) - Mémoire persistante
+2. [Commands](themes/2-commands/guide.md) - Commandes slash
+3. [Hooks](themes/3-hooks/guide.md) - Automation lifecycle
+4. [MCP](themes/4-mcp/guide.md) - Model Context Protocol
+5. [Skills](themes/5-skills/guide.md) - Capacités spécialisées
+6. [Plugins](themes/6-plugins/guide.md) - Extensions modulaires
+7. [Agents](themes/7-agents/guide.md) - Sub-agents orchestration
+8. [Workflows](themes/8-workflows/guide.md) - Pipelines automatisés
+9. [Best Practices](themes/9-best-practices/guide.md) - Production tips
+10. [Interactive UI](themes/10-interactive-ui/guide.md) - AskUserQuestion
+
+### 🎓 Patterns & Advanced
+
+- [Patterns](patterns/README.md) - Architecture & orchestration
+  - [Command-Agent-Skill](patterns/command-agent-skill.md)
+  - [Error Handling](patterns/error-handling.md)
+  - [Parallel Execution](patterns/parallel-execution.md)
+  - [State Management](patterns/state-management.md)
+- [Advanced](advanced/README.md) - Expert-level guides
+  - [Multi-Dialog Patterns](advanced/multi-dialog-patterns.md)
+  - [Enterprise Patterns](advanced/enterprise-patterns.md)
+  - [AI Orchestration](advanced/ai-orchestration.md)
+  - [Decision Trees](advanced/decision-trees.md)
+
+### 🔧 Add-ons (Optional)
+
+- [VS Code Extension](add-ons/vs-code-extension/guide.md)
+- [Statusline](add-ons/statusline/guide.md)
+
+---
+
+## 🧭 Quel Outil Utiliser ?
+
+Pas sûr de quelle feature utiliser ? Consultez :
+
+- 📊 [Decision Trees](advanced/decision-trees.md) - Arbre de décision complet
+- 🏗️ [Patterns](patterns/README.md) - Patterns d'orchestration
+- 🎯 [Best Practices](themes/9-best-practices/guide.md) - Recommendations
+
+**Quick Guide** :
+
+- **Context permanent** → Memory
+- **Action répétitive** → Command
+- **Automation lifecycle** → Hook
+- **Connaissance partagée** → Skill
+- **Travail isolé complexe** → Agent
+- **Package combiné** → Plugin
+
+---
+
 ## 📚 Thèmes du Parcours
 
 | # | Thème | Description |

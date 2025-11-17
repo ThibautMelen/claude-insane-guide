@@ -926,13 +926,29 @@ All developers should have Claude Code configured to read this file.
 ## 📚 Ressources
 
 ### Documentation Officielle
-- 📄 **Claude Code Memory** : https://code.claude.com/docs/memory
+- 📄 **Claude Code Memory** : https://code.claude.com/docs/en/memory
+- 📄 **Engineering Best Practices** : https://www.anthropic.com/engineering/claude-code-best-practices
+
+### Articles & Guides
+- 📝 **Memory Best Practices (Anthropic)** : https://www.anthropic.com/engineering/claude-code-best-practices
+  - Structurer sa mémoire pour productivité maximale
+  - Guidelines officielles d'Anthropic
+- 📝 **How I Use Claude Code (sshh.io)** : https://blog.sshh.io/p/how-i-use-every-claude-code-feature
+  - Workflow complet avec Memory comme fondation
 
 ### Vidéos Recommandées
 - 🎥 **Edmund Yong - 800h Claude Code** : https://www.youtube.com/watch?v=Ffh9OeJ7yxw
   - Quote: "D.R.Y. (Don't Repeat Yourself) - Let Claude remember your preferences"
+  - Démonstration Memory 3 niveaux (00:38-15:00)
 - 🎥 **Melvynx - 500h Claude Code Workflow** : [Fiche complète](../../ressources/videos/500h-optimisation-workflow-melvynx.md)
   - 3 niveaux mémoire, `/cloud-memory`, structure CRITICAL
+  - Maintenance automatique CLAUDE.md
+
+### Repositories Communauté
+- 🔗 **Edmund Yong Setup** : https://github.com/edmund-io/edmunds-claude-code
+  - CLAUDE.md production avec best practices
+  - Structure hiérarchique exemplaire
+  - Imports et modularité
 
 ### Outils & Packs
 - 🔧 **CCLI Blueprint (Melvynx)** : https://mlv.sh/ccli
@@ -941,8 +957,11 @@ All developers should have Claude Code configured to read this file.
   - Status line personnalisée
   - Hooks de sécurité
 
-### Guides Connexes
-- 📄 **Voir aussi** : [Commands](../commands/guide.md) | [Hooks](../hooks/guide.md) | [Best Practices](../best-practices/guide.md)
+### Ressources Internes
+- 📋 [Cheatsheet Memory](./cheatsheet.md) - Référence rapide
+- 🎓 [Exercices Memory](../exercises/memory/) - Pratique guidée
+- 🔗 [Commands](../2-commands/guide.md) - Complémentarité Memory/Commands
+- 🔗 [Best Practices](../9-best-practices/guide.md) - Optimisation workflow
 
 ---
 

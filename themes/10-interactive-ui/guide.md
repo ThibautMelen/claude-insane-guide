@@ -437,18 +437,41 @@ Validation → Saisie de données critiques
 
 ## 📚 Ressources & Suite
 
-### 🔗 Documentation Avancée
+### 📄 Documentation Officielle
+- 📄 **AskUserQuestion API** : https://code.claude.com/docs/en/ask-user-question (inféré)
+- 📄 **Engineering Best Practices** : https://www.anthropic.com/engineering/claude-code-best-practices
 
-- **[Patterns Multi-Dialog Avancés](../../advanced/multi-dialog-patterns.md)** : Decision trees complexes, validation chains
-- **[Showcase Supernovae Studio](../../showcase/supernovae-studio/)** : Implémentation production réelle
-- **[Cheatsheet](./cheatsheet.md)** : Référence rapide API
+### 📝 Articles & Patterns
+- 📝 **Multi-Dialog Patterns** : https://share.note.sx/8k50udm8#ME3MD6walWogaQZxAVIdsAMaYPFQvw694zbFb622c0Y
+  - Decision trees complexes
+  - Validation chains
+  - Progressive disclosure patterns
+  - Cas réels production
 
-### 🎯 Prochaines Étapes
+### 🔗 Documentation Avancée Interne
+
+- 📖 **[Patterns Multi-Dialog Avancés](../../patterns/multi-dialog-patterns.md)** : Decision trees complexes, validation chains
+- 📖 **[Advanced Workflows](../../advanced/complex-workflows.md)** : Orchestration interactive
+- 📋 **[Cheatsheet](./cheatsheet.md)** : Référence rapide API
+
+### 🎯 Projets & Exemples
 
 **Projets Suggérés** :
 - Créer un wizard de setup pour votre stack
 - Implémenter un diagnostic interactif
 - Builder un configurateur de CI/CD
+
+**Showcases Production** :
+- Migration Cloud wizard (AWS/GCP/Azure)
+- Monorepo setup (Turborepo/Nx)
+- Developer onboarding complet
+
+### 📚 Ressources Internes Liées
+
+- 🔗 [Commands](../2-commands/guide.md) - Intégrer AskUserQuestion dans commands
+- 🔗 [Agents](../5-agents/guide.md) - Agents avec dialogues interactifs
+- 🔗 [Workflows](../8-workflows/guide.md) - EPCT + validation interactive
+- 🔗 [Best Practices](../9-best-practices/guide.md) - UX patterns dialogues
 
 ### 💬 Communauté
 

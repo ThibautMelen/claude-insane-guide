@@ -783,24 +783,46 @@ claude
 ## 📚 Ressources
 
 ### Documentation Officielle
-- 📄 **Claude Slash Commands** : https://code.claude.com/docs/slash-commands
+- 📄 **Claude Slash Commands** : https://code.claude.com/docs/en/slash-commands
+- 📄 **Engineering Best Practices** : https://www.anthropic.com/engineering/claude-code-best-practices
+
+### Articles & Guides
+- 📝 **Commands Best Practices (Anthropic)** : https://www.anthropic.com/engineering/claude-code-best-practices
+  - Structure optimale prompts réutilisables
+  - Guidelines officielles
+- 📝 **How I Use Claude Code Commands** : https://blog.sshh.io/p/how-i-use-every-claude-code-feature
+  - Workflow quotidien avec commands essentielles
 
 ### Vidéos Recommandées
 - 🎥 **Melvynx - Formation Claude Code 2.0** : https://www.youtube.com/watch?v=bDr1tGskTdw (30:00 - Commands)
-- 🎥 **Melvynx - 500h Claude Code Workflow** : [Fiche complète](../../ressources/videos/500h-optimisation-workflow-melvynx.md)
+  - Création de commandes optimales
   - Structure Workflow + Rules + Examples + Critical
+- 🎥 **Melvynx - 500h Claude Code Workflow** : [Fiche complète](../../ressources/videos/500h-optimisation-workflow-melvynx.md)
   - Commande `/prompt-command` pour générer des commandes
+  - Meta-commande pour automatiser création
+
+### Repositories Communauté
+- 🔗 **Weston Hobson Commands** : https://github.com/wshobson/commands
+  - Collection communautaire de commandes
+  - Commands pour Git, Testing, Deployment
+  - Bonnes pratiques structuration
+- 🔗 **Claude Code Commands Directory** : https://claudecodecommands.directory/
+  - Catalogue communautaire de commands
+  - Recherche par catégorie
+  - Exemples production-ready
 
 ### Outils & Packs
 - 🔧 **CCLI Blueprint (Melvynx)** : https://mlv.sh/ccli
   - Pack complet de commandes prêtes à l'emploi
   - `/commit`, `/debug`, `/cloud-memory`, `/prompt-command`
   - Structure optimale selon 500h d'expérience
-- 🔗 **Weston Hobson Commands** : https://github.com/wshobson/commands
-  - Collection communautaire de commandes
 
-### Guides Connexes
-- 📄 **Voir aussi** : [Memory](../memory/guide.md) | [Workflows](../workflows/guide.md) | [Best Practices](../best-practices/guide.md)
+### Ressources Internes
+- 📋 [Cheatsheet Commands](./cheatsheet.md) - Référence rapide
+- 🎓 [Exercices Commands](../exercises/commands/) - Créer vos commandes
+- 🔗 [Memory](../1-memory/guide.md) - Quand utiliser Memory vs Commands
+- 🔗 [Hooks](../3-hooks/guide.md) - Intégration Commands + Hooks
+- 🔗 [Workflows](../8-workflows/guide.md) - Commands dans workflows EPCT
 
 ---
 
