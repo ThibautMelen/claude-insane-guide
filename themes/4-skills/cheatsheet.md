@@ -43,20 +43,20 @@ Process PDF files and extract content.
 
 ### 🎥 Vidéos Recommandées
 
-- [Claude Skills Complete Guide](../../ressources/videos/claude-skills-complete-guide-kenny-liao.md) - Kenny Liao | 🟡 Intermédiaire
+- [Claude Skills Complete Guide](../../ressources/videos/claude-skills-complete-guide-kenny-liao.md) ([🔗 YouTube](https://www.youtube.com/watch?v=421T2iWTQio)) - Kenny Liao | 🟡 Intermédiaire
   - Guide complet des skills
-- [Skills vs MCP vs Subagents](../../ressources/videos/skills-vs-mcp-vs-subagents.md) - Solo Swift Crafter | 🟢 Débutant
+- [Skills vs MCP vs Subagents](../../ressources/videos/skills-vs-mcp-vs-subagents.md) ([🔗 YouTube](https://youtu.be/ZroGqu7GyXM)) - Solo Swift Crafter | 🟢 Débutant
   - Comparaison claire des concepts
-- [Formation Claude Code 2.0](../../ressources/videos/formation-claude-code-2-0-melvynx.md) - Melvynx | 🟢 Débutant
+- [Formation Claude Code 2.0](../../ressources/videos/formation-claude-code-2-0-melvynx.md) ([🔗 YouTube](https://www.youtube.com/watch?v=bDr1tGskTdw)) - Melvynx | 🟢 Débutant
   - Introduction aux skills
-- [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) - Edmund Yong | 🔴 Expert
+- [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) ([🔗 YouTube](https://www.youtube.com/watch?v=Ffh9OeJ7yxw)) - Edmund Yong | 🔴 Expert
   - Skills avancés et cas d'usage
 
 ### 📝 Articles
 
-- [Agent Skills Progressive Disclosure](../../ressources/articles/agent-skills-progressive-disclosure-anthropic.md) - Anthropic
+- [Agent Skills Progressive Disclosure](../../ressources/articles/agent-skills-progressive-disclosure-anthropic.md) ([🔗 Source](https://share.note.sx/8k50udm8#ME3MD6walWogaQZxAVIdsAMaYPFQvw694zbFb622c0Y)) - Anthropic
   - Article officiel sur la conception de skills
-- [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) - YoungLeaders
+- [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) ([🔗 Source](https://www.youngleaders.tech/p/claude-skills-commands-subagents-plugins)) - YoungLeaders
   - Quand utiliser Skills vs autres features
 
 ### 🔗 Communauté

@@ -316,14 +316,14 @@ echo "File: $FILE"
 
 ### 🎥 Vidéos Recommandées
 
-- [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) - Edmund Yong | 🔴 Expert
+- [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) ([🔗 YouTube](https://www.youtube.com/watch?v=Ffh9OeJ7yxw)) - Edmund Yong | 🔴 Expert
   - Automation avec hooks avancés
-- [500h Optimisation Workflow](../../ressources/videos/500h-optimisation-workflow-melvynx.md) - Melvynx | 🟠 Avancé
+- [500h Optimisation Workflow](../../ressources/videos/500h-optimisation-workflow-melvynx.md) ([🔗 YouTube](https://youtu.be/kkkQKAPxna8)) - Melvynx | 🟠 Avancé
   - Workflows avec hooks
 
 ### 📝 Articles
 
-- [Orchestration Workflows Enterprise](../../ressources/articles/orchestration-workflows-enterprise-perplexity.md) - Perplexity
+- [Orchestration Workflows Enterprise](../../ressources/articles/orchestration-workflows-enterprise-perplexity.md) ([🔗 Source](https://www.perplexity.ai/search/summarize-the-current-webpage-YqEO3MquRBSTWbbJgkZWIw#0)) - Perplexity
   - Hooks dans orchestration complexe
 
 ### 🔗 Communauté

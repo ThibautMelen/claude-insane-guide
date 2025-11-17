@@ -227,15 +227,15 @@ cat .claude/commands/ma-command.md
 - 📖 [Guide Complet](./guide.md) - Guide local détaillé
 
 ### 🎥 Vidéos Recommandées
-- [Terminal AI Workflow](../../ressources/videos/terminal-ai-workflow.md) - NetworkChuck | 🟢 Débutant
+- [Terminal AI Workflow](../../ressources/videos/terminal-ai-workflow.md) ([🔗 YouTube](https://youtu.be/MsQACpcuTkU)) - NetworkChuck | 🟢 Débutant
   - Workflow complet avec commands
-- [Formation Claude Code 2.0](../../ressources/videos/formation-claude-code-2-0-melvynx.md) - Melvynx | 🟢 Débutant
+- [Formation Claude Code 2.0](../../ressources/videos/formation-claude-code-2-0-melvynx.md) ([🔗 YouTube](https://www.youtube.com/watch?v=bDr1tGskTdw)) - Melvynx | 🟢 Débutant
   - Introduction aux commands
-- [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) - Edmund Yong | 🔴 Expert
+- [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) ([🔗 YouTube](https://www.youtube.com/watch?v=Ffh9OeJ7yxw)) - Edmund Yong | 🔴 Expert
   - Commands avancés et EPCT
 
 ### 📝 Articles
-- [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) - YoungLeaders
+- [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) ([🔗 Source](https://www.youngleaders.tech/p/claude-skills-commands-subagents-plugins)) - YoungLeaders
   - Quand utiliser Commands vs autres features
 
 ### 🔗 Communauté
