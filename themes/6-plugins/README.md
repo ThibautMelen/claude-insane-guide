@@ -40,13 +40,26 @@ Référence rapide pour :
 Guide complet sur l'organisation :
 - 🎯 Les 3 scopes (User, Project, Local)
 - 🔧 Deux méthodes activation marketplace
-- 📥 Workflow installation détaillé
 - 🔌 Plugins standalone vs marketplace
 - 📊 Organisation marketplaces (combien par scope)
 - ❌ Copie plugins entre marketplaces (impossible → solutions)
 - 💡 Exemples concrets et FAQ
 
 **🕐 Temps de lecture** : ~20 minutes
+
+---
+
+### 📥 [Workflow Installation](./workflow-installation.md)
+Guide visuel des workflows d'installation :
+- ⚠️ Règle d'or (marketplace avant plugins)
+- 🔧 Installation CLI (manuelle globale)
+- ⚙️ Installation Config (automatique via config.json)
+- 💻 Installation Locale (projet spécifique)
+- 🍴 Fork Plugin Community (personnalisation)
+- 🚨 Erreurs courantes et solutions
+- 🌳 Decision tree complet
+
+**🕐 Temps de lecture** : ~15 minutes
 
 ---
 

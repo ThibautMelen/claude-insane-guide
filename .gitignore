@@ -1,21 +1,59 @@
 # macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
 
-# IDE
+# IDE / Editors
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
 
 # Node.js
 node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.coverage
 
 # Environment
 .env
 .env.local
+.env.*.local
 
 # Logs
 *.log
+logs/
 
 # Temporary files
 *.tmp
-*.swp
-*~
+*.bak
+*.backup
+.cache/
+
+# OS
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Build outputs
+dist/
+build/
+_site/
+.quarto/
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
