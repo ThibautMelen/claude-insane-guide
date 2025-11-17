@@ -1,18 +1,5 @@
 # Workflow Pattern Orchestration - Vue d'Ensemble
 
-> **📊 NOUVEAU : Documentation Visuelle Quarto**
->
-> Cette documentation inclut maintenant **36 fichiers .qmd** avec diagrammes interactifs Mermaid !
->
-> - 🎨 **3 patterns** × 3 fichiers (overview, diagrams, examples)
-> - 🚀 **9 workflows** × 3 fichiers (overview, diagrams, examples)
-> - 📄 **Voir** : `index.qmd` pour navigation complète
-> - 🔧 **Render** : `quarto render` pour générer le site HTML
->
-> 👉 **Ouvrez les fichiers .qmd dans VS Code** pour voir les diagrammes ou rendez le site avec Quarto.
-
----
-
 **Mission** : Maîtriser l'orchestration avancée de Claude Code en combinant workflows, patterns et best practices pour créer des systèmes production-ready complexes.
 
 > 📐 **Architecture** : Workflows (séquences) + Patterns (structures) + Best Practices (optimisations) = Orchestration complète

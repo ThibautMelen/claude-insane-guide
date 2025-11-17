@@ -11,9 +11,9 @@ Guide d'apprentissage complet sur **Claude Code** et l'écosystème Anthropic, o
 **Public** : Développeurs francophones souhaitant maîtriser Claude Code.
 
 **🆕 Nouveautés 2025** :
-- Theme 10 : Interactive UI (AskUserQuestion)
-- Patterns avancés multi-dialog
-- Showcase production (Supernovae Studio)
+- Thème 8 : Advanced (Interactive UI, Multi-dialog, Enterprise, AI Orchestration)
+- Thème 9 : Add-ons (VS Code Extension, Statusline)
+- Workflow-Pattern-Orchestration réorganisé
 - Updates Claude Sonnet 4.5
 
 ---
@@ -60,12 +60,15 @@ WORKFLOW-PATTERN-ORCHESTRATION
    └─> Best Practices (Performance, Cost, Resilience)
 
 💪 PARCOURS EXPERT (4-6 heures)
-PATTERNS & ADVANCED
-   ├─> Patterns (Orchestration réutilisables)
-   └─> Advanced (Multi-dialog, Enterprise, AI orchestration)
+8️⃣ ADVANCED (Thème 8)
+   ├─> Multi-dialog patterns
+   ├─> Interactive UI (AskUserQuestion)
+   ├─> Enterprise patterns
+   ├─> AI orchestration
+   └─> Decision trees
 
 🔧 OPTIONNEL
-ADD-ONS
+9️⃣ ADD-ONS (Thème 9)
    ├─> VS Code Extension
    └─> Statusline Dashboard
 ```
@@ -77,7 +80,7 @@ ADD-ONS
 ```
 claude-anthropic-comprhension/
 ┃
-┣━━ 📁 themes/                  🎯 FEATURES CORE (1-7 uniquement)
+┣━━ 📁 themes/                  🎯 FEATURES CORE (1-9)
 ┃   ┃
 ┃   ┣━━ 📁 1-memory/
 ┃   ┃   ├── 📄 guide.md         → Persistance instructions (.claude/CLAUDE.md)
@@ -103,37 +106,31 @@ claude-anthropic-comprhension/
 ┃   ┃   ├── 📄 guide.md         → Système d'extensibilité modulaire
 ┃   ┃   └── 📄 cheatsheet.md    → Marketplaces & distribution
 ┃   ┃
-┃   ┗━━ 📁 7-mcp/
-┃       ├── 📄 guide.md         → Model Context Protocol
-┃       └── 📄 cheatsheet.md    → Serveurs populaires
+┃   ┣━━ 📁 7-mcp/
+┃   ┃   ├── 📄 guide.md         → Model Context Protocol
+┃   ┃   └── 📄 cheatsheet.md    → Serveurs populaires
+┃   ┃
+┃   ┣━━ 📁 8-advanced/          💪 GUIDES EXPERT
+┃   ┃   ├── 📄 multi-dialog-patterns.md → Sequential, Conditional, Parallel
+┃   ┃   ├── 📄 interactive-ui.md → AskUserQuestion workflows complexes
+┃   ┃   ├── 📄 enterprise-patterns.md → Governance, RBAC, Compliance
+┃   ┃   ├── 📄 ai-orchestration.md → Multi-LLM routing (70-85% cost)
+┃   ┃   ├── 📄 decision-trees.md → Framework sélection features
+┃   ┃   └── 📄 README.md        → Navigation advanced
+┃   ┃
+┃   ┗━━ 📁 9-add-ons/           🔧 EXTENSIONS OPTIONNELLES
+┃       ┣━━ 📁 vs-code-extension/
+┃       ┃   └── 📄 guide.md     → Extension VS Code
+┃       ┣━━ 📁 statusline/
+┃       ┃   ├── 📄 guide.md     → Dashboard temps réel
+┃       ┃   └── 📄 cheatsheet.md → Templates & config
+┃       └── 📄 README.md        → Navigation add-ons
 ┃
 ┣━━ 📁 workflow-pattern-orchestration/  🚀 ORCHESTRATION AVANCÉE
 ┃   ┣━━ 📁 workflows/           → EPCT, Parallel, Sequential, Hybrid
-┃   ┣━━ 📁 patterns/            → Coordination commands, hooks automation
+┃   ┣━━ 📁 patterns/            → Coordination, automation, orchestration
 ┃   ┣━━ 📁 best-practices/      → Performance, Cost, Resilience
 ┃   └── 📄 README.md            → Navigation orchestration
-┃
-┣━━ 📁 patterns/                🏗️ PATTERNS RÉUTILISABLES
-┃   ├── 📄 command-agent-skill.md → Hierarchical orchestration
-┃   ├── 📄 error-handling.md    → Fallback chains & recovery
-┃   ├── 📄 parallel-execution.md → Concurrent agents (5-10x speedup)
-┃   ├── 📄 state-management.md  → Context persistence
-┃   └── 📄 README.md            → Navigation patterns
-┃
-┣━━ 📁 advanced/                💪 GUIDES EXPERT
-┃   ├── 📄 multi-dialog-patterns.md → Sequential, Conditional, Parallel dialogs
-┃   ├── 📄 interactive-ui.md    → AskUserQuestion workflows complexes 🆕
-┃   ├── 📄 enterprise-patterns.md → Governance, RBAC, Compliance
-┃   ├── 📄 ai-orchestration.md  → Multi-LLM routing (70-85% cost savings)
-┃   ├── 📄 decision-trees.md    → Framework sélection features
-┃   └── 📄 README.md            → Navigation advanced
-┃
-┣━━ 📁 add-ons/                 🔧 EXTENSIONS OPTIONNELLES
-┃   ┣━━ 📁 vs-code-extension/
-┃   ┃   └── 📄 guide.md         → Extension VS Code
-┃   ┗━━ 📁 statusline/
-┃       ├── 📄 guide.md         → Dashboard temps réel
-┃       └── 📄 cheatsheet.md    → Templates & config
 ┃
 ┣━━ 📁 ressources/              📹📄 Vidéos & articles
 ┃   ┣━━ 📁 videos/
@@ -146,9 +143,7 @@ claude-anthropic-comprhension/
 ┃   ├── 📄 CLAUDE.md            → Memory & règles projet
 ┃   └── 📁 commands/
 ┃
-┣━━ 📄 README.md                📚 Ce fichier
-┣━━ 📄 STATUS.md                ⚠️ État de la documentation
-┗━━ 📄 ressources.md            🔗 Index ressources
+┗━━ 📄 README.md                📚 Ce fichier
 ```
 
 ---
@@ -194,7 +189,7 @@ Chaque thème contient :
 
 ## 🗺️ Navigation
 
-### 🎯 Themes Core (Features Essentielles - 1 à 7)
+### 🎯 Themes Core (Features Essentielles - 1 à 9)
 
 **Ordre pédagogique optimal** :
 
@@ -205,8 +200,11 @@ Chaque thème contient :
 5. [Agents](themes/5-agents/guide.md) - Sub-agents pour travail isolé
 6. [Plugins](themes/6-plugins/guide.md) - Extensions modulaires combinées
 7. [MCP](themes/7-mcp/guide.md) - Model Context Protocol integration
+8. [Advanced](themes/8-advanced/README.md) - Guides expert (Multi-dialog, Interactive UI, Enterprise, AI Orchestration)
+9. [Add-ons](themes/9-add-ons/README.md) - Extensions optionnelles (VS Code, Statusline)
 
 **🎓 Parcours débutant** : Maîtrise 1-7 (~8-10 heures)
+**🎓 Parcours expert** : Thèmes 8-9 (~4-6 heures)
 
 ---
 
@@ -239,33 +237,27 @@ Chaque thème contient :
 
 ---
 
-### 🎓 Patterns & Advanced
+### 🎓 Thème 8 : Advanced (Expert)
 
-#### [Patterns](patterns/README.md) - Architecture & Orchestration
-**Patterns réutilisables pour coordonner features Claude Code**
-
-- [Command-Agent-Skill](patterns/command-agent-skill.md) - Hierarchical orchestration
-- [Error Handling](patterns/error-handling.md) - Fallback chains & recovery (3 niveaux)
-- [Parallel Execution](patterns/parallel-execution.md) - Concurrent agents (5-10x speedup)
-- [State Management](patterns/state-management.md) - Context persistence & memory
-
-#### [Advanced](advanced/README.md) - Expert-Level Guides
+#### [Advanced](themes/8-advanced/README.md) - Guides Expert-Level
 **Guides niveau expert pour use cases complexes**
 
-- [Multi-Dialog Patterns](advanced/multi-dialog-patterns.md) - Sequential, Conditional, Parallel, Validation
-- [Interactive UI](advanced/interactive-ui.md) - AskUserQuestion workflows complexes
-- [Enterprise Patterns](advanced/enterprise-patterns.md) - Governance, RBAC, Compliance (GDPR/SOC2)
-- [AI Orchestration](advanced/ai-orchestration.md) - Multi-LLM routing (70-85% cost savings)
-- [Decision Trees](advanced/decision-trees.md) - Framework complet de sélection features
+- [Multi-Dialog Patterns](themes/8-advanced/multi-dialog-patterns.md) - Sequential, Conditional, Parallel, Validation
+- [Interactive UI](themes/8-advanced/interactive-ui.md) - AskUserQuestion workflows complexes
+- [Enterprise Patterns](themes/8-advanced/enterprise-patterns.md) - Governance, RBAC, Compliance (GDPR/SOC2)
+- [AI Orchestration](themes/8-advanced/ai-orchestration.md) - Multi-LLM routing (70-85% cost savings)
+- [Decision Trees](themes/8-advanced/decision-trees.md) - Framework complet de sélection features
 
 **🎓 Parcours expert** (~4-6 heures)
 
 ---
 
-### 🔧 Add-ons (Optionnel)
+### 🔧 Thème 9 : Add-ons (Optionnel)
 
-- [VS Code Extension](add-ons/vs-code-extension/guide.md) - Intégration IDE
-- [Statusline](add-ons/statusline/guide.md) - Dashboard temps réel
+#### [Add-ons](themes/9-add-ons/README.md) - Extensions Optionnelles
+
+- [VS Code Extension](themes/9-add-ons/vs-code-extension/guide.md) - Intégration IDE
+- [Statusline](themes/9-add-ons/statusline/guide.md) - Dashboard temps réel
 
 ---
 
@@ -281,21 +273,21 @@ Chaque thème contient :
 - **Orchestration multi-features** → [Workflow-Pattern-Orchestration](workflow-pattern-orchestration/README.md)
 
 **Pour approfondir** :
-- 📊 [Decision Trees](advanced/decision-trees.md) - Arbre de décision complet
-- 🏗️ [Patterns](patterns/README.md) - Patterns d'orchestration
+- 📊 [Decision Trees](themes/8-advanced/decision-trees.md) - Arbre de décision complet
+- 🏗️ [Patterns](workflow-pattern-orchestration/patterns/README.md) - Patterns d'orchestration
 - 🚀 [Workflows](workflow-pattern-orchestration/README.md) - Workflows production-ready
 
 ---
 
 ## 📊 Statistiques Documentation
 
-- 📚 **7 themes core** (features essentielles)
+- 📚 **9 themes** (7 core + 1 advanced + 1 add-ons)
 - 🚀 **1 dossier orchestration** (workflows + patterns + best-practices)
   - 🆕 **5 workflows startup** production-ready (150 KB)
   - 📋 **1 rapport validation** (100% conforme Anthropic)
-- 🎓 **5 guides advanced** (expert-level)
-- 🏗️ **4 patterns** réutilisables
-- 🔧 **2 add-ons** optionnels
+- 🎓 **5 guides advanced** (expert-level dans thème 8)
+- 🏗️ **Patterns d'orchestration** (dans workflow-pattern-orchestration)
+- 🔧 **2 add-ons** optionnels (thème 9)
 - 📝 **~450 KB** documentation totale
 - 🔗 **60+ ressources** externes
 - 💾 **~25,000 lignes** de contenu pédagogique
@@ -356,15 +348,6 @@ Voir [ressources/articles/](./ressources/articles/) pour fiches complètes.
 > "D.R.Y. (Don't Repeat Yourself) - Let Claude remember your preferences"
 >
 > — Edmund Yong (800h Claude Code)
-
----
-
-## ⚠️ Statut de la Documentation
-
-Voir [STATUS.md](./STATUS.md) pour :
-- ✅ Sections à jour
-- ⚠️ Features deprecated
-- 🔄 Changelog complet
 
 ---
 
