@@ -30,3 +30,39 @@ Review code for:
 ---
 
 📖 [Guide](./guide.md)
+
+---
+
+## 📚 Ressources
+
+### 📄 Documentation Officielle
+
+- [Sub-Agents Docs](https://code.claude.com/docs/en/subagents) - Guide officiel Anthropic
+- [Task Tool Reference](https://code.claude.com/docs/en/tools#task) - Référence Task tool
+- 📖 [Guide Complet](./guide.md) - Guide local détaillé
+
+### 🎥 Vidéos Recommandées
+
+- [Skills vs MCP vs Subagents](../../ressources/videos/skills-vs-mcp-vs-subagents.md) - Solo Swift Crafter | 🟢 Débutant
+  - Comparaison claire agents vs autres features
+- [Formation Claude Code 2.0](../../ressources/videos/formation-claude-code-2-0-melvynx.md) - Melvynx | 🟢 Débutant
+  - Introduction aux sub-agents
+- [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) - Edmund Yong | 🔴 Expert
+  - Patterns avancés d'orchestration agents
+
+### 📝 Articles
+
+- [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) - YoungLeaders
+  - Quand utiliser Agents vs autres features
+- [Orchestration Workflows Enterprise](../../ressources/articles/orchestration-workflows-enterprise-perplexity.md) - Perplexity
+  - Orchestration multi-agents en entreprise
+
+### 🔗 Communauté
+
+- [Awesome Claude Code Sub-Agents](https://github.com/VoltAgent/awesome-claude-code-subagents) - Collection d'agents custom
+- [Awesome Claude Code](https://github.com/VoltAgent/awesome-claude-code#subagents) - Exemples et best practices
+- [Edmund Yong Setup](https://github.com/edmund-io/edmunds-claude-code) - Configuration agents
+
+---
+
+**💡 Tip** : Un agent = une responsabilité claire ! 🎯

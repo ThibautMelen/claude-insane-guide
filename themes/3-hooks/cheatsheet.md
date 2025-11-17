@@ -306,10 +306,30 @@ echo "File: $FILE"
 
 ---
 
-## 🔗 Ressources
+## 📚 Ressources
 
-- 📄 [Docs Officielles](https://code.claude.com/docs/hooks)
-- 📖 [Guide Complet](./guide.md)
+### 📄 Documentation Officielle
+
+- [Hooks Docs](https://code.claude.com/docs/en/hooks) - Guide officiel Anthropic
+- [Hooks Events Reference](https://code.claude.com/docs/en/hooks#events) - Liste complète des événements
+- 📖 [Guide Complet](./guide.md) - Guide local détaillé
+
+### 🎥 Vidéos Recommandées
+
+- [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) - Edmund Yong | 🔴 Expert
+  - Automation avec hooks avancés
+- [500h Optimisation Workflow](../../ressources/videos/500h-optimisation-workflow-melvynx.md) - Melvynx | 🟠 Avancé
+  - Workflows avec hooks
+
+### 📝 Articles
+
+- [Orchestration Workflows Enterprise](../../ressources/articles/orchestration-workflows-enterprise-perplexity.md) - Perplexity
+  - Hooks dans orchestration complexe
+
+### 🔗 Communauté
+
+- [Awesome Hooks Examples](https://github.com/VoltAgent/awesome-claude-code#hooks) - Exemples communautaires
+- [Edmund Yong Config](https://github.com/edmund-io/edmunds-claude-code) - Hooks configuration
 
 ---
 

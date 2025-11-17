@@ -655,3 +655,38 @@ cat .claude-plugin/plugin.json | jq .
 ---
 
 **Voir [Guide Complet](./guide.md) pour détails et exemples approfondis !**
+
+---
+
+## 📚 Ressources
+
+### 📄 Documentation Officielle
+
+- [Plugins Docs](https://code.claude.com/docs/en/plugins) - Guide officiel Anthropic
+- [Plugins Marketplace](https://code.claude.com/docs/en/plugins#marketplaces) - Système marketplace
+- [Plugin.json Reference](https://code.claude.com/docs/en/plugins#plugin-json) - Référence manifeste
+- 📖 [Guide Complet](./guide.md) - Guide local détaillé
+
+### 🎥 Vidéos Recommandées
+
+- [Formation Claude Code 2.0](../../ressources/videos/formation-claude-code-2-0-melvynx.md) - Melvynx | 🟢 Débutant
+  - Introduction aux plugins
+- [Skills vs MCP vs Subagents](../../ressources/videos/skills-vs-mcp-vs-subagents.md) - Solo Swift Crafter | 🟢 Débutant
+  - Quand utiliser plugins vs autres features
+- [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) - Edmund Yong | 🔴 Expert
+  - Plugins avancés et marketplace équipe
+
+### 📝 Articles
+
+- [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) - YoungLeaders
+  - Comparaison complète des features
+
+### 🔗 Communauté
+
+- [Awesome Claude Code Plugins](https://github.com/VoltAgent/awesome-claude-code#plugins) - Collection de plugins
+- [Edmund Yong Setup](https://github.com/edmund-io/edmunds-claude-code) - Configuration plugins
+- [Community Marketplaces](https://github.com/VoltAgent/awesome-claude-code#marketplaces) - Marketplaces communautaires
+
+---
+
+**💡 Tip** : Marketplace d'abord, plugin local ensuite ! ⚡

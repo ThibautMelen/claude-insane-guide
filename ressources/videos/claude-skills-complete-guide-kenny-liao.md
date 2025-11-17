@@ -256,7 +256,7 @@ Ratio d'efficacité: 3000 tokens → 75 tokens (40x plus efficace)
 **Cas d'usage**:
 - 🎯 **Migration progressive** : Commencer avec slash command → convertir en skill quand besoin d'autonomie
 - 🎯 **Compounding skills** : Skill Excel Builder qui utilise skill Excel (Anthropic) existant
-- 🎯 **Hybrid approach** : MCPs pour APIs externes + Skills pour logique métier + Slash commands pour workflows fixes
+- 🎯 **Hybrid approach** : MCPs pour APIs externes + Skills pour logique métier + Slash commands pour workflows
 
 ---
 

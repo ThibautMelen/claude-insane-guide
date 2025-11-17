@@ -178,4 +178,27 @@ mon-projet/
 
 ---
 
+## 📚 Ressources
+
+### 📄 Documentation Officielle
+- [Memory Docs](https://code.claude.com/docs/en/memory) - Guide officiel Anthropic
+- [Best Practices](https://code.claude.com/docs/en/memory#best-practices) - Patterns recommandés
+
+### 🎥 Vidéos Recommandées
+- [Formation Claude Code 2.0](../../ressources/videos/formation-claude-code-2-0-melvynx.md) - Melvynx | 🟢 Débutant
+  - Setup complet et Memory
+- [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) - Edmund Yong | 🔴 Expert
+  - "D.R.Y. - Let Claude remember your preferences"
+  - Optimisation Memory avancée
+
+### 📝 Articles
+- [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) - YoungLeaders
+  - Contexte Memory dans l'écosystème
+
+### 🔗 Communauté
+- [Awesome Claude Code](https://github.com/VoltAgent/awesome-claude-code) - Exemples de CLAUDE.md
+- [Edmund Yong Setup](https://github.com/edmund-io/edmunds-claude-code) - Config complète
+
+---
+
 **💡 Pro tip** : Imprimez cette cheatsheet ! 📋

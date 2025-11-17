@@ -219,10 +219,29 @@ cat .claude/commands/ma-command.md
 
 ---
 
-## 🔗 Ressources
+## 📚 Ressources
 
-- 📖 [Guide Complet](./guide.md)
-- 📄 [Docs Officielles](https://code.claude.com/docs/slash-commands)
+### 📄 Documentation Officielle
+- [Slash Commands Docs](https://code.claude.com/docs/en/slash-commands) - Guide officiel Anthropic
+- [Commands Best Practices](https://code.claude.com/docs/en/slash-commands#best-practices) - Patterns recommandés
+- 📖 [Guide Complet](./guide.md) - Guide local détaillé
+
+### 🎥 Vidéos Recommandées
+- [Terminal AI Workflow](../../ressources/videos/terminal-ai-workflow.md) - NetworkChuck | 🟢 Débutant
+  - Workflow complet avec commands
+- [Formation Claude Code 2.0](../../ressources/videos/formation-claude-code-2-0-melvynx.md) - Melvynx | 🟢 Débutant
+  - Introduction aux commands
+- [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) - Edmund Yong | 🔴 Expert
+  - Commands avancés et EPCT
+
+### 📝 Articles
+- [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) - YoungLeaders
+  - Quand utiliser Commands vs autres features
+
+### 🔗 Communauté
+- [Weston Hobson Commands](https://github.com/wshobson/commands) - Collection de commands pro
+- [Edmund Yong Setup](https://github.com/edmund-io/edmunds-claude-code) - EPCT et workflows
+- [Awesome Commands](https://github.com/VoltAgent/awesome-claude-code#commands) - Liste communautaire
 
 ---
 
