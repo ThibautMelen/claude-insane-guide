@@ -31,6 +31,27 @@ Utilise le MCP tool `mcp__supadata-ai-mcp__supadata_scrape` avec:
 
 Si l'article contient beaucoup de contenu, le scraping retournera le markdown complet.
 
+### 1.5. Vérification des Doublons
+
+**AVANT** d'analyser le contenu, vérifier si l'article n'existe pas déjà :
+
+1. **Extraire le domaine et le chemin** de l'URL fournie
+2. **Chercher dans ressources/articles/** avec Grep :
+   ```bash
+   grep -l "URL.*domain\.com.*article-path" ressources/articles/*.md
+   ```
+3. **Si un fichier est trouvé** :
+   - Afficher : `⚠️ Cette ressource existe déjà : {filename}`
+   - Utiliser AskUserQuestion pour demander :
+     ```markdown
+     Question: "Cet article existe déjà dans ressources/articles/{filename}. Que voulez-vous faire ?"
+     Options:
+     1. "Écraser l'existant" - Continuer et remplacer le fichier
+     2. "Créer avec nouveau nom" - Ajouter suffixe (ex: -v2)
+     3. "Annuler" - Arrêter la commande
+     ```
+4. **Si aucun doublon** : Continuer normalement
+
 ### 2. Extraction des Métadonnées
 
 À partir de la réponse de Supadata, extraire:
@@ -266,6 +287,75 @@ ressources/articles/[slug].md
 ```
 
 Créer le dossier `ressources/articles/` s'il n'existe pas.
+
+### 8. Mapping Tags → Thèmes
+
+Analyser les tags générés à l'étape 3.f et identifier les thèmes pertinents :
+
+**Table de Correspondance** :
+
+| Tags | Thème(s) Correspondant(s) |
+|------|---------------------------|
+| `memory`, `claude.md`, `CLAUDE.md` | `1-memory` |
+| `commands`, `slash-commands`, `/command` | `2-commands` |
+| `hooks`, `events`, `SessionStart`, `PostToolUse` | `3-hooks` |
+| `skills`, `SKILL.md`, `progressive-disclosure` | `4-skills` |
+| `agents`, `subagents`, `Task tool`, `sub-agent` | `5-agents` |
+| `plugins`, `marketplace`, `plugin.json` | `6-plugins` |
+| `mcp`, `servers`, `Model Context Protocol` | `7-mcp` |
+| `workflow`, `best-practices`, `optimization` | Plusieurs thèmes (selon contexte) |
+
+**Règles de Mapping** :
+- Un article peut correspondre à **plusieurs thèmes**
+- Privilégier les thèmes explicites (ex: `#mcp` → `7-mcp`)
+- Pour tags génériques (`#workflow`), analyser le contenu pour déterminer les thèmes
+- Minimum 1 thème, maximum 3 thèmes par article
+
+**Exemple** :
+- Tags : `#memory` `#commands` `#workflow` `#best-practices`
+- Thèmes détectés : `1-memory`, `2-commands`
+
+### 9. Ajout Automatique aux Cheatsheets
+
+**APRÈS** avoir créé la fiche, ajouter automatiquement la ressource aux cheatsheets des thèmes identifiés :
+
+**Pour chaque thème détecté à l'étape 8** :
+
+1. **Lire le cheatsheet** :
+   ```
+   Read themes/{theme}/cheatsheet.md
+   ```
+
+2. **Localiser la section "### 📝 Articles"**
+
+3. **Ajouter la nouvelle entrée avec Edit** :
+   - Format : `- [Titre Article](../../ressources/articles/{slug}.md) ([🔗 Source]({url})) - Source/Auteur`
+   - Sous-ligne descriptive (indentation 2 espaces) : `  - Résumé en 1 ligne`
+   - Placer alphabétiquement ou par pertinence
+
+4. **Exemple d'ajout** :
+   ```markdown
+   ### 📝 Articles
+
+   - [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) ([🔗 Source](https://www.youngleaders.tech/p/claude-skills-commands-subagents-plugins)) - YoungLeaders
+     - Comparaison complète des features
+   - [Nouvel Article](../../ressources/articles/nouvel-article-source.md) ([🔗 Source](https://example.com/article)) - Auteur
+     - Description courte du nouvel article
+   ```
+
+5. **Validation** :
+   - Vérifier que le lien relatif est correct (`../../ressources/articles/`)
+   - Vérifier que le formatage markdown est respecté
+   - Vérifier qu'il n'y a pas de doublon dans la liste
+
+6. **Output** :
+   ```
+   ✅ Article ajouté aux cheatsheets :
+   - themes/1-memory/cheatsheet.md
+   - themes/2-commands/cheatsheet.md
+   ```
+
+**Note** : Si aucun thème n'est détecté, ajouter manuellement plus tard ou demander à l'utilisateur de spécifier les thèmes.
 
 ## GUIDELINES OBLIGATOIRES
 

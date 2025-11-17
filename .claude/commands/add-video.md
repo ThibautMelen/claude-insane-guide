@@ -32,6 +32,32 @@ Utilise le MCP tool `mcp__supadata-ai-mcp__supadata_transcript` avec:
 
 Si la transcription est asynchrone (retourne un job ID), utilise `mcp__supadata-ai-mcp__supadata_check_transcript_status` pour vérifier le statut et récupérer le résultat.
 
+### 1.5. Vérification des Doublons
+
+**AVANT** d'analyser la transcription, vérifier si la vidéo n'existe pas déjà :
+
+1. **Extraire le VIDEO_ID** de l'URL YouTube :
+   - YouTube: `https://www.youtube.com/watch?v=VIDEO_ID` → extraire `VIDEO_ID`
+   - YouTube short: `https://youtu.be/VIDEO_ID` → extraire `VIDEO_ID`
+
+2. **Chercher dans ressources/videos/** avec Grep :
+   ```bash
+   grep -l "watch?v=VIDEO_ID\|youtu\.be/VIDEO_ID" ressources/videos/*.md
+   ```
+
+3. **Si un fichier est trouvé** :
+   - Afficher : `⚠️ Cette vidéo existe déjà : {filename}`
+   - Utiliser AskUserQuestion pour demander :
+     ```markdown
+     Question: "Cette vidéo existe déjà dans ressources/videos/{filename}. Que voulez-vous faire ?"
+     Options:
+     1. "Écraser l'existant" - Continuer et remplacer le fichier
+     2. "Créer avec nouveau nom" - Ajouter suffixe (ex: -v2)
+     3. "Annuler" - Arrêter la commande
+     ```
+
+4. **Si aucun doublon** : Continuer normalement
+
 ### 2. Extraction des Métadonnées
 
 À partir de la réponse de Supadata, extraire:
@@ -158,6 +184,77 @@ Utilise le tool `Write` pour créer:
 ```
 ressources/videos/[slug].md
 ```
+
+### 9. Mapping Tags → Thèmes
+
+Analyser les tags générés à l'étape 4.e et identifier les thèmes pertinents :
+
+**Table de Correspondance** :
+
+| Tags | Thème(s) Correspondant(s) |
+|------|---------------------------|
+| `memory`, `claude.md`, `CLAUDE.md` | `1-memory` |
+| `commands`, `slash-commands`, `/command` | `2-commands` |
+| `hooks`, `events`, `SessionStart`, `PostToolUse` | `3-hooks` |
+| `skills`, `SKILL.md`, `progressive-disclosure` | `4-skills` |
+| `agents`, `subagents`, `Task tool`, `sub-agent` | `5-agents` |
+| `plugins`, `marketplace`, `plugin.json` | `6-plugins` |
+| `mcp`, `servers`, `Model Context Protocol` | `7-mcp` |
+| `workflow`, `best-practices`, `optimization` | Plusieurs thèmes (selon contexte) |
+
+**Règles de Mapping** :
+- Une vidéo peut correspondre à **plusieurs thèmes**
+- Privilégier les thèmes explicites (ex: `#mcp` → `7-mcp`)
+- Pour tags génériques (`#workflow`), analyser le contenu pour déterminer les thèmes
+- Minimum 1 thème, maximum 3 thèmes par vidéo
+
+**Exemple** :
+- Tags : `#skills` `#mcp` `#subagents` `#comparison`
+- Thèmes détectés : `4-skills`, `5-agents`, `7-mcp`
+
+### 10. Ajout Automatique aux Cheatsheets
+
+**APRÈS** avoir créé la fiche, ajouter automatiquement la ressource aux cheatsheets des thèmes identifiés :
+
+**Pour chaque thème détecté à l'étape 9** :
+
+1. **Lire le cheatsheet** :
+   ```
+   Read themes/{theme}/cheatsheet.md
+   ```
+
+2. **Localiser la section "### 🎥 Vidéos Recommandées"**
+
+3. **Ajouter la nouvelle entrée avec Edit** :
+   - Format : `- [Titre Vidéo](../../ressources/videos/{slug}.md) ([🔗 YouTube]({url})) - Auteur | Difficulté`
+   - Sous-ligne descriptive (indentation 2 espaces) : `  - Résumé en 1 ligne`
+   - Placer par ordre de difficulté : 🟢 Débutant, 🟡 Intermédiaire, 🟠 Avancé, 🔴 Expert
+
+4. **Exemple d'ajout** :
+   ```markdown
+   ### 🎥 Vidéos Recommandées
+
+   - [Formation Claude Code 2.0](../../ressources/videos/formation-claude-code-2-0-melvynx.md) ([🔗 YouTube](https://www.youtube.com/watch?v=bDr1tGskTdw)) - Melvynx | 🟢 Débutant
+     - Setup complet et Memory
+   - [Nouvelle Vidéo](../../ressources/videos/nouvelle-video-auteur.md) ([🔗 YouTube](https://youtube.com/watch?v=XXX)) - Auteur | 🟡 Intermédiaire
+     - Description courte de la nouvelle vidéo
+   ```
+
+5. **Validation** :
+   - Vérifier que le lien relatif est correct (`../../ressources/videos/`)
+   - Vérifier que le formatage markdown est respecté
+   - Vérifier qu'il n'y a pas de doublon dans la liste
+   - Respecter l'ordre : Débutant → Intermédiaire → Avancé → Expert
+
+6. **Output** :
+   ```
+   ✅ Vidéo ajoutée aux cheatsheets :
+   - themes/4-skills/cheatsheet.md
+   - themes/5-agents/cheatsheet.md
+   - themes/7-mcp/cheatsheet.md
+   ```
+
+**Note** : Si aucun thème n'est détecté, ajouter manuellement plus tard ou demander à l'utilisateur de spécifier les thèmes.
 
 ## GUIDELINES OBLIGATOIRES
 
