@@ -223,22 +223,27 @@ cat .claude/commands/ma-command.md
 
 ### 📄 Documentation Officielle
 - [Slash Commands Docs](https://code.claude.com/docs/en/slash-commands) - Guide officiel Anthropic
+- [Agent SDK - Slash Commands](https://docs.claude.com/en/docs/agent-sdk/slash-commands) - Documentation détaillée SDK
 - [Commands Best Practices](https://code.claude.com/docs/en/slash-commands#best-practices) - Patterns recommandés
-- 📖 [Guide Complet](./guide.md) - Guide local détaillé
 
 ### 🎥 Vidéos Recommandées
 - [Terminal AI Workflow](../../ressources/videos/terminal-ai-workflow.md) ([🔗 YouTube](https://youtu.be/MsQACpcuTkU)) - NetworkChuck | 🟢 Débutant
   - Workflow complet avec commands
 - [Formation Claude Code 2.0](../../ressources/videos/formation-claude-code-2-0-melvynx.md) ([🔗 YouTube](https://www.youtube.com/watch?v=bDr1tGskTdw)) - Melvynx | 🟢 Débutant
   - Introduction aux commands
+- [Skills vs Slash Commands vs Sub-Agents vs MCP - Le Guide Complet](../../ressources/videos/skills-vs-slash-commands-vs-subagents-vs-mcp-dan.md) ([🔗 YouTube](https://www.youtube.com/watch?v=kFpLzCVLA20)) - Dan | 🟠 Avancé
+  - Slash commands comme primitive fondamentale, quand passer à un skill, compositional hierarchy
 - [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) ([🔗 YouTube](https://www.youtube.com/watch?v=Ffh9OeJ7yxw)) - Edmund Yong | 🔴 Expert
   - Commands avancés et EPCT
 
 ### 📝 Articles
 - [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) ([🔗 Source](https://www.youngleaders.tech/p/claude-skills-commands-subagents-plugins)) - YoungLeaders
   - Quand utiliser Commands vs autres features
+- [Understanding Claude Code's Full Stack](../../ressources/articles/full-stack-orchestration-opalic.md) ([🔗 Source](https://alexop.dev/posts/understanding-claude-code-full-stack/)) - Alexander Opalic
+  - Commands dans l'architecture : user-triggered workflows, explicit control
 
 ### 🔗 Communauté
+- [Awesome Claude Code](https://github.com/hesreallyhim/awesome-claude-code) ⭐ 17K - Liste curée commands & workflows
 - [Weston Hobson Commands](https://github.com/wshobson/commands) - Collection de commands pro
 - [Edmund Yong Setup](https://github.com/edmund-io/edmunds-claude-code) - EPCT et workflows
 - [Awesome Commands](https://github.com/VoltAgent/awesome-claude-code#commands) - Liste communautaire

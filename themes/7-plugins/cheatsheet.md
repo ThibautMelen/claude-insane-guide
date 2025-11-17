@@ -663,9 +663,9 @@ cat .claude-plugin/plugin.json | jq .
 ### 📄 Documentation Officielle
 
 - [Plugins Docs](https://code.claude.com/docs/en/plugins) - Guide officiel Anthropic
+- [Agent SDK - Plugins](https://docs.claude.com/en/docs/agent-sdk/plugins) - Documentation technique SDK
 - [Plugins Marketplace](https://code.claude.com/docs/en/plugins#marketplaces) - Système marketplace
 - [Plugin.json Reference](https://code.claude.com/docs/en/plugins#plugin-json) - Référence manifeste
-- 📖 [Guide Complet](./guide.md) - Guide local détaillé
 
 ### 🎥 Vidéos Recommandées
 
@@ -680,9 +680,12 @@ cat .claude-plugin/plugin.json | jq .
 
 - [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) ([🔗 Source](https://www.youngleaders.tech/p/claude-skills-commands-subagents-plugins)) - YoungLeaders
   - Comparaison complète des features
+- [Understanding Claude Code's Full Stack](../../ressources/articles/full-stack-orchestration-opalic.md) ([🔗 Source](https://alexop.dev/posts/understanding-claude-code-full-stack/)) - Alexander Opalic
+  - Plugins : bundled packages pour team standardization et distribution
 
 ### 🔗 Communauté
 
+- [Awesome Claude Code](https://github.com/hesreallyhim/awesome-claude-code) ⭐ 17K - Liste curée commands & workflows
 - [Awesome Claude Code Plugins](https://github.com/VoltAgent/awesome-claude-code#plugins) - Collection de plugins
 - [Edmund Yong Setup](https://github.com/edmund-io/edmunds-claude-code) - Configuration plugins
 - [Community Marketplaces](https://github.com/VoltAgent/awesome-claude-code#marketplaces) - Marketplaces communautaires

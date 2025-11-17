@@ -869,13 +869,13 @@ SKILLS:
 ## 📚 Ressources
 
 ### Documentation Interne
-- 📄 [Memory Guide](../themes/1-memory/guide.md) - Quand utiliser Memory
-- 📄 [Commands Guide](../themes/2-commands/guide.md) - Créer commands
-- 📄 [Hooks Guide](../themes/3-hooks/guide.md) - Auto-trigger workflows
-- 📄 [Skills Guide](../themes/4-skills/guide.md) - Share knowledge
-- 📄 [Agents Guide](../themes/5-agents/guide.md) - Parallel execution
-- 📄 [Plugins Guide](../themes/6-plugins/guide.md) - Distribute workflows
-- 📄 [MCP Guide](../themes/7-mcp/guide.md) - External integrations
+- 📄 [Memory Guide](../1-memory/guide.md) - Quand utiliser Memory
+- 📄 [Commands Guide](../2-commands/guide.md) - Créer commands
+- 📄 [Hooks Guide](../3-hooks/guide.md) - Auto-trigger workflows
+- 📄 [Skills Guide](../4-skills/guide.md) - Share knowledge
+- 📄 [MCP Guide](../5-mcp/guide.md) - External integrations
+- 📄 [Agents Guide](../6-agents/guide.md) - Parallel execution
+- 📄 [Plugins Guide](../7-plugins/guide.md) - Distribute workflows
 - 📄 [Command/Agent Pattern](../patterns/command-agent-skill.md) - Orchestration
 
 ### Documentation Externe

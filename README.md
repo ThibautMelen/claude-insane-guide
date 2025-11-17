@@ -46,12 +46,12 @@ Suivez cet ordre pour une progression optimale :
    ↓ Événements - Automatisation lifecycle
 4️⃣ SKILLS
    ↓ Capacités - Connaissances spécialisées
-5️⃣ AGENTS
+5️⃣ MCP
+   ↓ Intégration - Protocol externe
+6️⃣ AGENTS
    ↓ Orchestration - Délégation tâches isolées
-6️⃣ PLUGINS
-   ↓ Empaquetage - Extensions modulaires
-7️⃣ MCP
-   └─> Intégration - Protocol externe
+7️⃣ PLUGINS
+   └─> Empaquetage - Extensions modulaires
 
 🚀 PARCOURS INTERMÉDIAIRE → EXPERT (6-8 heures)
 WORKFLOW-PATTERN-ORCHESTRATION
@@ -98,17 +98,17 @@ claude-anthropic-comprhension/
 ┃   ┃   ├── 📄 guide.md         → Capacités spécialisées
 ┃   ┃   └── 📄 cheatsheet.md    → Structure skills
 ┃   ┃
-┃   ┣━━ 📁 5-agents/
+┃   ┣━━ 📁 5-mcp/
+┃   ┃   ├── 📄 guide.md         → Model Context Protocol
+┃   ┃   └── 📄 cheatsheet.md    → Serveurs populaires
+┃   ┃
+┃   ┣━━ 📁 6-agents/
 ┃   ┃   ├── 📄 guide.md         → Sub-agents & orchestration
 ┃   ┃   └── 📄 cheatsheet.md    → Agents built-in
 ┃   ┃
-┃   ┣━━ 📁 6-plugins/
+┃   ┣━━ 📁 7-plugins/
 ┃   ┃   ├── 📄 guide.md         → Système d'extensibilité modulaire
 ┃   ┃   └── 📄 cheatsheet.md    → Marketplaces & distribution
-┃   ┃
-┃   ┣━━ 📁 7-mcp/
-┃   ┃   ├── 📄 guide.md         → Model Context Protocol
-┃   ┃   └── 📄 cheatsheet.md    → Serveurs populaires
 ┃   ┃
 ┃   ┣━━ 📁 8-advanced/          💪 GUIDES EXPERT
 ┃   ┃   ├── 📄 multi-dialog-patterns.md → Sequential, Conditional, Parallel
@@ -197,9 +197,9 @@ Chaque thème contient :
 2. [Commands](themes/2-commands/guide.md) - Commandes slash automatisées
 3. [Hooks](themes/3-hooks/guide.md) - Automation lifecycle events
 4. [Skills](themes/4-skills/guide.md) - Capacités spécialisées auto-activées
-5. [Agents](themes/5-agents/guide.md) - Sub-agents pour travail isolé
-6. [Plugins](themes/6-plugins/guide.md) - Extensions modulaires combinées
-7. [MCP](themes/7-mcp/guide.md) - Model Context Protocol integration
+5. [MCP](themes/5-mcp/guide.md) - Model Context Protocol integration
+6. [Agents](themes/6-agents/guide.md) - Sub-agents pour travail isolé
+7. [Plugins](themes/7-plugins/guide.md) - Extensions modulaires combinées
 8. [Advanced](themes/8-advanced/README.md) - Guides expert (Multi-dialog, Interactive UI, Enterprise, AI Orchestration)
 9. [Add-ons](themes/9-add-ons/README.md) - Extensions optionnelles (VS Code, Statusline)
 

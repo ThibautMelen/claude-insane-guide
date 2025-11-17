@@ -194,6 +194,8 @@ mon-projet/
 ### 📝 Articles
 - [Skills, Commands, Subagents, Plugins](../../ressources/articles/skills-commands-subagents-plugins-youngleaders.md) ([🔗 Source](https://www.youngleaders.tech/p/claude-skills-commands-subagents-plugins)) - YoungLeaders
   - Contexte Memory dans l'écosystème
+- [Understanding Claude Code's Full Stack](../../ressources/articles/full-stack-orchestration-opalic.md) ([🔗 Source](https://alexop.dev/posts/understanding-claude-code-full-stack/)) - Alexander Opalic
+  - Memory Hierarchy : Enterprise → User → Project → Directory
 
 ### 🔗 Communauté
 - [Awesome Claude Code](https://github.com/VoltAgent/awesome-claude-code) - Exemples de CLAUDE.md

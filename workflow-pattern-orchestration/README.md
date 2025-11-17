@@ -10,6 +10,24 @@
 
 **Orchestration** = Coordination intelligente de **multiples fonctionnalités Claude Code** (Commands, Agents, Skills, Hooks, MCP) pour créer des workflows production complexes, robustes et scalables.
 
+### Composants Fondamentaux
+
+**Commands** (.claude/commands/) :
+- Workflow orchestration invoquée par l'utilisateur (`/command-name`)
+- Coordonne agents, agrège résultats, gère erreurs
+- Exemple : `/generate-locales` (orchestre 174 agents)
+
+**Skills** (.claude/skills/) :
+- Prompt-based meta-tool pour injection de connaissances spécialisées
+- Auto-invoqués par Claude basé sur description matching (LLM reasoning)
+- Architecture interne : 2 messages (metadata + prompt via isMeta)
+- Exemple : `pdf` skill (instructions PDF processing + tools)
+
+**Agents** (.claude/agents/) :
+- Exécution de tâches atomiques lancés par Commands via Task tool
+- Un agent = une tâche unique, retourne résultat structuré
+- Exemple : `locale-generator` (génère 1 locale)
+
 ```
 ╔═══════════════════════════════════════════════════════════╗
 ║              ARCHITECTURE D'ORCHESTRATION                  ║
@@ -52,6 +70,7 @@ Niveau 3 : BEST PRACTICES (Comment optimiser)
 ```
 workflow-pattern-orchestration/
 ├── README.md (← vous êtes ici)
+├── quick-reference.md   ⚡ Référence rapide (syntax, patterns, benchmarks)
 │
 ├── workflows/           📊 Comment exécuter
 │   ├── README.md             Vue d'ensemble workflows
@@ -62,11 +81,13 @@ workflow-pattern-orchestration/
 │   └── hybrid.md             Combined orchestration ⭐
 │
 ├── patterns/            🏗️ Comment structurer
-│   ├── README.md             Vue d'ensemble patterns
-│   ├── command-coordination.md    Commands orchestration
-│   ├── hook-automation.md         Lifecycle automation
-│   ├── agent-orchestration.md     Multi-agent patterns
-│   └── state-persistence.md       Memory + context
+│   ├── README.md                   Vue d'ensemble patterns
+│   ├── command-agent-skill.md      Command/Agent/Skill architecture ⭐
+│   ├── skill-invocation.md         Skills lifecycle & isMeta messages 🆕
+│   ├── command-coordination.md     Commands orchestration
+│   ├── hook-automation.md          Lifecycle automation
+│   ├── agent-orchestration.md      Multi-agent patterns
+│   └── state-persistence.md        Memory + context
 │
 └── best-practices/      ⚡ Comment optimiser
     ├── README.md             Vue d'ensemble optimisations
@@ -482,6 +503,9 @@ RÉSULTAT FINAL:
 ### Documentation Interne
 
 ```
+⚡ Quick Reference
+└─ quick-reference.md         → Syntax, patterns, benchmarks, tips ⭐
+
 📚 Guides Thématiques
 ├─ themes/1-memory/         → Foundation (CLAUDE.md)
 ├─ themes/2-commands/       → Slash commands
@@ -492,7 +516,8 @@ RÉSULTAT FINAL:
 └─ themes/7-mcp/            → MCP servers
 
 🎯 Patterns Avancés
-├─ patterns/command-agent-skill.md    → Architecture hiérarchique
+├─ patterns/command-agent-skill.md    → Architecture hiérarchique ⭐
+├─ patterns/skill-invocation.md       → Skills lifecycle & isMeta 🆕
 ├─ patterns/error-handling.md         → Fallback chains
 ├─ patterns/parallel-execution.md     → Batching + aggregation
 └─ patterns/state-management.md       → Context + persistence
@@ -511,7 +536,20 @@ RÉSULTAT FINAL:
 ├─ https://code.claude.com/docs
 ├─ https://code.claude.com/docs/task-tool
 ├─ https://code.claude.com/docs/hooks
+├─ https://docs.claude.com/en/docs/claude-code/skills
 └─ https://www.anthropic.com/engineering/claude-code-best-practices
+
+🎓 Skills Deep Dive (Advanced) ⭐
+├─ Claude Skills Deep Dive by Lee Hanchung
+│  https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/
+│  → Architecture interne détaillée : isMeta messages, prompt injection
+│  → Meta-tool pattern, LLM-based selection
+│  → Bundled resources (scripts/, references/, assets/)
+│
+└─ Anthropic Engineering Blog
+   https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills
+   → Vision officielle Anthropic sur Skills
+   → Real-world use cases
 
 🔗 Repos Communauté
 ├─ fix-grammar (parallel pattern)
@@ -520,6 +558,50 @@ RÉSULTAT FINAL:
 │  https://github.com/edmund-io/edmunds-claude-code
 └─ pr-review-toolkit (hybrid workflow)
    https://github.com/VoltAgent/awesome-claude-code-subagents
+
+📝 Articles Analysés (Ressources Internes) 🆕
+├─ Official Anthropic Engineering Blog - Agent Skills
+│  ../ressources/articles/agent-skills-anthropic.md
+│  → Architecture officielle Skills (progressive disclosure, sécurité)
+│  → Code execution dans Skills, bundled resources
+│  → Security considerations (official warnings)
+│
+├─ Skills Deep Dive (Lee Hanchung) - Architecture Interne
+│  ../ressources/articles/skills-deep-dive-architecture-lee.md
+│  → isMeta messages pattern, 2-message injection
+│  → LLM-based selection, SKILL tool vs skills
+│  → Lifecycle complet (5 phases)
+│
+├─ Young Leaders Tech - Skills vs Commands vs Subagents vs Plugins
+│  ../ressources/articles/skills-commands-subagents-plugins-youngleaders.md
+│  → Decision tree pratique (WHEN + WHEN NOT pattern)
+│  → Real-world refactoring (803 → 281 lines, +20 eval score)
+│  → Plugin distribution & marketplace patterns
+│
+└─ alexop.dev - Understanding Claude Code's Full Stack
+   ../ressources/articles/full-stack-orchestration-alexop.md
+   → Architecture complète (MCP → Core → Plugins → Skills)
+   → Context poisoning concept, Skills vs CLAUDE.md comparison
+   → Gray area decision guide (Skills vs Commands)
+   → Task-based multi-chat workflow pattern
+
+🌐 Ressources Web Externes 🆕
+├─ alexop.dev/prompts - Claude Code Templates
+│  https://alexop.dev/prompts/claude/
+│  → 8 templates création : skills, commands, agents, hooks, plugins, CLAUDE.md, bash
+│  → Ready-to-use prompts pour génération de composants
+│
+├─ obra/superpowers - Comprehensive Skills Library
+│  https://github.com/obra/superpowers
+│  → 9 skills rigoureux : TDD, debugging, collaboration, meta-skills
+│  → Philosophy : Test before implementation, verify with evidence
+│  → Systematic workflows (RED-GREEN-REFACTOR, 4-phase debugging)
+│
+└─ alexanderop/claude-code-builder - Builder Plugin
+   https://github.com/alexanderop/claude-code-builder
+   → Plugin avec 7 slash commands
+   → Génère skills, agents, commands, hooks, plugins, CLAUDE.md, bash scripts
+   → Automated component creation with best practices
 ```
 
 ---

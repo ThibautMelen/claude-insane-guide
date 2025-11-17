@@ -970,9 +970,9 @@ Junior → Code only, no deploy
 ## 📚 Ressources
 
 ### Documentation Interne
-- 📄 [Memory Guide](../themes/1-memory/guide.md) - Hierarchy & imports
-- 📄 [Hooks Guide](../themes/3-hooks/guide.md) - Governance automation
-- 📄 [Plugins Guide](../themes/6-plugins/guide.md) - Distribution strategies
+- 📄 [Memory Guide](../1-memory/guide.md) - Hierarchy & imports
+- 📄 [Hooks Guide](../3-hooks/guide.md) - Governance automation
+- 📄 [Plugins Guide](../7-plugins/guide.md) - Distribution strategies
 - 📄 [State Management](../patterns/state-management.md) - Cross-team coordination
 - 📄 [Error Handling](../patterns/error-handling.md) - Audit & compliance
 

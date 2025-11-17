@@ -312,7 +312,7 @@ echo "File: $FILE"
 
 - [Hooks Docs](https://code.claude.com/docs/en/hooks) - Guide officiel Anthropic
 - [Hooks Events Reference](https://code.claude.com/docs/en/hooks#events) - Liste complète des événements
-- 📖 [Guide Complet](./guide.md) - Guide local détaillé
+- [Hooks Guide (Agent SDK)](https://hexdocs.pm/claude_agent_sdk/hooks_guide.html) - Documentation technique SDK
 
 ### 🎥 Vidéos Recommandées
 
@@ -325,11 +325,15 @@ echo "File: $FILE"
 
 - [Orchestration Workflows Enterprise](../../ressources/articles/orchestration-workflows-enterprise-perplexity.md) ([🔗 Source](https://www.perplexity.ai/search/summarize-the-current-webpage-YqEO3MquRBSTWbbJgkZWIw#0)) - Perplexity
   - Hooks dans orchestration complexe
+- [Understanding Claude Code's Full Stack](../../ressources/articles/full-stack-orchestration-opalic.md) ([🔗 Source](https://alexop.dev/posts/understanding-claude-code-full-stack/)) - Alexander Opalic
+  - Hooks : event-driven automation, automatic quality enforcement
 
 ### 🔗 Communauté
 
 - [Awesome Hooks Examples](https://github.com/VoltAgent/awesome-claude-code#hooks) - Exemples communautaires
 - [Edmund Yong Config](https://github.com/edmund-io/edmunds-claude-code) - Hooks configuration
+- [Disler Hooks Mastery](https://github.com/disler/claude-code-hooks-mastery) - Mastery hooks automation
+- [Disler Multi-Agent Observability](https://github.com/disler/claude-code-hooks-multi-agent-observability) - Monitoring real-time agents via hooks
 
 ---
 
