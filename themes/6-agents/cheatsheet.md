@@ -53,6 +53,8 @@ Review code for:
   - Sub-agents pour parallelization et isolation, quand utiliser vs autres features
 - [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) ([🔗 YouTube](https://www.youtube.com/watch?v=Ffh9OeJ7yxw)) - Edmund Yong | 🔴 Expert
   - Patterns avancés d'orchestration agents
+- [Multi-Agent Orchestration : L'Orchestrator Agent](../../ressources/videos/multi-agent-orchestration-orchestrator-agent.md) ([🔗 YouTube](https://www.youtube.com/watch?v=p0mrXfwAbCg)) - Agentic Horizon | 🔴 Expert
+  - Pattern Orchestrator Agent : CRUD agents + Observability + Single Interface pour gérer flottes d'agents à l'échelle
 
 ### 📝 Articles
 
