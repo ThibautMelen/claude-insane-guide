@@ -16,6 +16,65 @@ Les decision trees permettent de **choisir la bonne feature Claude Code** pour c
 
 ---
 
+## ⚡ CRITICAL: Framework de Décision Dan
+
+> **"The prompt is the fundamental unit. Everything else is just a wrapper."**
+> — Dan (Skills vs Commands vs Subagents vs MCP)
+
+### 🎯 Pour Decision Trees: L'Essentiel
+
+**Decision Trees = Framework 3 questions** pour choisir la bonne feature :
+
+- **Q1: Répétitif?** → One-off = `/command` direct, Repeat = Continue Q2
+- **Q2: Auto-invoke?** → NO = `/command` 👤, YES = `Skill` 🤖
+- **Q3: External data?** → Add MCP si besoin, sinon Skill alone
+- **+Parallel?** → Add Sub-Agents pour exécution parallèle
+- **+Events?** → Add Hooks pour auto-trigger sur événements
+
+**Quick Flow** :
+```
+Problem → /command (primitive) → Test → Works?
+  ↓ YES
+Repeat? NO → Done (keep /command)
+  ↓ YES
+Auto-invoke? NO → Done (keep /command)
+  ↓ YES
+Compose to Skill + Add MCP/Agents IF needed
+```
+
+### 📚 Framework Complet
+
+**Voir [Core 4 & Fundamentals](core-4-fundamentals.md) pour** :
+- 📊 Tableau comparatif Dan (toutes features)
+- 🔥 Golden Rule workflow complet
+- 📈 Progressive Disclosure (Skills vs MCP)
+- 🏗️ Composition Hierarchy (comment features s'emboîtent)
+- 🤖 vs 👤 Distinction détaillée
+
+### 🔑 Spécificités Decision Trees
+
+**Quand utiliser ce guide** :
+- ✅ Choisir entre plusieurs features (Command vs Skill vs Hook)
+- ✅ Architecturer workflow complexe (orchestration)
+- ✅ Comprendre scopes (Personal, Project, Enterprise)
+- ✅ Scenarios réels (avec anti-patterns)
+
+**Les decision trees détaillés ci-dessous** :
+1. 📋 Master Decision Tree (vue d'ensemble)
+2. 1️⃣ Memory (conventions vs actions)
+3. 2️⃣ Commands (workflows vs preferences)
+4. 3️⃣ Hooks (manual vs auto-trigger)
+5. 4️⃣ Skills (knowledge vs action)
+6. 5️⃣ Plugins (distribute vs local)
+7. 6️⃣ Agents (orchestrate vs execute)
+
+**Progressivité recommandée** :
+- Débutant : Master Tree + Quick Decision Framework (ligne 196)
+- Intermédiaire : Decision trees 1-4 (Memory, Commands, Hooks, Skills)
+- Avancé : Decision trees 5-6 + Scenarios + Anti-patterns
+
+---
+
 ## 📐 Master Decision Tree
 
 ```
@@ -856,32 +915,91 @@ SKILLS:
 
 ## 🎓 Points Clés
 
+### 🔥 Fondamentaux (Dan's Philosophy)
+
+1. **Prompt = Primitive** : Tout se réduit à des prompts (tokens in/out)
+2. **Command = Base** : Toujours commencer par /command, valider, PUIS composer vers Skill si besoin
+3. **👤 vs 🤖 Trigger** : Manual (Commands) vs Auto (Skills, Hooks)
+4. **Q1 → Q2 → Q3** : Répétitif? Auto? External data? → Détermine la feature
+5. **Progressive Disclosure** : Skills chargent context progressivement (efficace), MCP dump tout (inefficace)
+6. **Composition Hierarchy** : Skills (top) > MCP > Sub-Agents > Commands (primitive)
+7. **Skills Dual Role** : Knowledge Base (comme CLAUDE.md étendu) + Composition Layer (orchestre features)
+
+### 📋 Features Overview
+
 1. **Memory** : Conventions, préférences (static config)
-2. **Command** : Workflows, orchestration (execute tasks)
+2. **Command** : Workflows, orchestration (execute tasks) - **THE PRIMITIVE**
 3. **Hook** : Automation, réaction aux événements (auto-trigger)
-4. **Skill** : Knowledge, instructions partagées (reusable context)
+4. **Skill** : Knowledge + Composition (auto-invoked, agent-first)
 5. **Plugin** : Distribution, packaging (share with others)
 6. **Agent** : Parallel execution, isolation (delegate work)
-7. **Orchestration** : Combiner features pour workflows complexes
+7. **MCP** : External data sources (APIs, DBs)
+8. **Orchestration** : Combiner features pour workflows complexes
+
+### 🎯 Decision Flow (Simple)
+
+```
+Problem → /command (primitive) → Test → Works?
+  ↓ YES
+Repeat? NO → Done (keep as /command)
+  ↓ YES
+Auto-invoke? NO → Done (keep as /command)
+  ↓ YES
+Compose to Skill → External data? → Add MCP if needed
+```
 
 ---
 
 ## 📚 Ressources
 
+### 🎯 COMMENCEZ ICI
+
+⭐ **[Core 4 & Fundamentals](core-4-fundamentals.md)** - La base AVANT tout : Prompt = Primitive
+
 ### Documentation Interne
-- 📄 [Memory Guide](../1-memory/guide.md) - Quand utiliser Memory
-- 📄 [Commands Guide](../2-commands/guide.md) - Créer commands
-- 📄 [Hooks Guide](../3-hooks/guide.md) - Auto-trigger workflows
-- 📄 [Skills Guide](../4-skills/guide.md) - Share knowledge
-- 📄 [MCP Guide](../5-mcp/guide.md) - External integrations
+
+**Guides par Feature** :
+- 📄 [Memory Guide](../1-memory/guide.md) - Conventions et préférences
+- 📄 [Commands Guide](../2-commands/guide.md) - Le primitive (LISEZ EN PREMIER)
+- 📄 [Hooks Guide](../3-hooks/guide.md) - Auto-trigger sur événements
+- 📄 [Skills Guide](../4-skills/guide.md) - Knowledge Base + Composition
+- 📄 [MCP Guide](../5-mcp/guide.md) - External data sources
 - 📄 [Agents Guide](../6-agents/guide.md) - Parallel execution
-- 📄 [Plugins Guide](../7-plugins/guide.md) - Distribute workflows
-- 📄 [Command/Agent Pattern](../patterns/command-agent-skill.md) - Orchestration
+- 📄 [Plugins Guide](../7-plugins/guide.md) - Distribution
+
+**Patterns Avancés** :
+- 📄 [Command/Agent/Skill Pattern](../../workflow-pattern-orchestration/patterns/command-agent-skill.md) - Orchestration complète
+- 📄 [Core 4 & Fundamentals](core-4-fundamentals.md) - Framework Dan complet
 
 ### Documentation Externe
-- 📄 [Claude Code Features](https://code.claude.com/docs) - Official overview
-- 📄 [Best Practices](https://code.claude.com/docs/best-practices) - When to use what
+
+**Claude Code Official** :
+- 📄 [Claude Code Docs](https://code.claude.com/docs) - Documentation officielle
+- 📄 [Memory](https://code.claude.com/docs/memory) - CLAUDE.md usage
+- 📄 [Commands](https://code.claude.com/docs/slash-commands) - Slash commands
+- 📄 [Skills](https://code.claude.com/docs/skills) - Agent Skills
+- 📄 [MCP](https://modelcontextprotocol.io/) - Model Context Protocol
+
+**Vidéos & Ressources** :
+- 🎥 [Dan - Skills vs Commands vs Subagents vs MCP](../../ressources/videos/skills-vs-slash-commands-vs-subagents-vs-mcp-dan.md) - **ANALYSE COMPLÈTE**
+- 🎥 [NetworkChuck - Terminal AI](../../ressources/videos/networkchuck-terminal-ai.md) - Workflow terminal
+- 🎥 [Edmund Yong - 800h Claude Code](../../ressources/videos/edmund-yong-800h-claude-code.md) - Best practices
 
 ### Repos Communauté
-- 🔗 [Awesome Sub-Agents](https://github.com/VoltAgent/awesome-claude-code-subagents) - Real examples
-- 🔗 [Edmund Yong Setup](https://github.com/edmund-io/edmunds-claude-code) - Feature orchestration
+
+- 🔗 [Awesome Sub-Agents](https://github.com/VoltAgent/awesome-claude-code-subagents) - Collection d'agents
+- 🔗 [Edmund Yong Setup](https://github.com/edmund-io/edmunds-claude-code) - Setup complet
+- 🔗 [Weston Hobson Commands](https://github.com/wshobson/commands) - Commands collection
+
+---
+
+## 💡 Tips de Lecture
+
+**Si vous êtes perdu** :
+
+1. 📚 **Start** : [Core 4 & Fundamentals](core-4-fundamentals.md) - Comprendre la philosophie
+2. 📊 **Framework** : Lisez la section "CRITICAL: Framework de Décision Dan" ci-dessus
+3. 🎯 **Quick Decision** : Utilisez le tableau "Quick Decision Framework" (ligne 196)
+4. 📖 **Deep Dive** : Parcourez les decision trees détaillés ci-dessous
+
+**Le plus important** : TOUJOURS commencer par /command (primitive), tester, puis composer vers Skill QUE si besoin d'auto-invocation.

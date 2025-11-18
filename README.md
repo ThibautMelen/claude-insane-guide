@@ -4,6 +4,30 @@
 
 ---
 
+## 🚀 COMMENCEZ ICI
+
+### 👋 Nouveau sur Claude Code?
+
+**Lisez ceci en PREMIER** (5 minutes) :
+
+📄 **[QUICK START : Claude Code en 5 Minutes](QUICK-START.md)** ⭐
+
+- ✅ Comprendre les 3 concepts clés (Commands, Skills, Agents)
+- ✅ Decision tree visuel simple
+- ✅ Créer votre premier workflow
+- ✅ Savoir où aller ensuite
+
+**Puis continuez avec** :
+
+📚 **[Core 4 & Fundamentals](themes/8-advanced/core-4-fundamentals.md)** (30 min)
+- Framework Dan complet (THE REFERENCE)
+- Comprendre POURQUOI avant COMMENT
+
+🎯 **[Decision Trees](themes/8-advanced/decision-trees.md)** (20 min)
+- Choisir la bonne feature pour chaque situation
+
+---
+
 ## 🎯 À Propos
 
 Guide d'apprentissage complet sur **Claude Code** et l'écosystème Anthropic, organisé par **ordre pédagogique** pour une progression optimale.
@@ -263,19 +287,92 @@ Chaque thème contient :
 
 ## 🧭 Quel Outil Utiliser ?
 
-**Quick Guide** :
-- **Context permanent** → [Memory](themes/1-memory/guide.md)
-- **Action répétitive** → [Command](themes/2-commands/guide.md)
-- **Automation lifecycle** → [Hook](themes/3-hooks/guide.md)
-- **Connaissance partagée** → [Skill](themes/4-skills/guide.md)
-- **Travail isolé complexe** → [Agent](themes/5-agents/guide.md)
-- **Package combiné** → [Plugin](themes/6-plugins/guide.md)
-- **Orchestration multi-features** → [Workflow-Pattern-Orchestration](workflow-pattern-orchestration/README.md)
+### 🎯 Comprendre les Fondamentaux D'ABORD
 
-**Pour approfondir** :
-- 📊 [Decision Trees](themes/8-advanced/decision-trees.md) - Arbre de décision complet
-- 🏗️ [Patterns](workflow-pattern-orchestration/patterns/README.md) - Patterns d'orchestration
-- 🚀 [Workflows](workflow-pattern-orchestration/README.md) - Workflows production-ready
+> "The prompt is the fundamental unit. Everything else is a wrapper."
+> — Dan, Skills vs Commands vs Sub-Agents vs MCP
+
+**Commencez ICI** : [Core 4 & Fundamentals](themes/8-advanced/core-4-fundamentals.md) ⭐
+
+Ce guide explique :
+- **The Core 4** : Context + Model + Prompt + Tools
+- **Pourquoi le prompt (command) est LA primitive**
+- **Composition Hierarchy** : Skills > MCP > Agents > Commands
+- **Agent-First vs Manual** : LA distinction clé
+
+**Sans ça, vous serez perdu**. Lisez d'abord, choisissez ensuite.
+
+---
+
+### 🔑 Decision Framework: Quelle Feature Utiliser ?
+
+#### Question 1: Est-ce un workflow RÉPÉTITIF ?
+
+```
+├─ NON  → Use /command (one-off task)
+└─ OUI  → Continue à Q2
+```
+
+#### Question 2: Voulez-vous un trigger AUTOMATIQUE ?
+
+```
+├─ NON  → Use /command (YOU decide when)
+└─ OUI  → Use Skill (AGENT decides when)
+```
+
+#### Question 3: Besoin de données EXTERNES ?
+
+```
+└─ OUI  → Skill + MCP
+```
+
+---
+
+### ⚡ Quick Reference: Par Use Case
+
+| Use Case | Feature | Trigger | Raison |
+|----------|---------|---------|--------|
+| **One-off task** | `/command` | 👤 Manual | Simple & explicit control |
+| **Repeat workflow (manual)** | `/command` | 👤 Manual | You decide WHEN |
+| **Repeat workflow (auto)** | `Skill` | 🤖 Auto | Agent decides WHEN |
+| **Domain knowledge** | `Skill` | 🤖 Auto | Knowledge base + auto-invoke |
+| **External data** | `MCP` | 🔀 Both | Live integrations |
+| **Parallel tasks** | `Sub-Agent` | 🔀 Both | Isolated contexts |
+| **Compose commands** | `Skill` | 🤖 Auto | Orchestration layer |
+| **Lifecycle automation** | `Hooks` | ⚙️ Auto | Deterministic events |
+| **Package & share** | `Plugins` | 📦 N/A | Distribution toolkit |
+
+---
+
+### 🎯 Golden Rule (Dan)
+
+```
+1. Start with /command (simple prompt)
+2. Test & Validate
+3. If repeat workflow → Compose to Skill
+4. NEVER skip steps 1 & 2
+```
+
+---
+
+### 📚 Pour Approfondir
+
+- ⭐ [Core 4 & Fundamentals](themes/8-advanced/core-4-fundamentals.md) - **START HERE**
+- 📊 [Decision Trees](themes/8-advanced/decision-trees.md) - Framework complet
+- 🏗️ [Patterns](workflow-pattern-orchestration/patterns/README.md) - Orchestration patterns
+- 🚀 [Workflows](workflow-pattern-orchestration/README.md) - Production-ready workflows
+
+---
+
+### 🗺️ Par Feature
+
+- **Context permanent** → [Memory](themes/1-memory/guide.md)
+- **Prompt = Primitive** → [Commands](themes/2-commands/guide.md) ⭐
+- **Auto-invoked knowledge** → [Skills](themes/4-skills/guide.md)
+- **Lifecycle automation** → [Hooks](themes/3-hooks/guide.md)
+- **External integration** → [MCP](themes/5-mcp/guide.md)
+- **Isolated context** → [Agents](themes/6-agents/guide.md)
+- **Package & distribute** → [Plugins](themes/7-plugins/guide.md)
 
 ---
 

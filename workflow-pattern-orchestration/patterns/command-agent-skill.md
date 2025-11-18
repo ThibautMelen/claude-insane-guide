@@ -1,12 +1,93 @@
 # Patterns: Command/Agent/Skill Architecture
 
-**Status**: ✅ VALIDATED - Best practices from Claude Code + LLM orchestration research + Hooks automation
+**Status**: ✅ VALIDATED - Best practices from Claude Code + LLM orchestration research + Hooks automation + Dan's Philosophy
 **Date**: 2025-01-12
+**Updated**: 2025-01-18 (Dan's framework integration)
 **Sources**:
 - Claude Code official docs: hooks, sub-agents, Agent SDK migration
 - Perplexity AI orchestration patterns (2025)
 - fix-grammar plugin analysis
 - pr-review-toolkit, feature-dev patterns
+- 🎥 [Dan - Skills vs Commands vs Subagents vs MCP](../../ressources/videos/skills-vs-slash-commands-vs-subagents-vs-mcp-dan.md)
+
+---
+
+## ⚡ CRITICAL: Dan's Philosophy - Prompt = Primitive
+
+> **"The prompt is the fundamental unit of knowledge work. Everything else is just composition."**
+> — Dan
+
+### 🎯 Pour Orchestration: L'Essentiel
+
+**Pattern Command/Agent/Skill = Architecture hiérarchique** pour workflows complexes :
+
+- **Command** = Orchestrator (👤 Manual trigger, YOU control WHEN)
+- **Agent** = Executor (⚡ Parallel execution, isolated tasks)
+- **Skill** = Knowledge Base + Composition Layer (🤖 Auto-loaded, shared context)
+- **Hooks** = Validators (🎣 Auto-trigger on events)
+- **MCP** = External Data (🔌 APIs/DBs, on-demand queries)
+
+**Golden Rule d'orchestration** :
+```
+1. Problem → 2. Write /command (THE PRIMITIVE)
+   ↓
+3. Test & Validate → 4. Works? → 5. Repeat workflow?
+   ↓ YES + want auto-invoke
+6. Compose to Skill
+   ↓ need parallel?
+7. Add Sub-Agents
+   ↓
+8. Complete Orchestration
+```
+
+### 📚 Framework Complet
+
+**Voir [Core 4 & Fundamentals](../themes/8-advanced/core-4-fundamentals.md) pour** :
+- 📊 Tableau comparatif Dan (toutes features)
+- 🔥 Golden Rule workflow complet (jamais skip étapes)
+- 📈 Progressive Disclosure (Skills vs MCP)
+- 🏗️ Composition Hierarchy détaillée
+- 🤖 vs 👤 Distinction (Manual vs Auto trigger)
+- 📚 Skills Dual Role (Knowledge + Composition)
+
+**Voir [Decision Trees](../themes/8-advanced/decision-trees.md) pour** :
+- 🎯 Framework 3 questions (Q1, Q2, Q3)
+- 📋 Decision trees par feature
+- 🔄 Scenarios réels et anti-patterns
+
+### 🔑 Spécificités Orchestration
+
+**Pourquoi ce pattern** :
+1. ✅ **Separation of concerns** : Command = orchestrate, Agent = execute
+2. ✅ **Concurrent pattern** : Parallel agents pour tasks indépendantes
+3. ✅ **Shared knowledge** : Skill provide instructions communes
+4. ✅ **Transparent reporting** : Track sources, errors, timing
+5. ✅ **Context isolation** : Avoid context poisoning (agents isolés)
+
+**Structure type** :
+```
+COMMAND (Coordinator)
+  ↓ validates + decides strategy
+  ↓ launches AGENTS (parallel)
+  ↓ AGENTS read SKILL (knowledge)
+  ↓ AGENTS execute (MCPs, tools)
+  ↓ COMMAND aggregates + reports
+```
+
+**Quand utiliser ce pattern** :
+- ✅ Multiple independent tasks (200 locales, 50 files, etc.)
+- ✅ Shared knowledge across tasks (skeleton, validation rules)
+- ✅ External data sources (MCP queries)
+- ✅ Need comprehensive reporting (sources, timing, errors)
+
+**Patterns détaillés ci-dessous** :
+1. 📐 Core Pattern (hierarchical orchestration)
+2. 1️⃣ COMMAND Pattern (coordinator)
+3. 2️⃣ AGENT Pattern (worker)
+4. 3️⃣ SKILL Pattern (knowledge base)
+5. 📦 PLUGIN Pattern (distribution)
+6. 🔄 Orchestration Patterns (concurrent, batch, hand-off)
+7. ⚠️ Error Handling & Reporting
 
 ---
 

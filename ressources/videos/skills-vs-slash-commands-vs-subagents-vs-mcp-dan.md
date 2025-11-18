@@ -1,435 +1,427 @@
-# Skills vs Slash Commands vs Sub-Agents vs MCP - Le Guide Complet
+# When to Use Claude Code Agent Skills vs MCP vs Sub-Agents vs Slash Commands
 
 ![Miniature vidéo](https://img.youtube.com/vi/kFpLzCVLA20/maxresdefault.jpg)
 
 ## Informations Vidéo
 
-- **Titre**: Skills vs Slash Commands vs Sub-Agents vs MCP - Le Guide Complet
-- **Auteur**: Dan
+- **Titre**: When to Use Claude Code Agent Skills vs MCP vs Sub-Agents vs Slash Commands
+- **Auteur**: Dan (Agentic Coding)
 - **Durée**: 27 minutes
-- **Date**: 2025
-- **Lien**: [https://www.youtube.com/watch?v=kFpLzCVLA20](https://www.youtube.com/watch?v=kFpLzCVLA20)
+- **Date**: Janvier 2025
+- **Lien**: [https://youtu.be/kFpLzCVLA20](https://youtu.be/kFpLzCVLA20)
 
 ## Tags
 
-`#skills` `#slash-commands` `#subagents` `#mcp` `#comparison` `#compositional-hierarchy` `#prompts-as-primitives` `#core-4` `#progressive-disclosure` `#agent-first`
+`#skills` `#mcp` `#subagents` `#slash-commands` `#composition` `#prompts` `#primitives` `#core-4` `#progressive-disclosure` `#agent-first`
 
 ---
 
 ## Résumé Exécutif
 
-Cette vidéo est **LA référence ultime** pour comprendre quand utiliser Skills, Slash Commands, Sub-Agents ou MCP dans Claude Code. Dan démontre que ces 4 features ne sont PAS interchangeables et ont chacune un rôle distinct. Il révèle la **hiérarchie compositionnelle** où les **prompts (slash commands) sont les primitives** de tout le système. La vidéo montre que Skills ne remplacent PAS les slash commands, mais les **composent** pour créer des solutions réutilisables à des problèmes récurrents.
+Dan analyse en profondeur les **4 capabilities clés de Claude Code** : Skills, MCP, Sub-Agents et Slash Commands. Il démontre que chaque feature a un rôle distinct et qu'**elles ne se remplacent pas mutuellement**. La vidéo révèle que **les prompts (slash commands) sont les primitives fondamentales** de tout agent coding, et que Skills agit comme une **couche de composition** pour regrouper ces primitives en solutions réutilisables.
 
-**Conclusion principale**: **Les prompts sont la primitive fondamentale de tout agent coding**. Skills, MCP et Sub-Agents sont des couches compositionnelles au-dessus des prompts. Si vous ne maîtrisez pas les prompts (slash commands), vous ne maîtriserez jamais l'agent coding.
+Le message révolutionnaire : **"The prompt is the fundamental unit of knowledge work"**. Dan insiste sur le fait que maîtriser les prompts est NON-NÉGOCIABLE pour réussir en tant qu'ingénieur agentic en 2025+.
+
+**Conclusion principale**: Skills ne remplacent pas les slash commands ou MCP - ils composent ces features ensemble pour créer des solutions agent-first automatisées et modulaires. Toujours commencer par un prompt simple, puis composer progressivement.
 
 ---
 
 ## Timecodes
 
-- **01:20** - Introduction aux 4 features (Skills, Sub-Agents, Slash Commands, MCP)
-- **01:42** - Démo: Créer git worktrees avec 3 approches différentes
-- **02:19** - Tableau comparatif des capabilities (agent-invoked, context efficiency, etc.)
-- **04:50** - Use cases: Quand utiliser chaque feature
-- **05:50** - Exemple 1: Extract PDF → Skill (automatic)
-- **06:10** - Exemple 2: Connect to Jira → MCP (external)
-- **06:18** - Exemple 3: Security audit → Sub-Agent (isolated + parallel)
-- **06:40** - Exemple 4: Git commit messages → Slash Command (simple, manual)
-- **08:20** - Skills vs Slash Commands: La confusion principale
-- **09:40** - Compositional hierarchy: Skills au sommet, prompts à la base
-- **12:01** - **The Core 4**: Context, Model, Prompt, Tools
-- **13:30** - Quand passer d'un prompt à un Skill (ex: git worktree manager)
-- **15:00** - Démo live: Skill "worktree manager" (remove, create, list)
-- **16:39** - Definitions: Skills = reoccurring workflows, MCP = external tools
-- **18:00** - Compositional levels: Skills > MCP > Sub-Agents > Slash Commands (primitives)
-- **19:00** - Custom Slash Commands = closest to bare metal LLM (prompts)
-- **21:20** - Prompts as primitives: "Everything is a prompt in the end"
-- **23:00** - Pros & Cons of Skills (8/10 rating)
-- **24:00** - Con #1: Skills don't go all the way (no nested /commands directory)
-- **24:40** - Con #2: Reliability when chaining multiple skills
-- **25:20** - Con #3: Skills = "canonized prompt engineering + modularity" (pas vraiment nouveau)
-- **26:00** - Repo disponible avec 4 skills (meta, video-processor, etc.)
+- 00:00 - Introduction : Skills vs MCP vs Sub-Agents vs Slash Commands
+- 01:08 - Le MAUVAIS moyen d'utiliser Skills (démo git worktrees)
+- 01:42 - Comparaison des 4 capabilities (table comparative)
+- 03:00 - Progressive Disclosure : Skills économisent le context window
+- 04:42 - Démonstration : Créer 3 git worktrees en parallèle
+- 06:25 - Modularity : Structure dédiée des Skills
+- 07:47 - Composition : Skills peuvent utiliser tout (MCP, Sub-Agents, Prompts)
+- 08:52 - Cas d'usage par feature (quand utiliser quoi ?)
+- 11:20 - Table décisionnelle : Extract PDF → Skill, Jira → MCP, etc.
+- 13:58 - Skills vs Slash Commands : La confusion principale
+- 15:47 - Le BON moyen d'utiliser Skills (composition)
+- 17:20 - The Core 4 : Context, Model, Prompt, Tools
+- 18:30 - Prompts = Primitive fondamentale de tout agent coding
+- 19:10 - Quand passer d'un Prompt à un Skill ? (gestion vs création)
+- 21:00 - Démonstration : Work Tree Manager Skill
+- 22:40 - Définitions officielles des 4 capabilities
+- 24:30 - Composition Hierarchy : Skills > MCP > Sub-Agents > Prompts
+- 25:40 - Pros & Cons des Skills (8/10 rating)
+- 26:30 - Conclusion : Maîtriser les prompts d'abord, composer ensuite
 
 ---
 
 ## Concepts Clés
 
-### 1. Skills vs Slash Commands vs Sub-Agents vs MCP - Tableau Comparatif
+### 1. The Core 4 : Fondation de Tout Agent
 
-**Définition**: Chaque feature a des capabilities distinctes et des use cases spécifiques.
+**Définition**: Les 4 éléments fondamentaux de tout agent coding : **Context, Model, Prompt, Tools**. Maîtriser ces 4 éléments = maîtriser tous les agents et toutes les features.
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    FEATURE COMPARISON TABLE                                 │
-├────────────────┬──────────┬──────────┬─────────────┬─────────────────────┤
-│   CAPABILITY   │  SKILLS  │   MCP    │ SUB-AGENTS  │ SLASH COMMANDS      │
-├────────────────┼──────────┼──────────┼─────────────┼─────────────────────┤
-│ Agent-Invoked  │    ✅    │    ✅    │     ✅      │        ❌           │
-│ (auto trigger) │  (YES)   │  (YES)   │   (YES)     │   (manual only)     │
-├────────────────┼──────────┼──────────┼─────────────┼─────────────────────┤
-│ Context        │    ✅    │    ❌    │     ✅      │        ✅           │
-│ Efficiency     │ (progr.) │ (BLOAT!) │ (isolated)  │   (efficient)       │
-├────────────────┼──────────┼──────────┼─────────────┼─────────────────────┤
-│ Context        │    ✅    │    ✅    │     ❌      │        ✅           │
-│ Persistence    │  (YES)   │  (YES)   │  (LOST!)    │     (YES)           │
-├────────────────┼──────────┼──────────┼─────────────┼─────────────────────┤
-│ Modularity     │  ✅ HIGH │    🟡    │   🟡 DIY    │      🟡 DIY         │
-│                │ (dedic.) │ (dedic.) │  (manual)   │    (manual)         │
-├────────────────┼──────────┼──────────┼─────────────┼─────────────────────┤
-│ Composability  │    ✅    │    🟡    │     ❌      │        ✅           │
-│                │  (HIGH)  │  (MED)   │  (NO SUB)   │     (HIGH)          │
-├────────────────┼──────────┼──────────┼─────────────┼─────────────────────┤
-│ Parallelization│    ❌    │    ❌    │     ✅      │        ❌           │
-│                │          │          │  (ONLY!)    │                     │
-└────────────────┴──────────┴──────────┴─────────────┴─────────────────────┘
+╔═══════════════════════════════════════╗
+║          THE CORE 4                   ║
+║   Foundation of All Agents            ║
+╚═══════════════════════════════════════╝
+              ▼
+      ┌─────────────────┐
+      │   1. CONTEXT    │ ← What the agent knows
+      └─────────────────┘
+              ▼
+      ┌─────────────────┐
+      │   2. MODEL      │ ← Which LLM (Claude 3.5, etc.)
+      └─────────────────┘
+              ▼
+      ┌─────────────────┐
+      │   3. PROMPT     │ ← Instructions (THE PRIMITIVE)
+      └─────────────────┘
+              ▼
+      ┌─────────────────┐
+      │   4. TOOLS      │ ← What the agent can do
+      └─────────────────┘
+              ▼
+        ╔═══════════╗
+        ║   AGENT   ║
+        ╚═══════════╝
 
-Legend:
-✅ = Full support
-🟡 = Partial / Manual
-❌ = Not supported
+🎯 Master The Core 4 → Master All Features
 ```
 
 **Avantages**:
-- ✅ Clarté sur quand utiliser chaque feature
-- ✅ Évite la confusion entre Skills et Slash Commands
-- ✅ Aide à choisir le bon outil pour le bon problème
-- ✅ Met en évidence les capabilities uniques (ex: Sub-Agents = seul à paralléliser)
+- ✅ Simplifie toute la complexité de Claude Code
+- ✅ Permet de comprendre n'importe quelle feature (Skills, MCP, etc.)
+- ✅ Applicable à tous les outils d'agent coding (pas juste Claude Code)
+- ✅ Framework mental pour décider quelle feature utiliser
 
 **Limitations**:
-- ❌ Beaucoup d'overlap entre Skills et Slash Commands
-- ❌ Risque de sur-complexifier avec trop de features
-- ❌ Pas toujours clair quand passer d'un prompt à un Skill
+- ❌ Abstraction de haut niveau (pas de détails techniques)
+- ❌ Nécessite de maîtriser chaque élément individuellement
 
 **Cas d'usage**:
-- **Skills**: Automatic PDF extraction, style guide violations detection
-- **MCP**: Jira integration, database queries, weather API
-- **Sub-Agents**: Security audits, parallel test fixing, isolated workflows
-- **Slash Commands**: Git commit messages, create component, one-off tasks
+- Débugger un agent qui ne fonctionne pas → vérifier chaque élément du Core 4
+- Choisir entre Skills/MCP/Sub-Agents → analyser quel élément du Core 4 est impacté
+- Apprendre une nouvelle feature → la relier au Core 4
 
 ---
 
-### 2. Compositional Hierarchy - Skills au Sommet, Prompts à la Base
+### 2. Composition Hierarchy : L'Ordre des Primitives
 
-**Définition**: Les features s'empilent en couches compositionnelles, avec les **prompts (slash commands) comme primitive fondamentale**.
-
-```
-                    ╔═══════════════════════════╗
-                    ║        SKILLS             ║  ← Top level
-                    ║  (Agent-first solutions)  ║
-                    ╚═══════════════════════════╝
-                              ▲
-                              │ composes ↓
-                    ┌─────────┴─────────┐
-                    │                   │
-            ┌───────────────┐   ┌───────────────┐
-            │  MCP SERVERS  │   │  SUB-AGENTS   │  ← Mid level
-            │  (External)   │   │  (Isolated)   │
-            └───────────────┘   └───────────────┘
-                    │                   │
-                    └─────────┬─────────┘
-                              ▼ composes ↓
-                    ┌───────────────────────────┐
-                    │   SLASH COMMANDS          │  ← Primitive
-                    │   (Prompts = Base Level)  │
-                    └───────────────────────────┘
-                              ▲
-                              │
-                    ╔═══════════════════════════╗
-                    ║      THE CORE 4           ║  ← Foundation
-                    ║  Context • Model          ║
-                    ║  Prompt  • Tools          ║
-                    ╚═══════════════════════════╝
-```
-
-**Règles de Composition**:
-- ✅ Skills peuvent utiliser: MCP + Sub-Agents + Slash Commands
-- ✅ Slash Commands peuvent utiliser: Skills + MCP + Sub-Agents
-- ❌ Sub-Agents **NE PEUVENT PAS** utiliser d'autres Sub-Agents
-- ❌ MCP (lower level) ne devrait PAS utiliser Skills (higher level)
-
-**Pourquoi c'est important**:
-> "If you avoid understanding how to write great prompts, how to really build these out in a repeatable way, you will not progress as an agentic engineer. The prompt is the fundamental unit of knowledge work."
-> — Dan
-
-**Cas d'usage**:
-- **Git Worktree Skill**: Utilise un slash command `/create-worktree` comme primitive
-- **Video Processor Skill**: Compose plusieurs prompts pour transcription + processing
-- **Meta Skill**: Skill qui génère d'autres skills (build the thing that builds the thing)
-
----
-
-### 3. Progressive Disclosure - Efficacité du Contexte avec Skills
-
-**Définition**: Les Skills protègent le contexte en chargeant l'information en 3 niveaux progressifs, contrairement aux MCP qui "torchent" le context window dès le démarrage.
+**Définition**: Les features Claude Code ont une **hiérarchie de composition claire**. Skills est au sommet (peut utiliser tout), Prompts est à la base (primitive fondamentale).
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│         SKILLS: Progressive Disclosure (3 Levels)            │
-├──────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Level 1: METADATA                                           │
-│  ┌────────────────────────────────────┐                     │
-│  │ • Skill name                       │  ← Always loaded    │
-│  │ • Description                      │                     │
-│  │ • Available capabilities           │                     │
-│  └────────────────────────────────────┘                     │
-│           ▼ (agent decides to invoke)                        │
-│                                                              │
-│  Level 2: INSTRUCTIONS (SKILL.md)                            │
-│  ┌────────────────────────────────────┐                     │
-│  │ • Full prompt/instructions         │  ← Loaded on use    │
-│  │ • Guidelines                       │                     │
-│  │ • Examples                         │                     │
-│  └────────────────────────────────────┘                     │
-│           ▼ (skill pulls resources)                          │
-│                                                              │
-│  Level 3: RESOURCES                                          │
-│  ┌────────────────────────────────────┐                     │
-│  │ • Files in /resources              │  ← Loaded as needed │
-│  │ • Documentation                    │                     │
-│  │ • Code snippets                    │                     │
-│  └────────────────────────────────────┘                     │
-│                                                              │
-└──────────────────────────────────────────────────────────────┘
+Composition Hierarchy (Top to Bottom)
+══════════════════════════════════════
 
-VS
+┌──────────────────────────────────────┐
+│        🏆 SKILLS (TOP)               │ ← Compose TOUT
+│  ┌────────────────────────────────┐  │
+│  │ Can use: MCP, Sub-Agents,      │  │
+│  │ Slash Commands, other Skills   │  │
+│  └────────────────────────────────┘  │
+└──────────────────────────────────────┘
+              ▼ Uses
+┌──────────────────────────────────────┐
+│        🔌 MCP SERVERS                │ ← External integrations
+│  (Connect to Jira, DB, APIs, etc.)   │
+└──────────────────────────────────────┘
+              ▼ Can use
+┌──────────────────────────────────────┐
+│      🤖 SUB-AGENTS                   │ ← Isolate context
+│  (Parallel workflows, task delegate) │
+└──────────────────────────────────────┘
+              ▼ Can use
+┌──────────────────────────────────────┐
+│    ⚡ SLASH COMMANDS (PRIMITIVE)      │ ← Base unit
+│  ┌────────────────────────────────┐  │
+│  │ THE FUNDAMENTAL UNIT           │  │
+│  │ Everything = Prompt at the end │  │
+│  └────────────────────────────────┘  │
+└──────────────────────────────────────┘
 
-┌──────────────────────────────────────────────────────────────┐
-│         MCP: Context Window Explosion                        │
-├──────────────────────────────────────────────────────────────┤
-│                                                              │
-│  ┌────────────────────────────────────────────────────┐     │
-│  │  ALL TOOLS + SCHEMAS LOADED AT BOOTUP             │     │
-│  │  ════════════════════════════════════════════════  │     │
-│  │  • Tool 1 definition + schema                      │     │
-│  │  • Tool 2 definition + schema                      │     │
-│  │  • Tool 3 definition + schema                      │     │
-│  │  • ...                                             │     │
-│  │  • Tool N definition + schema                      │     │
-│  │                                                     │     │
-│  │  ⚠️ BLOATS CONTEXT WINDOW IMMEDIATELY!             │     │
-│  └────────────────────────────────────────────────────┘     │
-│                                                              │
-└──────────────────────────────────────────────────────────────┘
+⚠️ CIRCULAR COMPOSITION POSSIBLE:
+   - Slash Command can invoke Skills
+   - Skills can invoke Slash Commands
+   - Sub-Agents can invoke Slash Commands
+
+🎯 KEY INSIGHT: Always start with Slash Commands,
+   then compose upward when needed
 ```
 
 **Avantages**:
-- ✅ Économie massive de tokens (context efficiency)
-- ✅ Agent charge uniquement ce dont il a besoin
-- ✅ Scalable: ajouter des skills ne bloat pas le context
-- ✅ Meilleure performance du modèle (moins de distraction)
+- ✅ Clarifie quand utiliser chaque feature
+- ✅ Montre que Skills n'est PAS un remplacement
+- ✅ Révèle que Slash Commands est la primitive la plus importante
+- ✅ Guide pour construire des solutions modulaires
 
 **Limitations**:
-- ❌ Latence additionnelle (3 round-trips vs 1 pour prompts)
-- ❌ Dépend de la capacité de l'agent à choisir le bon skill
+- ❌ Composition circulaire peut créer de la confusion
+- ❌ Hiérarchie non stricte (plusieurs chemins possibles)
 
 **Cas d'usage**:
-- Library de 50+ skills disponibles mais seuls 2-3 sont chargés par session
-- Worktree manager skill: charge seulement les instructions quand worktrees mentionnés
-- PDF skill: charge uniquement quand un PDF est détecté dans le contexte
+- Créer une nouvelle feature → commencer par Slash Command
+- Besoin d'automatisation → envelopper dans un Skill
+- Besoin d'isolation → déléguer à Sub-Agent
+- Besoin de connexion externe → utiliser MCP
 
 ---
 
-### 4. The Core 4 - Fondamentaux de l'Agent Coding
+### 3. Progressive Disclosure : Skills vs MCP Context Window
 
-**Définition**: **Tous les agents** et **toutes les features** reposent sur 4 éléments fondamentaux. Si vous maîtrisez ces 4, vous maîtrisez tout.
+**Définition**: Skills utilisent **3 niveaux d'adoption progressive** pour économiser le context window, contrairement aux MCP qui "explodent" le contexte au démarrage.
 
 ```
-╔═══════════════════════════════════════════════════════════════╗
-║                        THE CORE 4                             ║
-║                 Foundation of All Agents                      ║
-╚═══════════════════════════════════════════════════════════════╝
-                              ▼
-        ┌─────────────────────────────────────────────┐
-        │                                             │
-        │         Every Agent = Core 4                │
-        │                                             │
-        │   ┌─────────────────────────────────┐      │
-        │   │  1. CONTEXT                     │      │
-        │   │     • Codebase files            │      │
-        │   │     • Memory (CLAUDE.md)        │      │
-        │   │     • Conversation history      │      │
-        │   └─────────────────────────────────┘      │
-        │                  ▼                          │
-        │   ┌─────────────────────────────────┐      │
-        │   │  2. MODEL                       │      │
-        │   │     • LLM (Claude Sonnet 4.5)   │      │
-        │   │     • Reasoning capabilities    │      │
-        │   └─────────────────────────────────┘      │
-        │                  ▼                          │
-        │   ┌─────────────────────────────────┐      │
-        │   │  3. PROMPT                      │      │
-        │   │     • Instructions               │      │
-        │   │     • User intent                │      │
-        │   │     • **THE PRIMITIVE**          │      │
-        │   └─────────────────────────────────┘      │
-        │                  ▼                          │
-        │   ┌─────────────────────────────────┐      │
-        │   │  4. TOOLS                       │      │
-        │   │     • Read, Write, Edit, Bash   │      │
-        │   │     • MCP tools                 │      │
-        │   └─────────────────────────────────┘      │
-        │                                             │
-        └─────────────────────────────────────────────┘
-                              ▼
-        ┌─────────────────────────────────────────────┐
-        │  Every Claude Code Feature Builds on This   │
-        │                                              │
-        │  Skills      = Core 4 + Modularity           │
-        │  MCP         = Core 4 + External Tools       │
-        │  Sub-Agents  = Core 4 + Isolated Context     │
-        │  Slash Cmds  = Core 4 (closest to bare metal)│
-        └─────────────────────────────────────────────┘
-```
+Context Window Management
+═════════════════════════
 
-**Citation clé**:
-> "It's because everything comes down to just four pieces. You have context, model, prompt, and tools. If you understand these, if you can build and manage these, you will win."
-> — Dan
+MCP Servers (❌ Context Explosion):
+┌─────────────────────────────────────┐
+│ MCP SERVER STARTS                   │
+│ ┌─────────────────────────────────┐ │
+│ │ ❌ ALL TOOLS LOADED AT BOOT     │ │
+│ │ ❌ ALL SCHEMAS IN CONTEXT       │ │
+│ │ ❌ FULL API DOCS LOADED         │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+│ 🔥 CONTEXT WINDOW: 50K+ tokens     │
+└─────────────────────────────────────┘
+
+
+Skills (✅ Progressive Disclosure):
+┌─────────────────────────────────────┐
+│ LEVEL 1: METADATA ONLY              │
+│ ┌─────────────────────────────────┐ │
+│ │ ✅ Skill name + description     │ │
+│ │ ✅ ~100 tokens                  │ │
+│ └─────────────────────────────────┘ │
+└─────────────────────────────────────┘
+              ▼ If triggered
+┌─────────────────────────────────────┐
+│ LEVEL 2: INSTRUCTIONS               │
+│ ┌─────────────────────────────────┐ │
+│ │ ✅ SKILL.md loaded              │ │
+│ │ ✅ ~2K tokens                   │ │
+│ └─────────────────────────────────┘ │
+└─────────────────────────────────────┘
+              ▼ If resources needed
+┌─────────────────────────────────────┐
+│ LEVEL 3: RESOURCES                  │
+│ ┌─────────────────────────────────┐ │
+│ │ ✅ Examples, docs, templates    │ │
+│ │ ✅ ~5K tokens                   │ │
+│ └─────────────────────────────────┘ │
+└─────────────────────────────────────┘
+
+💡 Skills load context ONLY when needed
+🔥 MCP loads EVERYTHING upfront
+```
 
 **Avantages**:
-- ✅ Framework mental simplifié pour comprendre toutes les features
-- ✅ Toujours revenir aux fondamentaux quand confus
-- ✅ Évite la surcharge de features (feature bloat)
+- ✅ Économie massive du context window (100x moins que MCP)
+- ✅ Permet d'avoir 10+ Skills vs 2-3 MCP servers max
+- ✅ Chargement incrémental = plus rapide
+- ✅ Agent décide quoi charger et quand
 
 **Limitations**:
-- ❌ Peut paraître trop simpliste pour des workflows complexes
+- ❌ Nécessite que l'agent détecte le bon moment (reliability concerns)
+- ❌ Si mal configuré, peut charger trop de levels inutilement
 
 **Cas d'usage**:
-- Debugger un skill qui ne fonctionne pas → revenir au Core 4
-- Apprendre une nouvelle feature → la décomposer en Core 4
-- Choisir entre 2 approches → celle qui expose le mieux le Core 4
+- Remplacer un MCP server qui torture votre context window
+- Avoir des dizaines de skills disponibles sans coût
+- Automatiser des workflows sans sacrifier du contexte
 
 ---
 
-### 5. Quand Utiliser Chaque Feature - Decision Tree
+### 4. Agent-First vs Manual Trigger : Skills vs Slash Commands
 
-**Définition**: Un arbre de décision clair pour choisir la bonne feature selon votre use case.
+**Définition**: **Skills sont invoqués automatiquement par l'agent**, tandis que **Slash Commands sont des triggers manuels**. C'est LA différence principale.
 
 ```
-                      ┌────────────────────┐
-                      │  Nouveau Problème  │
-                      └──────────┬─────────┘
-                                 │
-                      ┌──────────▼──────────┐
-                      │ Besoin paralléliser?│
-                      └──────────┬──────────┘
-                                 │
-                    ┌────────────┴────────────┐
-                    │ YES                     │ NO
-                    ▼                         ▼
-            ┌───────────────┐      ┌──────────────────┐
-            │  SUB-AGENTS   │      │ Intégration ext? │
-            │  (isolated +  │      └──────────┬───────┘
-            │   parallel)   │                 │
-            └───────────────┘      ┌──────────┴──────────┐
-                                   │ YES                 │ NO
-                                   ▼                     ▼
-                           ┌───────────────┐   ┌─────────────────┐
-                           │  MCP SERVERS  │   │ Tâche répétée ? │
-                           │  (external    │   └────────┬────────┘
-                           │   tools)      │            │
-                           └───────────────┘   ┌────────┴────────┐
-                                               │ YES             │ NO
-                                               ▼                 ▼
-                                     ┌──────────────────┐ ┌─────────────────┐
-                                     │ Agent doit auto? │ │ SLASH COMMAND   │
-                                     └────────┬─────────┘ │ (manual, simple)│
-                                              │           └─────────────────┘
-                                   ┌──────────┴──────────┐
-                                   │ YES                 │ NO
-                                   ▼                     ▼
-                          ┌─────────────────┐  ┌─────────────────┐
-                          │     SKILL       │  │ SLASH COMMAND   │
-                          │ (agent-invoked) │  │ (manual invoke) │
-                          └─────────────────┘  └─────────────────┘
+Decision Flow: Skill or Slash Command?
+═══════════════════════════════════════
 
-MOTS-CLÉS TRIGGERS:
-━━━━━━━━━━━━━━━━━━
-• "parallel"           → SUB-AGENTS
-• "external API/DB"    → MCP
-• "automatically"      → SKILL
-• "one-off task"       → SLASH COMMAND
-• "repeat workflow"    → SKILL ou SLASH COMMAND (selon auto/manual)
+User Request:
+"Implement authentication"
+              │
+              ▼
+┌─────────────────────────────────────┐
+│ Question: Do you want this AUTOMATIC│
+│ or do you want MANUAL CONTROL?      │
+└─────────────────────────────────────┘
+         │                    │
+         ▼                    ▼
+    AUTOMATIC            MANUAL
+         │                    │
+         ▼                    ▼
+┌──────────────┐      ┌──────────────┐
+│   SKILL      │      │ /COMMAND     │
+│              │      │              │
+│ ✅ Agent     │      │ ✅ You       │
+│  decides     │      │  decide      │
+│  when        │      │  when        │
+│              │      │              │
+│ ✅ Triggered │      │ ✅ Explicit  │
+│  by context  │      │  invocation  │
+│              │      │              │
+│ Example:     │      │ Example:     │
+│ - PDF text   │      │ - /commit    │
+│   extraction │      │ - /test      │
+│ - Style      │      │ - /deploy    │
+│   violations │      │              │
+└──────────────┘      └──────────────┘
+
+🎯 Use Skill: When you want "set it and forget it"
+⚡ Use /Command: When you want explicit control
 ```
 
-**Exemples annotés**:
-- ✅ "Fix 50 failing tests in parallel" → **Sub-Agents** (parallel keyword)
-- ✅ "Automatically extract PDF data" → **Skill** (automatic keyword)
-- ✅ "Connect to Jira" → **MCP** (external integration)
-- ✅ "Generate commit message" → **Slash Command** (simple, one-off)
-- ✅ "Manage git worktrees (create/list/remove)" → **Skill** (repeat workflow, multiple ops)
+**Avantages (Skills)**:
+- ✅ Agent invoqué automatiquement = moins de micro-management
+- ✅ Dial up autonomy knob to 11
+- ✅ Agent détecte le bon contexte (si bien configuré)
 
-**Avantages**:
-- ✅ Decision tree clair et actionnable
-- ✅ Évite la paralysie du choix
-- ✅ Mots-clés triggers faciles à repérer
+**Avantages (Slash Commands)**:
+- ✅ Contrôle total sur quand exécuter
+- ✅ Prévisibilité : tu sais exactement ce qui va se passer
+- ✅ Plus simple à débugger
+- ✅ Primitive fondamentale = toujours fiable
 
 **Limitations**:
-- ❌ Cas edge où plusieurs solutions sont valides
+- ❌ Skills : Reliability concerns (l'agent choisira-t-il le bon skill ?)
+- ❌ Slash Commands : Nécessite ton intervention manuelle
 
 **Cas d'usage**:
-- Nouveau projet: partir avec Slash Commands, évoluer vers Skills si répété
-- Debugging: toujours commencer avec un Slash Command simple
-- Production: Skills pour workflows automatiques, MCP pour intégrations
+- **Skill** : Extraire automatiquement du texte de PDFs dans ton workflow
+- **Slash Command** : Créer un commit message (`/commit`) quand TU décides
+- **Skill** : Détecter automatiquement les violations de style guide
+- **Slash Command** : Lancer les tests (`/test`) à un moment précis
+
+---
+
+### 5. The Prompt is the Fundamental Unit
+
+**Définition**: **"The prompt is the fundamental unit of knowledge work and programming"** (Dan). TOUT se résume à des prompts (tokens in, tokens out). Maîtriser les prompts est NON-NÉGOCIABLE.
+
+```
+Why Prompts are the Primitive
+══════════════════════════════
+
+Everything Reduces to Prompts:
+┌─────────────────────────────────────┐
+│           SKILL                     │
+│  ┌───────────────────────────────┐  │
+│  │ Uses /slash-command-1         │  │
+│  │ Uses /slash-command-2         │  │
+│  │ Uses MCP server (prompt)      │  │
+│  └───────────────────────────────┘  │
+│         ▼ All reduce to             │
+│  ┌───────────────────────────────┐  │
+│  │      PROMPTS (tokens)         │  │
+│  └───────────────────────────────┘  │
+└─────────────────────────────────────┘
+
+LLM Execution:
+┌─────────┐    ┌─────────┐    ┌─────────┐
+│ Tokens  │───>│  Model  │───>│ Tokens  │
+│  IN     │    │ Process │    │  OUT    │
+└─────────┘    └─────────┘    └─────────┘
+    ▲                              │
+    │                              │
+    └──────────────────────────────┘
+         Everything is a PROMPT
+
+🎯 Master Prompts → Master Everything
+❌ Skip Prompts → You Will Lose
+
+Dan's Warning:
+"If you avoid understanding how to write
+great prompts, you will not progress as
+an agentic engineer in 2025, 2026 and beyond."
+```
+
+**Avantages**:
+- ✅ Fondation universelle (applicable à tous les LLMs/agents)
+- ✅ Toutes les features se composent de prompts
+- ✅ Maîtriser les prompts = débloquer toutes les capabilities
+- ✅ Compétence transférable (GPT, Gemini, Claude, etc.)
+
+**Limitations**:
+- ❌ Les features "fancy" (Skills, MCP) peuvent masquer cette vérité
+- ❌ Tentation de skip les fondamentaux pour aller vite
+
+**Cas d'usage**:
+- Toujours commencer par un **simple prompt** (slash command)
+- Si le prompt marche → ne le remplace PAS par un Skill (sauf si automatisation nécessaire)
+- Débugger un Skill qui échoue → revenir au prompt de base
+- Apprendre une nouvelle feature → la décomposer en prompts
 
 ---
 
 ## Citations Marquantes
 
-> "The prompt is the fundamental unit of knowledge work and of programming. If you don't know how to build and manage prompts, you will lose."
-> — Dan (12:09)
+> "The prompt is the fundamental unit of knowledge work and programming. If you don't know how to build and manage prompts, you will lose."
 
-> "If you understand these [Core 4], if you can build and manage these, you will win. Why is that? It's because every agent is the core 4."
-> — Dan (12:44)
+> "Skills are effectively opinionated prompt engineering plus modularity. The real question is: what's actually new here?"
 
-> "Do not give away the prompt. The prompt is the fundamental unit of knowledge work. If you avoid understanding how to write great prompts, you will not progress as an agentic engineer."
-> — Dan (19:10)
+> "Don't give away the prompt. Everything comes down to just four pieces: Context, Model, Prompt, Tools. If you master these, you will win."
 
-> "Skills are effectively canonized prompt engineering plus modularity. The real question is what's the actual innovation? I think the answer is not that much."
-> — Dan (24:48)
+> "Skills don't replace slash commands or MCP or sub-agents. This is a higher compositional level to group features together."
 
-> "Use whatever works for you. But I would say have a strong bias towards slash commands. And then when you're thinking about composing many slash commands, sub agents or MCPs, think about putting them in a skill."
-> — Dan (20:44)
+> "If you can do the job with a sub-agent or custom slash command and it's a one-off job, do not use a skill. This is not what skills are for."
 
-> "This [Skills] is the agentic approach. This is what you want to see. Agent just does the right thing."
-> — Dan (22:14)
+> "Use whatever works for you, but have a strong bias towards slash commands. When composing many slash commands, think about putting them in a skill."
 
 ---
 
 ## Points d'Action
 
-### ✅ Immédiat
+### ✅ Immédiat (< 1h)
 
-1. **Maîtriser les Slash Commands AVANT tout**
-   - Créer 5-10 slash commands pour vos workflows quotidiens
-   - Refactorer vos prompts ad-hoc en slash commands réutilisables
-   - Ne PAS sauter directement aux Skills
+1. **Auditer tes Slash Commands actuels**
+   - Lister tous tes `/commands` existants
+   - Identifier lesquels pourraient être automatisés (→ Skills)
+   - Garder les one-off tasks en `/commands`
 
-2. **Clarifier votre mental model avec le Core 4**
-   - Pour chaque feature que vous utilisez, la décomposer en Context + Model + Prompt + Tools
-   - Revenir au Core 4 quand vous êtes confus sur quelle feature utiliser
+2. **Créer un Simple Prompt avant tout**
+   - Prochain workflow : commencer par `/command`
+   - Tester et valider la solution
+   - Seulement APRÈS → envisager un Skill
 
-### 🔄 Court Terme
+3. **Vérifier ton Context Window**
+   - Si tu as beaucoup de MCP servers → context explosion ?
+   - Envisager de convertir certains MCP en Skills
+   - Mesurer la différence de tokens
 
-3. **Identifier les candidats pour Skills**
-   - Repérer vos slash commands utilisés 5+ fois par semaine
-   - Workflows avec plusieurs étapes répétitives (ex: worktree management)
-   - Passer de slash command → skill uniquement si bénéfice clair (auto-invoke + modularity)
+### 🔄 Court Terme (1 jour - 1 semaine)
 
-4. **Tester la compositional hierarchy**
-   - Créer un skill qui compose 3 slash commands
-   - Vérifier si l'agent trigger le bon skill automatiquement
-   - Mesurer la fiabilité (est-ce que ça marche 90% du temps ?)
+4. **Créer ton Premier Skill de "Manager"**
+   - Identifier un workflow répétitif avec plusieurs étapes
+   - Créer un Skill qui compose plusieurs `/commands`
+   - Exemple : Git Work Tree Manager (create, list, remove, merge)
 
-### 💪 Long Terme
+5. **Documenter ta Composition Hierarchy**
+   - Mapper tes Skills → quels /commands ils utilisent ?
+   - Mapper tes /commands → lesquels utilisent des MCP ?
+   - Visualiser ta chaîne de composition
 
-5. **Build the thing that builds the thing**
-   - Créer un "meta skill" pour générer d'autres skills
-   - Automatiser la création de skills à partir de slash commands existants
+6. **Tester la Reliability des Skills**
+   - Créer un Skill et observer si l'agent le trigger au bon moment
+   - Comparer avec `/command` équivalent
+   - Noter les cas où Skills échoue à se déclencher
 
-6. **Maîtriser le prompt engineering**
-   - Étudier les patterns de prompts efficaces
-   - S'entraîner à décomposer des problèmes complexes en prompts simples
-   - Se former sur Tactical Agentic Coding (mentionné par Dan)
+### 💪 Long Terme (> 1 semaine)
+
+7. **Maîtriser The Core 4**
+   - Approfondir Context management (memory, CLAUDE.md)
+   - Approfondir Prompt engineering (frameworks, patterns)
+   - Approfondir Tools (créer tes propres MCP servers)
+
+8. **Construire des Skills Composables**
+   - Créer des Skills qui utilisent d'autres Skills
+   - Tester la chaîne de composition (Skill A → Skill B → /command)
+   - Documenter les limites de composition
+
+9. **Contribuer à l'Écosystème**
+   - Partager tes meilleurs Skills (GitHub, Plugins)
+   - Documenter tes patterns de composition
+   - Aider la communauté à clarifier Skills vs /commands
 
 ---
 
@@ -437,92 +429,95 @@ MOTS-CLÉS TRIGGERS:
 
 ### 🔗 Outils
 
-- **Claude Code Skills Feature** : [https://docs.anthropic.com/en/docs/build-with-claude/agent-skills](https://docs.anthropic.com/en/docs/build-with-claude/agent-skills)
-  - Feature officielle pour créer des skills agent-first
+- **Git Work Trees** : [Git Documentation](https://git-scm.com/docs/git-worktree)
+  - Permet de créer plusieurs branches en parallèle sans switching
 
-- **Git Worktrees** : Outil git natif pour travailler sur plusieurs branches en parallèle
-  - `git worktree add <path> <branch>` pour créer
-  - Use case: développement parallèle sur plusieurs features
+- **Tactical Agentic Coding** : [Dan's Course](https://tacticalagenticcoding.com)
+  - Cours avancé sur les patterns d'agent coding et AI Developer Workflows (ADWs)
+
+- **Agentic Horizon** : [Dan's Community](https://agentichorizon.com)
+  - Communauté pour maîtriser les prompts à l'échelle avec multi-agents
 
 ### 📚 Documentation
 
-- **Tactical Agentic Coding** : [Mentionné par Dan, lien non fourni]
-  - Formation avancée sur les patterns d'agent coding
-  - Couvre les ADWs (AI Developer Workflows)
+- **Claude Code Skills Docs** : [https://code.claude.com/docs/skills](https://code.claude.com/docs/skills)
+  - Documentation officielle sur les Skills
 
-- **Agentic Horizon** : [Mentionné par Dan, lien non fourni]
-  - Cours sur multi-agent workflows
+- **Claude Code MCP Docs** : [https://modelcontextprotocol.io/](https://modelcontextprotocol.io/)
+  - Spécification du Model Context Protocol
 
-### 🎥 Repo GitHub
+### 🎥 Vidéos Connexes
 
-- **Codebase de la vidéo** : [Lien mentionné "in description"]
-  - 4 skills inclus: Meta skill, Video processor, Worktree manager, etc.
-  - Démo complète de compositional patterns
+- **Dan's Channel** : Autres vidéos sur Skills, Sub-Agents, Prompts
+  - Output Styles, Hooks, Plugins, etc.
 
 ---
 
 ## Schéma Récapitulatif
 
 ```
-╔═══════════════════════════════════════════════════════════════════════════╗
-║              CLAUDE CODE FEATURES - THE COMPLETE PICTURE                  ║
-╚═══════════════════════════════════════════════════════════════════════════╝
+🎯 DAN'S ULTIMATE DECISION TREE
+═══════════════════════════════
 
-                              ┌────────────────┐
-                              │   YOUR TASK    │
-                              └───────┬────────┘
-                                      │
-                        ┌─────────────▼─────────────┐
-                        │  Decision Framework       │
-                        ├───────────────────────────┤
-                        │ • Parallelize? → Sub      │
-                        │ • External?    → MCP      │
-                        │ • Automatic?   → Skill    │
-                        │ • One-off?     → Slash    │
-                        └─────────────┬─────────────┘
-                                      │
-                        ┌─────────────▼─────────────┐
-                        │  Compositional Hierarchy  │
-                        └───────────────────────────┘
-                                      │
-        ┌─────────────────────────────┼─────────────────────────────┐
-        │                             │                             │
-        ▼                             ▼                             ▼
-┌───────────────┐          ┌────────────────────┐        ┌──────────────────┐
-│    SKILLS     │          │    MCP SERVERS     │        │   SUB-AGENTS     │
-│               │          │                    │        │                  │
-│ • Agent-first │          │ • External tools   │        │ • Isolated       │
-│ • Reusable    │◄────────►│ • Database/APIs    │        │ • Parallel       │
-│ • Modular     │ composes │ • Context bloat    │        │ • Context LOST   │
-└───────┬───────┘          └──────────┬─────────┘        └────────┬─────────┘
-        │                             │                           │
-        └─────────────────────────────┼───────────────────────────┘
-                                      │ ALL compose ↓
-                                      ▼
-                        ┌──────────────────────────┐
-                        │   SLASH COMMANDS         │
-                        │   (Prompts = Primitive)  │
-                        │                          │
-                        │ • Closest to bare metal  │
-                        │ • MUST MASTER FIRST      │
-                        │ • Foundation of all      │
-                        └─────────────┬────────────┘
-                                      │ built on ↓
-                                      ▼
-                        ┌──────────────────────────┐
-                        │      THE CORE 4          │
-                        ├──────────────────────────┤
-                        │ Context • Model          │
-                        │ Prompt  • Tools          │
-                        └──────────────────────────┘
+Start Here:
+┌─────────────────────────────────────┐
+│ "I need to solve a problem"         │
+└─────────────────────────────────────┘
+              │
+              ▼
+┌─────────────────────────────────────┐
+│ Q1: Is this a REPEAT WORKFLOW?      │
+└─────────────────────────────────────┘
+     YES │           │ NO
+         ▼           ▼
+    ┌────────┐  ┌─────────────┐
+    │ Maybe  │  │ Use /command│
+    │ Skill  │  │ (one-off)   │
+    └────────┘  └─────────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
+│ Q2: Do I want AUTOMATIC trigger?    │
+└─────────────────────────────────────┘
+     YES │           │ NO
+         ▼           ▼
+    ┌────────┐  ┌─────────────┐
+    │ SKILL  │  │ /command    │
+    │        │  │ (manual)    │
+    └────────┘  └─────────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
+│ Q3: Does it need EXTERNAL data?     │
+└─────────────────────────────────────┘
+         │ YES
+         ▼
+    ┌────────┐
+    │ Skill  │
+    │  +     │
+    │  MCP   │
+    └────────┘
 
-KEY INSIGHTS:
-━━━━━━━━━━━━━
-1. START with Slash Commands (prompts)
-2. SCALE to Skills when repeated (3+ times/week)
-3. USE MCP for external integrations only
-4. USE Sub-Agents for parallelization only
-5. ALWAYS understand the Core 4 foundation
+
+Special Cases:
+══════════════
+
+Need PARALLEL workflows?
+  → SUB-AGENTS (always)
+
+Need EXTERNAL integration?
+  → MCP SERVER (always)
+
+One-off task?
+  → /COMMAND (always start here)
+
+Managing multiple /commands?
+  → SKILL (compose them)
+
+
+The Golden Rule:
+════════════════
+Start with /command → Validate → Compose into Skill if needed
 ```
 
 ---
@@ -531,41 +526,40 @@ KEY INSIGHTS:
 
 ### 🤔 Questions à Explorer
 
-- Les Skills sont-ils vraiment fiables quand on en chaîne 3-4 ensemble ? (Dan doute à 24:40)
-- Pourquoi Skills n'ont-ils pas de répertoire `/commands` dédié pour nested prompts ?
-- Quel est le seuil exact pour passer d'un slash command à un skill ? (3 fois ? 5 fois ?)
-- Est-ce que Skills vont évoluer pour supporter des nested sub-agents ?
+- **Reliability des Skills** : Dans combien de cas l'agent trigger le bon skill vs échoue ?
+- **Composition Limits** : Peut-on vraiment chaîner 5+ Skills de manière fiable ?
+- **Performance** : Skills vs /commands → quelle différence de latency/tokens ?
+- **Best Practices** : Quand arrêter de composer et garder un simple /command ?
 
 ### 💡 Idées d'Amélioration
 
-- Créer un "skill health check" slash command pour tester la fiabilité des skills
-- Développer une convention de nommage claire: `skill-[domain]-manager` (ex: `skill-worktree-manager`)
-- Ajouter un compteur d'usage aux slash commands pour détecter automatiquement les candidats à skill
-- Créer un template de migration slash-command → skill
+- Créer une **Skill Library personnelle** avec patterns réutilisables
+- Développer un **Skill Tester** pour mesurer reliability automatiquement
+- Construire un **Meta Skill** (comme Dan) pour générer d'autres Skills
+- Documenter ma propre **Composition Hierarchy** pour mes projets
 
 ### 🔗 À Combiner Avec
 
-- **Skills Deep Dive** (Solo Swift Crafter) pour comprendre l'architecture interne
-- **MCP Servers Guide** pour intégrations externes (Jira, DBs, APIs)
-- **Sub-Agents Workflows** (Melvynx) pour parallelization patterns
-- **Prompt Engineering Mastery** (fondamental selon Dan)
+- [Formation Claude Code 2.0 - Melvynx](./formation-claude-code-2-0-melvynx.md) : Setup de Skills
+- [Sub-Agents Usage - Melvynx](./subagents-usage-melvynx.md) : Quand utiliser Sub-Agents vs Skills
+- [800h Claude Code - Edmund Yong](./800h-claude-code-edmund-yong.md) : D.R.Y. avec Skills
+- Documentation MCP : Comparaison Skills vs MCP (context window)
 
 ---
 
 ## Conclusion
 
-**Message clé** : **Ne pas se laisser distraire par les nouvelles features**. Les prompts (slash commands) sont et restent la primitive fondamentale de tout agent coding. Skills ne remplacent PAS les slash commands, ils les **composent**. Commencez toujours avec un slash command simple, puis évoluez vers un skill uniquement si vous avez un workflow répétitif qui bénéficie de l'auto-invocation par l'agent.
+**Message clé** : Skills, MCP, Sub-Agents et Slash Commands sont **4 outils DISTINCTS** qui ne se remplacent pas. Skills est une **couche de composition** pour automatiser des workflows répétitifs en regroupant des /commands, MCP, et sub-agents. MAIS : **le prompt (/command) reste la primitive fondamentale** que tu DOIS maîtriser avant tout.
 
-Dan donne une note de **8/10 aux Skills** : feature solide, mais pas révolutionnaire (= "canonized prompt engineering"). Les vraies limitations : pas de nested `/commands`, fiabilité inconnue pour le chaining, et pas vraiment d'innovation technique (juste une structure opinionated).
+**Dan's Rating** : 8/10 pour Skills
+- ✅ Agent-invoked, context-efficient, modular
+- ❌ Doesn't go all the way (no `/commands` directory inside Skills)
+- ❌ Reliability concerns (will agent trigger right skill in chains?)
 
-**Action immédiate** :
-1. Lister vos 10 prompts les plus utilisés
-2. Les convertir en slash commands (pas en skills !)
-3. Identifier ceux utilisés 5+ fois/semaine → candidats pour skills
-4. Créer 1 skill "manager" pour un workflow répétitif (ex: git worktrees, deployments, testing)
+**Action immédiate** : Audite tes Slash Commands actuels. Identifie UN workflow répétitif. Crée ton premier Skill qui compose plusieurs /commands. Teste la reliability. Compare avec /command équivalent.
 
 ---
 
-**🎓 Niveau de difficulté** : 🟠 Avancé (nécessite expérience avec prompts, slash commands ET MCP)
-**⏱️ Temps de mise en pratique** : 2-4 heures (créer 1 skill complet avec 3 slash commands composés)
-**💪 Impact** : 🔥 TRÈS ÉLEVÉ - Change complètement la compréhension des features Claude Code
+**🎓 Niveau de difficulté** : 🟠 Avancé (nécessite maîtrise de /commands, MCP, Sub-Agents d'abord)
+**⏱️ Temps de mise en pratique** : 2-4 heures (créer 2-3 Skills expérimentaux)
+**💪 Impact** : 🔥🔥🔥 MAJEUR (change complètement la façon de penser Skills)

@@ -51,8 +51,8 @@ Process PDF files and extract content.
   - Guide complet des skills
 - [5 Claude Skills Game-Changers](../../ressources/videos/5-claude-skills-game-changers-sean-allen.md) ([🔗 YouTube](https://www.youtube.com/watch?v=901VMcZq8X4)) - Sean Allen | 🟡 Intermédiaire
   - 5 skills transformatrices : Skill Creator, Brainstorming, Debugging, Simplification Cascade
-- [Skills vs Slash Commands vs Sub-Agents vs MCP - Le Guide Complet](../../ressources/videos/skills-vs-slash-commands-vs-subagents-vs-mcp-dan.md) ([🔗 YouTube](https://www.youtube.com/watch?v=kFpLzCVLA20)) - Dan | 🟠 Avancé
-  - Comparaison approfondie : quand utiliser chaque feature, compositional hierarchy, prompts as primitives
+- [When to Use Skills vs MCP vs Sub-Agents vs Slash Commands](../../ressources/videos/skills-vs-slash-commands-vs-subagents-vs-mcp-dan.md) ([🔗 YouTube](https://youtu.be/kFpLzCVLA20)) - Dan | 🟠 Avancé
+  - The Core 4, composition hierarchy, progressive disclosure, prompts as primitives (THE reference guide)
 - [800h Claude Code](../../ressources/videos/800h-claude-code-edmund-yong.md) ([🔗 YouTube](https://www.youtube.com/watch?v=Ffh9OeJ7yxw)) - Edmund Yong | 🔴 Expert
   - Skills avancés et cas d'usage
 

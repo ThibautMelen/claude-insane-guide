@@ -6,6 +6,65 @@
 
 ---
 
+## ⚡ CRITICAL: Skills = Auto-Invoked + Dual Role
+
+> **"Skills don't replace commands/MCP/agents. This is higher compositional level."**
+> — Dan, Skills vs Commands vs Sub-Agents vs MCP
+
+### 🎯 Pour Skills: L'Essentiel
+
+**Skills = AUTO-INVOKED** (Agent decides WHEN) vs Commands = Manual (YOU decide)
+
+- 🤖 **Agent-First** : Auto-load when context matches (vs Commands = explicit)
+- 📚+🏗️ **Dual Role** : BOTH Knowledge Base (domain docs) AND Composition Layer (orchestrates features)
+- 📈 **Progressive Disclosure** : 100 → 2K → 5K tokens (vs MCP = 50K upfront)
+- 🎯 **Golden Rule** : Start /command → Validate → Migrate to Skill IF repeat + auto needed
+
+**Dual Role Explained** :
+1. **Knowledge Base** : Like extended CLAUDE.md (domain-specific docs)
+2. **Composition Layer** : Orchestrates commands/MCP/agents together
+
+### 📚 Framework Complet
+
+**Voir [Core 4 & Fundamentals](../8-advanced/core-4-fundamentals.md) pour** :
+- 📊 Tableau comparatif Dan (Triggered By, Context Efficiency, etc.)
+- 🔥 Golden Rule workflow complet (Command → Test → Skill IF needed)
+- 📈 Progressive Disclosure détaillée (Skills vs MCP avec diagrams)
+- 🏗️ Composition Hierarchy (Skills compose commands/MCP/agents)
+- 🤖 vs 👤 Distinction (Agent-First vs Manual trigger)
+- 📚 Skills Dual Role complet (Knowledge Base + Composition Layer)
+
+**Voir [Decision Trees](../8-advanced/decision-trees.md) pour** :
+- 🎯 Framework 3 questions (Q1: Répétitif? Q2: Auto? Q3: External data?)
+- 📋 Decision tree Skills vs Commands détaillé
+- 🔄 Migration path (quand migrer Command → Skill)
+
+### 🔑 Spécificités Skills
+
+**Quand utiliser Skills** :
+- ✅ Repeat workflow + want auto-invoke
+- ✅ Domain-specific knowledge (PDF, Excel, Locale)
+- ✅ "Set it and forget it" approach
+- ✅ Compose multiple features (commands/MCP/agents)
+- ✅ Progressive disclosure needed (vs MCP explosion)
+
+**Quand NE PAS utiliser** :
+- ❌ One-off task → Use Command
+- ❌ Need explicit control → Use Command
+- ❌ Testing phase → Start with Command first
+- ❌ Event-driven → Use Hook instead
+
+**Structure Fichier** :
+```
+.claude/skills/skill-name/
+├── SKILL.md (entry point + frontmatter)
+├── references/ (documentation, loaded on-demand)
+├── scripts/ (executable code)
+└── assets/ (templates, referenced by path)
+```
+
+---
+
 ## 📚 Théorie Fondamentale
 
 ### 🎯 Qu'est-ce qu'un Skill ?
