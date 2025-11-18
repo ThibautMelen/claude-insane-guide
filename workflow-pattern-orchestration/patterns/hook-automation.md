@@ -356,26 +356,26 @@ BLOCK if not approved
 
 ```
 ┌──────────────────────────────────────────┐
-│     Batch Processing (174 locales)       │
+│     Batch Processing (200 locales)       │
 │                                          │
 │  Wave 1: Agents 1-20                     │
 │         ↓                                │
 │  ┌────────────────────────────┐         │
 │  │ SubagentStop Hook:         │         │
 │  │                            │         │
-│  │ Agent 1 done → Progress: 1/174 (0.6%)│
-│  │ Agent 2 done → Progress: 2/174 (1.1%)│
+│  │ Agent 1 done → Progress: 1/200 (0.5%)│
+│  │ Agent 2 done → Progress: 2/200 (1.0%)│
 │  │ ...                        │         │
-│  │ Agent 20 done → Progress: 20/174 (11%)│
+│  │ Agent 20 done → Progress: 20/200 (10%)│
 │  └────────────────────────────┘         │
 │         ↓                                │
 │  Wave 2: Agents 21-40                    │
 │         ↓                                │
 │  ... Progress updates ...                │
 │         ↓                                │
-│  Wave 9: Agents 161-174                  │
+│  Wave 10: Agents 181-200                  │
 │         ↓                                │
-│  Agent 174 done → Progress: 174/174 (100%)│
+│  Agent 200 done → Progress: 200/200 (100%)│
 │         ↓                                │
 │  Final aggregation + report              │
 └──────────────────────────────────────────┘

@@ -193,7 +193,7 @@ Quelle est la tâche ?
 
 # 3. Observer orchestration
 # - EPCT : Explore data sources, plan strategy
-# - PARALLEL : Batch (9 waves × 20 agents)
+# - PARALLEL : Batch (10 waves × 20 agents)
 # - CONDITIONAL : Context7 → Perplexity → Firecrawl
 # - HOOKS : Validation PostToolUse
 # - REPORT : Aggregation metrics
@@ -246,7 +246,7 @@ Quelle est la tâche ?
 - EPCT + Parallel + Conditional
 - Commands + Agents + Skills + Hooks + MCP
 - Exemples complets production-ready :
-  - Generate 174 Locales
+  - Generate 200 Locales
   - PR Review Workflow
   - Migration Cloud Complete
   - Monorepo Setup

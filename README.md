@@ -219,7 +219,7 @@ Chaque thème contient :
 - ⚡ [Best Practices](workflow-pattern-orchestration/best-practices/README.md) - Performance, Cost, Resilience, Team collaboration
 
 **Exemples production** :
-- 174 locales generation (8.3x speedup)
+- 200 locales generation (8.3x speedup)
 - PR review automation (4 parallel agents)
 - Documentation generator (Skills + MCP)
 - Monorepo setup wizard (20+ decision branches)

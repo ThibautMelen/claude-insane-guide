@@ -158,16 +158,16 @@ Task(subagent_type="deployer", prompt="Deploy to production")
               ... more waves ...
                     ↓
         ┌───────────────────────┐
-        │ Wave N (Items 161-174)│
+        │ Wave N (Items 181-200)│
         │  14 agents (parallel) │
         └───────────────────────┘
 
-📊 174 items ÷ 20/wave = 9 waves
-⚡ Speedup: 174 × 30min → 9 × 30min = ~6.5h → 4.5h = ~15x
+📊 200 items ÷ 20/wave = 10 waves
+⚡ Speedup: 200 × 30min → 10 × 30min = 100h → 5h = 20x
 ```
 
 **Use Cases** :
-- ✅ Locale generation (174 files)
+- ✅ Locale generation (200 files)
 - ✅ Image processing (1000+ images)
 - ✅ Data migration (large databases)
 - ✅ Batch API calls
@@ -175,9 +175,9 @@ Task(subagent_type="deployer", prompt="Deploy to production")
 **Example** : Locale Generation
 
 ```yaml
-# COMMAND processes 174 locales in batches
+# COMMAND processes 200 locales in batches
 
-Total: 174 locale files
+Total: 200 locale files
 Batch size: 20 files per wave
 
 FOR each wave in [1..9]:
@@ -186,11 +186,11 @@ FOR each wave in [1..9]:
   Aggregate results (success/fail counts)
   IF failures: Retry once with fallback
 
-Final aggregate: 174/174 success ✅
+Final aggregate: 200/200 success ✅
 ```
 
 **Why Batch?** :
-- ✅ Prevents resource exhaustion (not 174 agents at once)
+- ✅ Prevents resource exhaustion ((not 200 agents) at once)
 - ✅ Better error handling (per-wave retry)
 - ✅ Progress visibility (wave completion tracking)
 - ✅ Cost control (can stop mid-process)
@@ -387,7 +387,7 @@ Max parallel: 20 agents
 IF more needed: Use BATCH pattern
 
 ❌ Incorrect:
-# Launch 174 agents at once (resource exhaustion)
+# Launch 200 agents at once (resource exhaustion)
 ```
 
 **3. Handle failures gracefully**
@@ -425,10 +425,10 @@ Each agent duplicates knowledge (inconsistent results)
 **1. Don't over-parallelize**
 ```yaml
 ❌ WRONG:
-Launch 174 agents concurrently (resource exhaustion)
+Launch 200 agents concurrently (resource exhaustion)
 
 ✅ CORRECT:
-Batch: 174 ÷ 20 = 9 waves (manageable load)
+Batch: 200 ÷ 20 = 10 waves (manageable load)
 ```
 
 **2. Don't use parallel for dependent tasks**

@@ -219,7 +219,7 @@ You are [Agent Role]. Your task is to...
 - Simple transformations
 - Structured data processing
 - Following explicit instructions
-- Cost optimization (174 locales × haiku = cheaper)
+- Cost optimization (200 locales × haiku = cheaper)
 
 **sonnet** (use when):
 - Complex reasoning needed
@@ -905,7 +905,7 @@ When same field in multiple files:
 
 ## Minimal Bootstrap
 
-10-15 essential fields to bootstrap 174 locales:
+10-15 essential fields to bootstrap 200 locales:
 - locale_code, language, country, script_code
 - decimal_separator, thousands_separator
 - date_pattern, time_pattern
@@ -1515,7 +1515,7 @@ Aggregate results.
 
 ### Batch Pattern (Large Scale)
 
-**Use case**: 174 locales (avoid overwhelming)
+**Use case**: 200 locales (avoid overwhelming)
 
 ```
 COMMAND launches batches:
@@ -1524,7 +1524,7 @@ Batch 1 (20 agents) ─── ⏱️ 60s ──→ ✓
 Batch 2 (20 agents) ─── ⏱️ 58s ──→ ✓
 Batch 3 (20 agents) ─── ⏱️ 62s ──→ ✓
 ...
-Batch 9 (14 agents) ─── ⏱️ 45s ──→ ✓
+Batch 9 (20 agents) ─── ⏱️ 45s ──→ ✓
 
 Total time: 9 batches × ~60s = 9-10 min
 ```
@@ -2373,7 +2373,7 @@ async function generateLocalesViaCLI(locales: string[]) {
 2. **Create AGENT file** (`.claude/agents/locale-technical-generator.md`)
 3. **Create COMMAND file** (`.claude/commands/generate-locale-technical.md`)
 4. **Test POC** (3 locales: ja-JP, en-US, ar-SA)
-5. **Generate all** (174 locales in batches)
+5. **Generate all** (200 locales in batches)
 
 ---
 

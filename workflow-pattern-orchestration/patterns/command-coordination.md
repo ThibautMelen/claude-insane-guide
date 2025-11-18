@@ -197,9 +197,9 @@ Task(
 ```yaml
 ## ORCHESTRATE: Batch Strategy
 
-Total: 174 locales
+Total: 200 locales
 Batch size: 20 locales per wave
-Waves: 9 waves (174 ÷ 20 = 8.7 → 9)
+Waves: 10 waves (200 ÷ 20 = 10)
 
 Wave 1: Locales 1-20
   Launch 20 agents in parallel
@@ -211,11 +211,11 @@ Wave 2: Locales 21-40
 
 ...
 
-Wave 9: Locales 161-174 (14 agents)
+Wave 10: Locales 181-200 (20 agents)
   Launch 14 agents in parallel
   Wait for completion
 
-Aggregate: 174/174 success ✅
+Aggregate: 200/200 success ✅
 ```
 
 **Implementation**:
@@ -223,8 +223,8 @@ Aggregate: 174/174 success ✅
 ┌──────────────────────────────────────────────────┐
 │                  COMMAND                         │
 │                                                  │
-│  Parse: 174 locale codes                        │
-│  Batch: Split into 9 waves (20 items each)      │
+│  Parse: 200 locale codes                        │
+│  Batch: Split into 10 waves (20 items each)      │
 │                                                  │
 │  ┌──────────────────────────────────────────┐  │
 │  │ Wave 1 (Locales 1-20)                    │  │
@@ -241,13 +241,13 @@ Aggregate: 174/174 success ✅
 │       ... 7 more waves ...                      │
 │         ↓                                        │
 │  ┌──────────────────────────────────────────┐  │
-│  │ Wave 9 (Locales 161-174)                 │  │
+│  │ Wave 9 (Locales 181-200)                 │  │
 │  │   Agent161 ... Agent174 (parallel)       │  │
 │  │   ✅ 14/14 success                        │  │
 │  └──────────────────────────────────────────┘  │
 │         ↓                                        │
-│  Aggregate: 174/174 success ✅                  │
-│  Report: "Generated 174 locales (3.5h)"        │
+│  Aggregate: 200/200 success ✅                  │
+│  Report: "Generated 200 locales (3.5h)"        │
 └──────────────────────────────────────────────────┘
 ```
 
@@ -666,7 +666,7 @@ Use AskUserQuestion for dynamic inputs
 |----------|-------|------------|---------|----------|
 | Translation | 15 languages | None | Medium | **Parallel** |
 | CI/CD | Build→Test→Deploy | Sequential | Small | **Sequential** |
-| Locale Gen | 174 files | None | Large | **Batch (20/wave)** |
+| Locale Gen | 200 files | None | Large | **Batch (20/wave)** |
 | RFP Response | Analysis→Writing→Review | Sequential | Medium | **Sequential (3 phases)** |
 | Security Response | Triage→Contain→Recover | Sequential | Small | **Sequential with gates** |
 

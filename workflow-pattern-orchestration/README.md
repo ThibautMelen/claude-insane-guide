@@ -15,7 +15,7 @@
 **Commands** (.claude/commands/) :
 - Workflow orchestration invoquée par l'utilisateur (`/command-name`)
 - Coordonne agents, agrège résultats, gère erreurs
-- Exemple : `/generate-locales` (orchestre 174 agents)
+- Exemple : `/generate-locales` (orchestre 200 agents)
 
 **Skills** (.claude/skills/) :
 - Prompt-based meta-tool pour injection de connaissances spécialisées
@@ -148,7 +148,7 @@ workflow-pattern-orchestration/
 
 🛠️ Exercice pratique :
 - Benchmarker séquentiel vs parallèle
-- Optimiser coût 174 locales (haiku vs sonnet)
+- Optimiser coût 200 locales (haiku vs sonnet)
 - Implémenter retry logic + fallback chains
 ```
 
@@ -164,7 +164,7 @@ workflow-pattern-orchestration/
 
 🛠️ Projet final :
 - Créer workflow hybride : EPCT + Parallel + Conditional + Hooks
-- Exemple : Generate 174 locales avec fallback chains
+- Exemple : Generate 200 locales avec fallback chains
 - Benchmarks, rapports, monitoring
 ```
 
@@ -251,7 +251,7 @@ workflows/epct.md → Méthodologie structurée
 
 ### Exemple 3 : Generate Locales (Hybride)
 
-**Use case** : Générer 174 locale files avec API enrichment.
+**Use case** : Générer 200 locale files avec API enrichment.
 
 ```bash
 # Command
@@ -259,7 +259,7 @@ workflows/epct.md → Méthodologie structurée
 
 # Workflow orchestré
 1. EPCT : Explore data sources, plan stratégie
-2. PARALLEL : Batch (9 waves × 20 agents)
+2. PARALLEL : Batch (10 waves × 20 agents)
 3. CONDITIONAL : Context7 → Perplexity → Firecrawl
 4. HOOKS : Validation PostToolUse
 5. REPORT : Aggregation metrics
@@ -349,7 +349,7 @@ COMMAND aggregates all waves
 
 **Pattern combinés** :
 - ✅ EPCT (Explore → Plan → Code → Test)
-- ✅ Parallel (9 waves × 20 agents = 180 total)
+- ✅ Parallel (10 waves × 20 agents = 180 total)
 - ✅ Conditional (5-level fallback chains)
 - ✅ Command/Agent/Skill (hiérarchie claire)
 - ✅ Hooks (validation automatique)
@@ -488,7 +488,7 @@ RÉSULTAT FINAL:
    ✅ Monitor + failfast + fallback
 
 5. OPUS PARTOUT
-   ❌ $50 pour 174 locales
+   ❌ $50 pour 200 locales
    ✅ Haiku : $0.25 (même qualité pour tâches simples)
 
 6. RAPPORTS VAGUES
