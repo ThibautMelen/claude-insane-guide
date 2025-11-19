@@ -57,3 +57,16 @@ _site/
 *.zip
 *.tar.gz
 *.rar
+
+# Documentation builds
+.docusaurus/
+.mdx-data.json
+
+# Editor backups
+*~.md
+*.md.bak
+
+# Local notes (personal)
+TODO.md
+NOTES.md
+DRAFT*.md

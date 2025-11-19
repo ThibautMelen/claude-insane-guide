@@ -1,10 +1,65 @@
-# 📚 Guide Claude Code - Maîtrise Complète
+<div align="center">
 
-> **Formation progressive pour maîtriser Claude Code** - De débutant à expert
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║      ██████╗██╗      █████╗ ██╗   ██╗██████╗ ███████╗                   ║
+║     ██╔════╝██║     ██╔══██╗██║   ██║██╔══██╗██╔════╝                   ║
+║     ██║     ██║     ███████║██║   ██║██║  ██║█████╗                     ║
+║     ██║     ██║     ██╔══██║██║   ██║██║  ██║██╔══╝                     ║
+║     ╚██████╗███████╗██║  ██║╚██████╔╝██████╔╝███████╗                   ║
+║      ╚═════╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝                   ║
+║                                                                           ║
+║                    🎯 GUIDE COMPLET & MAÎTRISE                           ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+<h1>📚 Guide Claude Code - Formation Complète</h1>
+
+<p>
+  <strong>Formation progressive pour maîtriser Claude Code</strong><br>
+  De débutant à expert • 100% Français • Production-Ready
+</p>
+
+<!-- Badges -->
+<p>
+  <img src="https://img.shields.io/badge/langue-français-blue?style=for-the-badge" alt="Langue">
+  <img src="https://img.shields.io/badge/niveau-débutant_→_expert-green?style=for-the-badge" alt="Niveau">
+  <img src="https://img.shields.io/badge/durée-20--28h-orange?style=for-the-badge" alt="Durée">
+  <img src="https://img.shields.io/badge/license-MIT-purple?style=for-the-badge" alt="License">
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/themes-9_core-brightgreen?style=flat-square" alt="Themes">
+  <img src="https://img.shields.io/badge/workflows-5_production-blue?style=flat-square" alt="Workflows">
+  <img src="https://img.shields.io/badge/docs-~450KB-yellow?style=flat-square" alt="Documentation">
+  <img src="https://img.shields.io/badge/ressources-60+-red?style=flat-square" alt="Ressources">
+</p>
+
+<!-- Quick Navigation -->
+<p>
+  <a href="#-commencez-ici"><strong>🚀 Quick Start</strong></a> •
+  <a href="#-parcours-dapprentissage"><strong>🗺️ Parcours</strong></a> •
+  <a href="#-navigation"><strong>📖 Navigation</strong></a> •
+  <a href="#-quel-outil-utiliser-"><strong>🧭 Decision Framework</strong></a> •
+  <a href="#-ressources-complémentaires"><strong>📚 Ressources</strong></a>
+</p>
+
+<!-- Status -->
+<p>
+  <img src="https://img.shields.io/badge/status-✅_actif-success?style=flat-square" alt="Status">
+  <img src="https://img.shields.io/badge/dernière_maj-2025-informational?style=flat-square" alt="Update">
+  <img src="https://img.shields.io/badge/claude_sonnet-4.5-blueviolet?style=flat-square" alt="Claude Version">
+</p>
+
+</div>
 
 ---
 
 ## 🚀 COMMENCEZ ICI
+
+<div align="center">
 
 ### 👋 Nouveau sur Claude Code?
 
@@ -12,10 +67,14 @@
 
 📄 **[QUICK START : Claude Code en 5 Minutes](QUICK-START.md)** ⭐
 
-- ✅ Comprendre les 3 concepts clés (Commands, Skills, Agents)
-- ✅ Decision tree visuel simple
-- ✅ Créer votre premier workflow
-- ✅ Savoir où aller ensuite
+</div>
+
+```
+✅ Comprendre les 3 concepts clés (Commands, Skills, Agents)
+✅ Decision tree visuel simple
+✅ Créer votre premier workflow
+✅ Savoir où aller ensuite
+```
 
 **Puis continuez avec** :
 
@@ -30,15 +89,29 @@
 
 ## 🎯 À Propos
 
-Guide d'apprentissage complet sur **Claude Code** et l'écosystème Anthropic, organisé par **ordre pédagogique** pour une progression optimale.
+<table>
+<tr>
+<td width="50%">
+
+### 📖 Qu'est-ce que c'est ?
+
+Guide d'apprentissage **complet** sur **Claude Code** et l'écosystème Anthropic, organisé par **ordre pédagogique** pour une progression optimale.
 
 **Public** : Développeurs francophones souhaitant maîtriser Claude Code.
 
-**🆕 Nouveautés 2025** :
-- Thème 8 : Advanced (Interactive UI, Multi-dialog, Enterprise, AI Orchestration)
-- Thème 9 : Add-ons (VS Code Extension, Statusline)
-- Workflow-Pattern-Orchestration réorganisé
-- Updates Claude Sonnet 4.5
+</td>
+<td width="50%">
+
+### 🆕 Nouveautés 2025
+
+- ✨ Thème 8 : Advanced (Interactive UI, Multi-dialog, Enterprise, AI Orchestration)
+- 🔧 Thème 9 : Add-ons (VS Code Extension, Statusline)
+- 🚀 Workflow-Pattern-Orchestration réorganisé
+- 🤖 Updates Claude Sonnet 4.5
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -100,6 +173,9 @@ WORKFLOW-PATTERN-ORCHESTRATION
 ---
 
 ## 📁 Structure du Projet
+
+<details>
+<summary><strong>📂 Cliquez pour voir l'arborescence complète</strong></summary>
 
 ```
 claude-anthropic-comprhension/
@@ -170,6 +246,8 @@ claude-anthropic-comprhension/
 ┗━━ 📄 README.md                📚 Ce fichier
 ```
 
+</details>
+
 ---
 
 ## 🚀 Quick Start
@@ -205,9 +283,16 @@ Chaque thème **s'appuie sur les précédents**.
 
 Lisez les **guides** pour comprendre les concepts, puis utilisez les **cheatsheets** comme référence rapide.
 
-Chaque thème contient :
-- 📚 **Guide complet** : Théorie + exemples concrets
-- ⚡ **Cheatsheet** : Référence rapide pour usage quotidien
+<table>
+<tr>
+<td>📚 <strong>Guide complet</strong></td>
+<td>Théorie + exemples concrets</td>
+</tr>
+<tr>
+<td>⚡ <strong>Cheatsheet</strong></td>
+<td>Référence rapide pour usage quotidien</td>
+</tr>
+</table>
 
 ---
 
@@ -217,18 +302,24 @@ Chaque thème contient :
 
 **Ordre pédagogique optimal** :
 
-1. [Memory](themes/1-memory/guide.md) - Mémoire persistante (.claude/CLAUDE.md)
-2. [Commands](themes/2-commands/guide.md) - Commandes slash automatisées
-3. [Hooks](themes/3-hooks/guide.md) - Automation lifecycle events
-4. [Skills](themes/4-skills/guide.md) - Capacités spécialisées auto-activées
-5. [MCP](themes/5-mcp/guide.md) - Model Context Protocol integration
-6. [Agents](themes/6-agents/guide.md) - Sub-agents pour travail isolé
-7. [Plugins](themes/7-plugins/guide.md) - Extensions modulaires combinées
-8. [Advanced](themes/8-advanced/README.md) - Guides expert (Multi-dialog, Interactive UI, Enterprise, AI Orchestration)
-9. [Add-ons](themes/9-add-ons/README.md) - Extensions optionnelles (VS Code, Statusline)
+| # | Thème | Description | Durée |
+|---|-------|-------------|-------|
+| 1️⃣ | [Memory](themes/1-memory/guide.md) | Mémoire persistante (.claude/CLAUDE.md) | 1h |
+| 2️⃣ | [Commands](themes/2-commands/guide.md) | Commandes slash automatisées | 1.5h |
+| 3️⃣ | [Hooks](themes/3-hooks/guide.md) | Automation lifecycle events | 1h |
+| 4️⃣ | [Skills](themes/4-skills/guide.md) | Capacités spécialisées auto-activées | 2h |
+| 5️⃣ | [MCP](themes/5-mcp/guide.md) | Model Context Protocol integration | 1.5h |
+| 6️⃣ | [Agents](themes/6-agents/guide.md) | Sub-agents pour travail isolé | 1.5h |
+| 7️⃣ | [Plugins](themes/7-plugins/guide.md) | Extensions modulaires combinées | 1h |
+| 8️⃣ | [Advanced](themes/8-advanced/README.md) | Guides expert (Multi-dialog, Interactive UI, Enterprise, AI Orchestration) | 4-6h |
+| 9️⃣ | [Add-ons](themes/9-add-ons/README.md) | Extensions optionnelles (VS Code, Statusline) | 2h |
+
+<div align="center">
 
 **🎓 Parcours débutant** : Maîtrise 1-7 (~8-10 heures)
 **🎓 Parcours expert** : Thèmes 8-9 (~4-6 heures)
+
+</div>
 
 ---
 
@@ -237,16 +328,44 @@ Chaque thème contient :
 #### [Workflow-Pattern-Orchestration](workflow-pattern-orchestration/README.md)
 **Coordination intelligente de Memory + Commands + Hooks + Skills + Agents + Plugins**
 
-**Contenu** :
-- 📋 [Workflows](workflow-pattern-orchestration/workflows/README.md) - EPCT, Parallel, Sequential, Conditional, Hybrid
-- 🏗️ [Patterns](workflow-pattern-orchestration/patterns/README.md) - Command coordination, Hook automation, Agent orchestration
-- ⚡ [Best Practices](workflow-pattern-orchestration/best-practices/README.md) - Performance, Cost, Resilience, Team collaboration
+<table>
+<tr>
+<td width="33%">
+
+**📋 Workflows**
+- EPCT
+- Parallel
+- Sequential
+- Conditional
+- Hybrid
+
+</td>
+<td width="33%">
+
+**🏗️ Patterns**
+- Command coordination
+- Hook automation
+- Agent orchestration
+- State management
+
+</td>
+<td width="33%">
+
+**⚡ Best Practices**
+- Performance
+- Cost optimization
+- Resilience
+- Team collaboration
+
+</td>
+</tr>
+</table>
 
 **Exemples production** :
-- 200 locales generation (8.3x speedup)
-- PR review automation (4 parallel agents)
-- Documentation generator (Skills + MCP)
-- Monorepo setup wizard (20+ decision branches)
+- 🚀 200 locales generation (8.3x speedup)
+- 👥 PR review automation (4 parallel agents)
+- 📚 Documentation generator (Skills + MCP)
+- 🏗️ Monorepo setup wizard (20+ decision branches)
 
 **🆕 Workflows Startup** (Production-Ready) :
 - 📝 [Blog Automation](workflow-pattern-orchestration/workflows/blog-automation-startup.md) - Pipeline complet création/publication (96% time reduction)
@@ -255,9 +374,13 @@ Chaque thème contient :
 - 👥 [Community Management](workflow-pattern-orchestration/workflows/community-management-startup.md) - Monitoring + auto-réponse (76% time reduction)
 - ♻️ [Content Repurposing](workflow-pattern-orchestration/workflows/content-repurposing-startup.md) - 1 contenu → 10+ formats (92% time reduction)
 
-**Validation** : ✅ [Rapport de validation complet](workflow-pattern-orchestration/VALIDATION_REPORT.md) (100% conforme docs Anthropic)
+<div align="center">
+
+**✅ Validation** : [Rapport de validation complet](workflow-pattern-orchestration/VALIDATION_REPORT.md) (100% conforme docs Anthropic)
 
 **🎓 Parcours intermédiaire → expert** (~6-8 heures)
+
+</div>
 
 ---
 
@@ -266,11 +389,11 @@ Chaque thème contient :
 #### [Advanced](themes/8-advanced/README.md) - Guides Expert-Level
 **Guides niveau expert pour use cases complexes**
 
-- [Multi-Dialog Patterns](themes/8-advanced/multi-dialog-patterns.md) - Sequential, Conditional, Parallel, Validation
-- [Interactive UI](themes/8-advanced/interactive-ui.md) - AskUserQuestion workflows complexes
-- [Enterprise Patterns](themes/8-advanced/enterprise-patterns.md) - Governance, RBAC, Compliance (GDPR/SOC2)
-- [AI Orchestration](themes/8-advanced/ai-orchestration.md) - Multi-LLM routing (70-85% cost savings)
-- [Decision Trees](themes/8-advanced/decision-trees.md) - Framework complet de sélection features
+- 🔀 [Multi-Dialog Patterns](themes/8-advanced/multi-dialog-patterns.md) - Sequential, Conditional, Parallel, Validation
+- 💬 [Interactive UI](themes/8-advanced/interactive-ui.md) - AskUserQuestion workflows complexes
+- 🏢 [Enterprise Patterns](themes/8-advanced/enterprise-patterns.md) - Governance, RBAC, Compliance (GDPR/SOC2)
+- 🤖 [AI Orchestration](themes/8-advanced/ai-orchestration.md) - Multi-LLM routing (70-85% cost savings)
+- 🌳 [Decision Trees](themes/8-advanced/decision-trees.md) - Framework complet de sélection features
 
 **🎓 Parcours expert** (~4-6 heures)
 
@@ -280,8 +403,8 @@ Chaque thème contient :
 
 #### [Add-ons](themes/9-add-ons/README.md) - Extensions Optionnelles
 
-- [VS Code Extension](themes/9-add-ons/vs-code-extension/guide.md) - Intégration IDE
-- [Statusline](themes/9-add-ons/statusline/guide.md) - Dashboard temps réel
+- 💻 [VS Code Extension](themes/9-add-ons/vs-code-extension/guide.md) - Intégration IDE
+- 📊 [Statusline](themes/9-add-ons/statusline/guide.md) - Dashboard temps réel
 
 ---
 
@@ -289,22 +412,29 @@ Chaque thème contient :
 
 ### 🎯 Comprendre les Fondamentaux D'ABORD
 
+<div align="center">
+
 > "The prompt is the fundamental unit. Everything else is a wrapper."
 > — Dan, Skills vs Commands vs Sub-Agents vs MCP
 
 **Commencez ICI** : [Core 4 & Fundamentals](themes/8-advanced/core-4-fundamentals.md) ⭐
 
+</div>
+
 Ce guide explique :
-- **The Core 4** : Context + Model + Prompt + Tools
-- **Pourquoi le prompt (command) est LA primitive**
-- **Composition Hierarchy** : Skills > MCP > Agents > Commands
-- **Agent-First vs Manual** : LA distinction clé
+- ✅ **The Core 4** : Context + Model + Prompt + Tools
+- ✅ **Pourquoi le prompt (command) est LA primitive**
+- ✅ **Composition Hierarchy** : Skills > MCP > Agents > Commands
+- ✅ **Agent-First vs Manual** : LA distinction clé
 
 **Sans ça, vous serez perdu**. Lisez d'abord, choisissez ensuite.
 
 ---
 
 ### 🔑 Decision Framework: Quelle Feature Utiliser ?
+
+<details>
+<summary><strong>📊 Arbre de décision complet</strong></summary>
 
 #### Question 1: Est-ce un workflow RÉPÉTITIF ?
 
@@ -325,6 +455,8 @@ Ce guide explique :
 ```
 └─ OUI  → Skill + MCP
 ```
+
+</details>
 
 ---
 
@@ -366,31 +498,34 @@ Ce guide explique :
 
 ### 🗺️ Par Feature
 
-- **Context permanent** → [Memory](themes/1-memory/guide.md)
-- **Prompt = Primitive** → [Commands](themes/2-commands/guide.md) ⭐
-- **Auto-invoked knowledge** → [Skills](themes/4-skills/guide.md)
-- **Lifecycle automation** → [Hooks](themes/3-hooks/guide.md)
-- **External integration** → [MCP](themes/5-mcp/guide.md)
-- **Isolated context** → [Agents](themes/6-agents/guide.md)
-- **Package & distribute** → [Plugins](themes/7-plugins/guide.md)
+| Feature | Description | Lien |
+|---------|-------------|------|
+| **Context permanent** | Memory persistante | [Memory](themes/1-memory/guide.md) |
+| **Prompt = Primitive** | Base de tout | [Commands](themes/2-commands/guide.md) ⭐ |
+| **Auto-invoked knowledge** | Skills auto-activées | [Skills](themes/4-skills/guide.md) |
+| **Lifecycle automation** | Événements système | [Hooks](themes/3-hooks/guide.md) |
+| **External integration** | Protocole MCP | [MCP](themes/5-mcp/guide.md) |
+| **Isolated context** | Sub-agents | [Agents](themes/6-agents/guide.md) |
+| **Package & distribute** | Extensions modulaires | [Plugins](themes/7-plugins/guide.md) |
 
 ---
 
 ## 📊 Statistiques Documentation
 
-- 📚 **9 themes** (7 core + 1 advanced + 1 add-ons)
-- 🚀 **1 dossier orchestration** (workflows + patterns + best-practices)
-  - 🆕 **5 workflows startup** production-ready (150 KB)
-  - 📋 **1 rapport validation** (100% conforme Anthropic)
-- 🎓 **5 guides advanced** (expert-level dans thème 8)
-- 🏗️ **Patterns d'orchestration** (dans workflow-pattern-orchestration)
-- 🔧 **2 add-ons** optionnels (thème 9)
-- 📝 **~450 KB** documentation totale
-- 🔗 **60+ ressources** externes
-- 💾 **~25,000 lignes** de contenu pédagogique
+<div align="center">
 
-**Total apprentissage** : ~20-28 heures (débutant → expert)
+| Métrique | Valeur |
+|----------|--------|
+| 📚 **Themes** | 9 (7 core + 1 advanced + 1 add-ons) |
+| 🚀 **Workflows** | 5 production-ready startup |
+| 🎓 **Guides Advanced** | 5 expert-level |
+| 🏗️ **Patterns** | Orchestration complète |
+| 📝 **Documentation** | ~450 KB |
+| 🔗 **Ressources** | 60+ externes |
+| 💾 **Contenu** | ~25,000 lignes pédagogiques |
+| ⏱️ **Temps total** | 20-28 heures (débutant → expert) |
 
+</div>
 
 ---
 
@@ -431,6 +566,10 @@ Voir [ressources/articles/](./ressources/articles/) pour fiches complètes.
 
 ## 🎓 Philosophie du Projet
 
+<table>
+<tr>
+<td width="50%">
+
 ### Principes d'Apprentissage
 
 1. **📖 Progressivité** : Du débutant à l'expert, pas de raccourcis
@@ -440,26 +579,49 @@ Voir [ressources/articles/](./ressources/articles/) pour fiches complètes.
 5. **📚 Complétude** : Tous les aspects de Claude Code couverts
 6. **🔄 Maintenu** : À jour avec dernières versions
 
+</td>
+<td width="50%">
+
 ### Quote Inspirante
 
 > "D.R.Y. (Don't Repeat Yourself) - Let Claude remember your preferences"
 >
 > — Edmund Yong (800h Claude Code)
 
+</td>
+</tr>
+</table>
+
 ---
 
 ## 🤝 Contribution
 
-Ce projet est personnel mais open source pour la communauté francophone.
+Ce projet est personnel mais **open source** pour la communauté francophone.
 
-**Suggestions ?** Ouvrez une issue ou PR !
+**Suggestions ?** Ouvrez une [issue](../../issues) ou [PR](../../pulls) !
 
 ---
 
 ## 📝 License
 
-MIT License - Libre d'utilisation et modification.
+<div align="center">
+
+**MIT License** - Libre d'utilisation et modification
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+</div>
 
 ---
 
-**🚀 Bonne formation !** Commencez par [themes/1-memory/guide.md](./themes/1-memory/guide.md) 🎓
+<div align="center">
+
+**🚀 Bonne formation !**
+
+Commencez par [themes/1-memory/guide.md](./themes/1-memory/guide.md) 🎓
+
+---
+
+<sub>Made with ❤️ by <a href="https://github.com/ThibautMelen">@ThibautMelen</a> • <a href="https://github.com/SuperNovae-studio">SuperNovae Studio</a></sub>
+
+</div>
