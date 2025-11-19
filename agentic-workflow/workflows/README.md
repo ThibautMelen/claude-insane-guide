@@ -254,154 +254,56 @@ Quelle est la tâche ?
 
 ---
 
-## 🚀 Use Cases Startup
+## 🚀 Content Automation Stack pour Startups
 
-**Workflows pratiques production-ready** pour startups qui veulent scaler leur content marketing et community management.
+**Stack complet production-ready** pour scaler votre content marketing avec **5 workflows interconnectés**.
 
-### [blog-automation-startup.md](./blog-automation-startup.md) 📝
-**Blog Automation Pipeline** : Automatisation complète de la création et publication d'articles de blog.
+### [startup-content-stack.md](./startup-content-stack.md) 📦 ⭐
 
-**Architecture** :
-- Planning (Keyword research, Competitor analysis, Outline)
-- Writing (Draft, SEO optimization, Visual curation)
-- Publishing (CMS integration, Analytics setup)
-- Promotion (Social media, Newsletter, SEO submission)
+**Document consolidé** : Vue d'ensemble + Template partagé + 5 workflows détaillés + Integration pipeline
 
-**ROI** :
-- ⏱️ **96% réduction temps** : 16-23h → 3.5h
-- 💰 **97% réduction coûts** : $1,900 → $50
-- 📈 **10-15x production** : 4-6 articles/mois → 60+
+**Les 5 Workflows** :
 
-**Includes** :
-- 9 agents spécialisés (parallel + sequential)
-- 3 skills (Brand-Voice, SEO-Best-Practices, Content-Templates)
-- 2 hooks (Content-Brief-Validation, Quality-Gate)
-- 3 MCP servers (Ahrefs, Firecrawl, WordPress)
+| Workflow | Temps Avant | Temps Après | ROI Cost | Speedup |
+|----------|-------------|-------------|----------|---------|
+| **Blog Automation** 📝 | 16-23h | 3.5h | 96% ↓ | 6.5x |
+| **Multi-Language** 🌍 | 40 jours | 55min | 98% ↓ | 1040x |
+| **Social Media** 📱 | 7-11h | 55min | 92% ↓ | 7.6x |
+| **Community Mgmt** 👥 | 8.3h | 2h | 83% ↓ | 4.1x |
+| **Content Repurposing** ♻️ | 7-8h | 40min | 93% ↓ | 10.5x |
 
----
+**Architecture Partagée** (Template réutilisable) :
+- 🏗️ Pattern 3-levels (Command → Subcommand → Agent)
+- 🛠️ Templates : Agents, Skills, Hooks
+- 🔌 MCP Servers : Ahrefs, WordPress, Firecrawl, DeepL, DALL-E
 
-### [multi-language-content-startup.md](./multi-language-content-startup.md) 🌍
-**Multi-Language Content Generator** : Traduction et localisation automatique à l'échelle internationale.
-
-**Architecture** :
-- Source Analysis (Content parsing, Context extraction)
-- Batch Translation (15 agents parallèles : EMEA, APAC, AMERICAS)
-- Quality Assurance (QA validation, Multi-CMS publishing)
-
-**ROI** :
-- ⏱️ **99% réduction temps** : 40 jours → 55min
-- 💰 **97% réduction coûts** : $3,000 → $100
-- 🌐 **13-15 langues simultanées** en 20 minutes
-
-**Includes** :
-- 15+ agents parallèles (1 per language)
-- Regional batching (API optimization)
-- Cultural localization automatique
-- 2 skills (Translation-Guidelines, Cultural-Context)
-- 2 hooks (Source-Validation, Cultural-Check)
-
----
-
-### [social-media-automation-startup.md](./social-media-automation-startup.md) 📱
-**Social Media Post Generator** : Génération multi-plateformes depuis une seule idée.
-
-**Architecture** :
-- Idea Development (Trend research, Content ideation)
-- Multi-Platform Generation (6 agents : Twitter, LinkedIn, Instagram, Facebook, TikTok, Visual)
-- Scheduling & Publishing (Optimal timing, Multi-publisher)
-
-**ROI** :
-- ⏱️ **86% réduction temps** : 6.75h/jour → 55min
-- 💰 **96% réduction coûts** : $5,050/mois → $200
-- 📊 **3-5x production** : 60-90 posts/mois → 300+
-
-**Includes** :
-- 6 agents parallèles (platform-specific)
-- Format adaptation (threads, carousels, stories, scripts)
-- Visual assets generation automatique
-- 3 skills (Brand-Voice, Hashtag-Strategy, Platform-Formats)
-- 3 hooks (Content-Policy-Check, Visual-Validation, Scheduling-Optimization)
-
----
-
-### [community-management-startup.md](./community-management-startup.md) 👥
-**Community Management Automation** : Modération, réponses automatiques, escalation intelligente.
-
-**Architecture** :
-- Monitoring (Social, Email, Chat - 3 agents parallel)
-- Triage & Classification (Categorizer, Prioritizer)
-- Response (Conditional: Auto-respond 70% OR Escalate 30%)
-
-**ROI** :
-- ⏱️ **76% réduction temps** : 8.3h/jour → 2h
-- 💰 **71% réduction coûts** : $4,000/mois → $1,150
-- ⚡ **70% auto-resolution** : <30min response time
-- 🌙 **24/7 monitoring** automatique
-
-**Includes** :
-- Multi-channel monitoring (social, email, chat)
-- Intelligent triage avec complexity scoring
-- Conditional logic (auto-respond vs escalate)
-- Human-in-loop pour messages complexes/sensibles
-- 2 skills (FAQ-Database, Customer-Context)
-- 2 hooks (Spam-Filter, Sentiment-Check)
-
----
-
-### [content-repurposing-startup.md](./content-repurposing-startup.md) ♻️
-**Content Repurposing Pipeline** : Transformer 1 contenu long en 10+ formats différents.
-
-**Architecture** :
-- Source Analysis (Content extraction, Structure analysis)
-- Multi-Format Generation (10+ agents parallel : Twitter, LinkedIn, Instagram, YouTube, TikTok, Newsletter, Podcast, Visuals)
-- Packaging & Delivery (Organization, Usage guide, Scheduling)
-
-**ROI** :
-- ⏱️ **92% réduction temps** : 7-8h → 40min
-- 💰 **93% réduction coûts** : $200 → $15
-- 📦 **10x multiplication** : 1 contenu → 10-12 formats → 25+ pièces
-- 📈 **10-50x reach** sur même investissement initial
-
-**Includes** :
-- 10+ agents parallèles (1 per format)
-- Format-specific optimization (threads, carousels, scripts, outlines)
-- Visual assets generation (quote graphics, infographics, slide decks)
-- 3-week posting schedule automatique
-- 1 skill (Format-Best-Practices)
-
----
-
-## 📊 Impact Cumulé Startup Stack
-
-En combinant ces 5 workflows, une startup obtient :
-
+**Integration Pipeline** :
 ```
-Content Creation Pipeline:
-┌─────────────────────────────────────────────────────┐
-│                                                     │
-│  1. Blog Automation (source content)                │
-│         ↓                                           │
-│  2. Multi-Language (13-15 languages)                │
-│         ↓                                           │
-│  3. Content Repurposing (10-12 formats × 15 langs) │
-│         ↓                                           │
-│  4. Social Media Automation (distribution)          │
-│         ↓                                           │
-│  5. Community Management (engagement)               │
-│                                                     │
-└─────────────────────────────────────────────────────┘
+Blog Generation (source)
+    ↓
+Multi-Language Translation (13-15 langues)
+    ↓
+Content Repurposing (10-12 formats × 15 langues)
+    ↓
+Social Media Distribution (Twitter, LinkedIn, Instagram)
+    ↓
+Community Management (engagement, moderation)
+```
 
-RÉSULTAT:
-├─ 1 article blog (8h création)
-├─→ 15 versions langues (traduction auto)
-├─→ 150+ pièces content (10 formats × 15 langues)
-├─→ Distribution optimisée (5 plateformes)
-└─→ Engagement 24/7 (community auto)
+**ROI Global** :
+- ⏱️ **Temps** : 50h → 10h/semaine (-80%)
+- 💰 **Coût** : $17,150 → $1,472/mois (-91%)
+- 🚀 **Production** : 1 contenu → 150+ pièces (15 langues × 10 formats)
+- 📈 **Engagement** : 200-300 interactions/jour automatisées
 
-ROI GLOBAL:
-✅ 1 contenu initial → 150+ pièces finales
-✅ 10,000-50,000+ impressions potentielles
-✅ 90%+ réduction temps et coûts
+**Ce que contient startup-content-stack.md** :
+1. Vue d'ensemble des 5 workflows (table comparative)
+2. Workflow Template complet (architecture + implémentation)
+3. Détails de chaque workflow (agents, skills, hooks spécifiques)
+4. Integration Pipeline (comment ils se connectent)
+5. Shared Resources (skills, hooks, MCP communs)
+6. Quick Start Guide (installation pas-à-pas)
+7. Roadmap d'implémentation (Phase 1, 2, 3)
 ✅ Qualité constante et brand-consistent
 ✅ Scalable à 100+ articles/mois sans effort
 ```
