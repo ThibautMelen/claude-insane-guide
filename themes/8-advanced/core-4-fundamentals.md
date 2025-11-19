@@ -49,6 +49,9 @@ Ce guide explique les **4 éléments fondamentaux** de TOUT agent coding et **po
    ├─ Skill prompts     : .claude/skills/*/SKILL.md
    └─ Inline prompts    : Direct conversation
 
+**📚 Règles d'Or Application** :
+- [Orchestration Principles](../../agentic-workflow/orchestration-principles.md) - Anthropic official rules
+
 4️⃣ TOOLS      : Ce que l'agent peut faire
    ├─ Built-in : Read, Write, Edit, Bash, Grep
    ├─ Task     : Launch sub-agents

@@ -119,3 +119,5 @@ IF approaching limit:
 - 📐 [Command-Agent-Skill Pattern](../architecture/command-subcommand-agent.md)
 - 🚀 [Error Handling](../best-practices/error-resilience.md)
 - 📄 [Claude Code Task Tool](https://code.claude.com/docs/task-tool)
+
+**Voir** : [Agents Guide](../../../themes/6-agents/guide.md) - Verdent Deck architecture

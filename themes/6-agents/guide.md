@@ -103,6 +103,9 @@ Tâche complexe = orchestration agents
 
 **💡 Concept clé (Melvynx)** : Lancer **agents en parallèle** pour gains de temps massifs.
 
+**📚 Benchmarks Production** :
+- [Pattern 3: Parallelization](../../agentic-workflow/6-composable-patterns/3-parallelization.md) - 9.7x speedup mesuré
+
 ```
 ╔═══════════════════════════════════════════════════╗
 ║     PARALLÉLISATION - GAIN DE PERFORMANCE         ║

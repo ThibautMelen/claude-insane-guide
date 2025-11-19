@@ -109,3 +109,5 @@ Iteration 4+ (diminishing returns):
 - 🚀 [Enterprise RFP (Quality Loops)](../workflows/enterprise-rfp.md)
 - 🚀 [Global Localization (Translation Quality)](../workflows/global-localization.md)
 - 📄 [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)
+
+**Voir** : [Multi-Dialog Patterns](../../../themes/8-advanced/multi-dialog-patterns.md) - AskUserQuestion avancé

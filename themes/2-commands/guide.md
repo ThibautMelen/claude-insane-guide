@@ -9,49 +9,30 @@
 > **"Prompt = Primitive. Everything else is composition."**
 > — Dan, Skills vs Commands vs Sub-Agents vs MCP
 
-### 🎯 Pour Commands: L'Essentiel
-
 **Commands = THE PRIMITIVE** de tout l'écosystème Claude Code.
 
-- 👤 **Manual Trigger** : YOU décidez WHEN (vs Skills = auto)
-- ✅ **Start here ALWAYS** : Test & Validate BEFORE composer vers Skill
-- 📝 **Pure Prompts** : Fichiers markdown réutilisables
-- 🎯 **Golden Rule** : Command → Test → Skill IF needed (jamais skip)
-
-**Équation** : `Everything = Prompts` (Skills/Agents/MCP = Prompts + wrappers)
-
-### 📚 Framework Complet
-
-**Voir [Core 4 & Fundamentals](../8-advanced/core-4-fundamentals.md) pour** :
+**Framework complet** : 📚 Voir [Core 4 & Fundamentals](../8-advanced/core-4-fundamentals.md#-the-prompt-is-the-fundamental-unit)
 - 📊 Tableau comparatif Dan (Triggered By, Context Efficiency, etc.)
-- 🔥 Golden Rule workflow complet (5 étapes avec Mermaid)
-- 📈 Progressive Disclosure (Skills vs MCP)
-- 🏗️ Composition Hierarchy (Skills > MCP > Agents > Commands)
-- 🤖 vs 👤 Distinction détaillée (Manual vs Auto trigger)
+- 🔥 Golden Rule (5 étapes : Start → Test → Repeat? → Auto? → Compose)
+- 📈 The Core 4 elements (Context, Model, Prompt, Tools)
+- 🏗️ Composition Hierarchy (Skills > MCP > Sub-Agents > Commands)
+- ⭐ **Équation fondamentale** : `Everything = Prompts`
 
-**Voir [Decision Trees](../8-advanced/decision-trees.md) pour** :
-- 🎯 Framework 3 questions (Q1: Répétitif? Q2: Auto? Q3: External data?)
-- 📋 Decision trees détaillés (quand utiliser Commands vs Skills vs Agents)
-- 🔄 Scenarios réels et anti-patterns
+**Decision Framework** : 🎯 Voir [Decision Trees](../8-advanced/decision-trees.md)
+- Q1: Répétitif?
+- Q2: Want AUTOMATIC trigger?
+- Q3: Need external data?
 
-### 🔑 Spécificités Commands
+**📚 Application Pratique** :
+- [Pattern 1: Prompt Chaining](../../agentic-workflow/6-composable-patterns/1-prompt-chaining.md) - EPCT Workflow
+- [Orchestration Principles](../../agentic-workflow/orchestration-principles.md) - Commands dans workflows
 
-**Pourquoi Commands en PREMIER** :
-1. ✅ Simple, testable, iterable
-2. ✅ Validate workflow avant complexification
-3. ✅ Explicit control (YOU decide when)
-4. ✅ Debug facilement (un seul fichier)
+### 🔑 Pourquoi Commands TOUJOURS en PREMIER
 
-**Quand utiliser** :
-- ✅ One-off tasks
-- ✅ Repeat workflows (with manual control)
-- ✅ Orchestration (lance agents, agrège)
-- ✅ Testing phase (avant Skill)
-
-**Quand NE PAS utiliser** :
-- ❌ Want auto-invoke → Use Skill
-- ❌ Event-driven → Use Hook
-- ❌ Just preferences → Use Memory
+1. ✅ **Simple & testable** : Un seul fichier markdown
+2. ✅ **Manual control** : YOU décidez WHEN (vs Skill = auto)
+3. ✅ **Validation** : Test before composer vers Skill
+4. ✅ **Golden Rule** : `/command` → Test → Skill IF needed (jamais skip)
 
 ---
 

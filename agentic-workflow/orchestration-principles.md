@@ -35,44 +35,9 @@ Ce document établit les **règles fondamentales** pour orchestrer Commands, Sub
 
 ### Règle 2 : Hiérarchie Plate (Flat Hierarchy)
 
-```
-╔═══════════════════════════════════════════════════════════╗
-║               HIÉRARCHIE ANTHROPIC VALIDE                 ║
-╚═══════════════════════════════════════════════════════════╝
+**Voir** : [Command-Subcommand-Agent Architecture](./architecture/command-subcommand-agent.md) pour détails complets.
 
-NIVEAU 1 : MAIN COMMAND (Orchestrateur principal)
-             │
-             ├──> NIVEAU 2 : SUBCOMMAND 1
-             │              ├──> AGENT A
-             │              ├──> AGENT B
-             │              └──> AGENT C
-             │
-             ├──> NIVEAU 2 : SUBCOMMAND 2
-             │              ├──> AGENT D
-             │              └──> AGENT E
-             │
-             └──> NIVEAU 2 : SUBCOMMAND 3
-                            ├──> AGENT F
-                            └──> AGENT G
-```
-
-**Structure maximale recommandée** :
-```
-LEVEL 1: Main Command
-  └─> LEVEL 2: Subcommand
-       └─> LEVEL 3: Agent (feuille, pas de délégation)
-```
-
-**Anti-pattern (JAMAIS FAIRE)** :
-```
-❌ PROFONDEUR EXCESSIVE
-
-Command
- └─> Subcommand
-      └─> Agent
-           └─> Subagent  ← INTERDIT !
-                └─> Sub-subagent  ← INTERDIT !
-```
+**En bref** : Maximum 3 niveaux (Command → Subcommand → Agent). Agents = feuilles, jamais de délégation.
 
 ---
 
@@ -112,186 +77,17 @@ Output:  Résultat structuré (JSON, Markdown, status)
 
 ### Règle 4 : Hooks pour Validation et Décisions
 
-**Types de Hooks** :
+**Voir** : [Hooks Lifecycle Architecture](./architecture/hooks-lifecycle.md) pour détails complets.
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                   HOOKS ANTHROPIC                       │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  🔍 VALIDATION HOOKS                                    │
-│     ├─> Quality-Gate (coverage, bugs, perf)            │
-│     ├─> Format-Checker (schema, structure)             │
-│     └─> Completeness-Check (tous champs requis)        │
-│                                                         │
-│  🎯 DECISION HOOKS                                      │
-│     ├─> Severity-Decision (P1/P2/P3 routing)           │
-│     ├─> Approval-Gate (human-in-loop)                  │
-│     └─> Branching-Logic (A/B path selection)           │
-│                                                         │
-│  📊 MONITORING HOOKS                                    │
-│     ├─> Logging (audit trail)                          │
-│     ├─> Metrics (timing, success rate)                 │
-│     └─> Alert-Ingestion (normalize events)             │
-│                                                         │
-│  🔧 EXECUTION HOOKS                                     │
-│     ├─> PreProcess (data preparation)                  │
-│     ├─> PostProcess (cleanup, aggregation)             │
-│     └─> Parallel-Execution (launch batch)              │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
-
-**Placement Stratégique** :
-
-```
-Command
-  ├─> HOOK: PreProcess
-  ├─> Subcommand 1
-  │     ├─> Agent A
-  │     └─> Agent B
-  ├─> HOOK: Validation (vérifie outputs A+B)
-  ├─> Subcommand 2
-  │     └─> Agent C
-  ├─> HOOK: Quality-Gate (décision go/no-go)
-  └─> HOOK: PostProcess (rapport final)
-```
-
-**Codes de Retour Hooks** :
-- `0` : OK, continue
-- `1` : Warning, continue avec log
-- `2` : Block, arrête le workflow
+**En bref** : 4 types (Validation, Decision, Monitoring, Execution). Codes retour : 0=OK, 1=Warning, 2=Block.
 
 ---
 
 ### Règle 5 : Skills pour Économie de Contexte
 
-**Définition Skill** :
-- Base de connaissances partagée via prompt-injection
-- Auto-invoquée par Claude (LLM reasoning, pas algorithmic)
-- Architecture meta-tool : 2 messages (metadata + prompt complet)
-- Évite la duplication de contexte
-- Maintient la cohérence (brand voice, guidelines)
+**Voir** : [Skills Progressive Disclosure Architecture](./architecture/skills-progressive-disclosure.md) pour détails complets.
 
-```
-╔═══════════════════════════════════════════════════════════╗
-║              SKILLS : META-TOOL ARCHITECTURE              ║
-╚═══════════════════════════════════════════════════════════╝
-
-COMPOSANTS:
-
-1. Skill tool (capital S)
-   ├─> Meta-tool dans tools array
-   ├─> Agrège toutes les skills disponibles
-   └─> Gère la sélection et l'invocation
-
-2. skills (lowercase s)
-   ├─> Fichiers .claude/skills/*/SKILL.md
-   ├─> Prompt-based instructions (500-5000 mots)
-   ├─> Bundled resources (scripts/, references/, assets/)
-   └─> Auto-invoquées par Claude basé sur description
-
-INVOCATION (2-message pattern):
-
-User: "Extract data from this PDF"
-  ↓
-Claude reconnaît "PDF" dans description skill
-  ↓
-Injection de 2 messages:
-  ├─> MESSAGE 1 (isMeta: false - visible UI)
-  │   "<command-message>The 'pdf' skill is loading</command-message>"
-  │
-  └─> MESSAGE 2 (isMeta: true - hidden UI, sent to API)
-      [Full skill prompt: 500-5000 words of instructions]
-  ↓
-Claude exécute avec contexte modifié:
-  ├─> Tools pre-approved (no user prompt)
-  └─> Model override possible (haiku/sonnet/opus)
-```
-
-**Structure Skill Complète** :
-
-```
-.claude/skills/pdf/
-├── SKILL.md                   ← Frontmatter + instructions
-│   ├─ name: pdf
-│   ├─ description: Extract text from PDFs, fill forms
-│   ├─ allowed-tools: Read, Bash(pdftotext:*)
-│   └─ model: haiku (fast & cheap)
-│
-├── scripts/                   ← Bundled executables
-│   ├── extract_tables.py
-│   └── fill_form.py
-│
-├── references/                ← Documentation, examples
-│   ├── pdf_structure.md
-│   └── form_templates.json
-│
-└── assets/                    ← Static files
-    └── sample_form.pdf
-```
-
-**Pattern d'Usage avec Error Handling** :
-
-```
-╔═══════════════════════════════════════════════════════════╗
-║           SKILL EXECUTION WITH FALLBACKS                  ║
-╚═══════════════════════════════════════════════════════════╝
-
-User Request: "Analyze legal document"
-  │
-  ├─> SKILL: legal-analyzer (auto-invoked)
-  │     │
-  │     ├─> TRY: Primary tool (pdftotext)
-  │     │     ├─> SUCCESS → Continue
-  │     │     └─> ERROR → Fallback
-  │     │
-  │     ├─> FALLBACK 1: Alternative tool (pdf2text)
-  │     │     ├─> SUCCESS → Continue
-  │     │     └─> ERROR → Fallback
-  │     │
-  │     └─> FALLBACK 2: Manual extraction (Read + OCR)
-  │           └─> Log error + continue with best effort
-  │
-  └─> Output: Structured analysis with confidence score
-```
-
-**Progressive Disclosure Pattern** :
-
-```
-┌─────────────────────────────────────────────────────────┐
-│         SKILL PROGRESSIVE DISCLOSURE                    │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  LEVEL 1: Frontmatter (50-200 chars)                   │
-│     ├─> name, description, when_to_use                 │
-│     └─> Claude voit ça dans tools array                │
-│            │                                            │
-│            ├─> Match description → Skill selected      │
-│            │                                            │
-│  LEVEL 2: SKILL.md Full Prompt (500-5000 words)        │
-│     ├─> Detailed instructions                          │
-│     ├─> Examples, edge cases                           │
-│     └─> Injected via isMeta message                    │
-│            │                                            │
-│            ├─> Need more context?                      │
-│            │                                            │
-│  LEVEL 3: Bundled Resources                            │
-│     ├─> scripts/ (execute helper tools)                │
-│     ├─> references/ (read detailed docs)               │
-│     └─> assets/ (use templates/samples)                │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-
-Benefit: Minimal context by default, expand only if needed
-```
-
-**Bénéfices** :
-- ✅ 10-50x moins de tokens (prompt injection on-demand uniquement)
-- ✅ Cohérence garantie (1 skill → tous contexts)
-- ✅ Mise à jour centralisée (modifier SKILL.md → effet immédiat)
-- ✅ Exécution sécurisée (tools pre-approved, no user prompt)
-- ✅ Portabilité (bundled resources, {baseDir} variables)
+**En bref** : Auto-invoquées, 3 niveaux (metadata → full prompt → bundled resources), 10-50x moins de tokens.
 
 ---
 
@@ -566,129 +362,7 @@ COMMAND
 - Parallèle : 20 langues / 20 threads = 5min
 - **Speedup : 20x**
 
-**Implémentation Command Parallèle** :
-
-```markdown
-# .claude/commands/generate-locales.md
-
----
-name: generate-locales
-description: Generate translations for all locales in parallel
----
-
-You will orchestrate parallel translation of content to all target locales.
-
-## Process
-
-1. Read source content from /content/en/
-2. List all target locales from /locales/config.json
-3. Launch translation agents IN PARALLEL using Task tool:
-   - Call Task tool ONCE with ALL agents in same message
-   - DO NOT wait for results between calls
-   - Maximum 20 agents per batch (API rate limits)
-4. Aggregate results as they complete
-5. Validate all outputs (completeness, format)
-6. Generate summary report
-
-## Parallel Execution Pattern
-
-**CRITICAL**: To execute agents in parallel, you MUST:
-- Send a SINGLE message with MULTIPLE Task tool calls
-- Do NOT use sequential messages
-- Do NOT wait for one agent before launching next
-
-Example:
-```typescript
-// ✅ CORRECT: Parallel execution
-[
-  Task({ agent: "translator", locale: "fr" }),
-  Task({ agent: "translator", locale: "es" }),
-  Task({ agent: "translator", locale: "de" }),
-  // ... all agents in same message
-]
-
-// ❌ WRONG: Sequential execution
-Task({ agent: "translator", locale: "fr" })
-// wait for result...
-Task({ agent: "translator", locale: "es" })
-// wait for result...
-```
-
-## Error Handling
-
-- If agent fails → Retry once
-- If retry fails → Mark locale as failed, continue others
-- Generate error report at end with failed locales
-- Success threshold: 95% (allow max 5% failures)
-
-## Output Format
-
-```json
-{
-  "total_locales": 20,
-  "successful": 19,
-  "failed": ["ja"],
-  "duration_seconds": 145,
-  "speedup": "18.5x vs sequential"
-}
-```
-```
-
-**Patterns d'Orchestration Parallèle** :
-
-```
-╔═══════════════════════════════════════════════════════════╗
-║           PARALLEL AGENT ORCHESTRATION                    ║
-╚═══════════════════════════════════════════════════════════╝
-
-PATTERN A: Fixed Batch (known tasks)
-  Command
-    ├─> Batch 1: Agents 1-20 (parallel)
-    ├─> Wait for all completions
-    ├─> Batch 2: Agents 21-40 (parallel)
-    └─> Aggregate all results
-
-PATTERN B: Dynamic Batching (unknown tasks)
-  Command
-    ├─> Discover tasks (scan directory, API call)
-    ├─> Split into batches of 20
-    ├─> Launch each batch in parallel
-    └─> Aggregate as completed
-
-PATTERN C: Priority-Based (mixed criticality)
-  Command
-    ├─> High Priority: Agents 1-5 (parallel, first)
-    ├─> Wait for completion
-    ├─> Medium Priority: Agents 6-15 (parallel)
-    ├─> Low Priority: Agents 16-30 (parallel)
-    └─> Aggregate all
-
-PATTERN D: Fallback Parallelization (resilience)
-  Command
-    ├─> Primary: Launch all agents (parallel)
-    ├─> Monitor progress (timeouts, errors)
-    ├─> Retry failures (parallel, max 3x)
-    └─> Fallback: Sequential for persistent failures
-```
-
-**Best Practices Parallélisation** :
-
-```
-✅ DO:
-  ├─> Limit batch size (20 agents max per API limits)
-  ├─> Set timeout per agent (5min typical)
-  ├─> Implement retry logic (3x with backoff)
-  ├─> Track progress (dashboard, logs)
-  ├─> Aggregate progressively (don't wait for all)
-  └─> Fail gracefully (continue if some fail)
-
-❌ DON'T:
-  ├─> Launch unlimited agents (saturates API)
-  ├─> Use sequential when parallel possible
-  ├─> Block on single failure (isolate errors)
-  ├─> Ignore timeouts (set limits always)
-  └─> Mix parallel/sequential without reason
-```
+**Best Practices** : Batch size max 20, timeout 5min, retry 3x, fail gracefully.
 
 ---
 
@@ -767,131 +441,25 @@ COMMAND
 
 ### 2. Monitoring Temps Réel
 
-```
-┌─────────────────────────────────────────────────────────┐
-│              DASHBOARD MONITORING                       │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  📊 Workflow: RFP-Orchestrator                          │
-│                                                         │
-│  Progress: ████████████░░░░░░░░░░ 60%                  │
-│                                                         │
-│  ✅ Analysis Phase    : Completed (2m 30s)              │
-│  🔄 Writing Phase     : In Progress (3/5 agents done)   │
-│  ⏳ Review Phase      : Pending                         │
-│                                                         │
-│  Agents:                                                │
-│    ✅ Legal-Analyzer   : Success (145s)                 │
-│    ✅ Tech-Analyzer    : Success (98s)                  │
-│    ✅ Finance-Analyzer : Success (110s)                 │
-│    🔄 Content-Writer   : Running (45s elapsed)          │
-│    ⏳ Pricing-Calc     : Queued                         │
-│                                                         │
-│  Hooks:                                                 │
-│    ✅ Validation       : Pass (0 errors)                │
-│    ⏳ Format           : Pending                        │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
-
-**Implémentation** :
-- Hook PostToolUse pour chaque agent → log metrics
-- Dashboard temps réel (WebSocket, Server-Sent Events)
-- Alertes si timeout ou errors
+**Implémentation** : Hook PostToolUse → log metrics → dashboard (WebSocket/SSE) → alertes
 
 ---
 
 ### 3. Gestion d'Erreurs Robuste
 
-```
-┌─────────────────────────────────────────────────────────┐
-│            ERROR HANDLING STRATEGY                      │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  Agent Error                                            │
-│    │                                                    │
-│    ├─> Retry (max 3x) avec exponential backoff         │
-│    │     │                                              │
-│    │     ├─> Success → Continue                        │
-│    │     └─> Fail → Fallback Strategy                  │
-│    │                  │                                 │
-│    │                  ├─> Use Cached Result            │
-│    │                  ├─> Use Default Value            │
-│    │                  ├─> Skip (if non-critical)       │
-│    │                  └─> Escalate to Human            │
-│    │                                                    │
-│    └─> Log Error + Context (stack, input, config)      │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
-
-**Code Example** :
-
-```yaml
-# .claude/agents/api-caller.md
-
-Error Handling:
-1. Retry 3x with backoff (1s, 2s, 4s)
-2. If fail → fallback to cached data (if <1h old)
-3. If no cache → return default empty result
-4. Log error to .claude/logs/errors.jsonl
-5. If critical → trigger HOOK: Human-Escalation
-```
+**Stratégie** : Retry 3x backoff → Fallback (cache/default/skip) → Escalate human si critique → Log toujours
 
 ---
 
 ### 4. Resource Management
 
-```
-╔═══════════════════════════════════════════════════════════╗
-║           RESOURCE LIMITS ANTHROPIC                       ║
-╚═══════════════════════════════════════════════════════════╝
-
-COMMAND Level:
-  ├─> Max Parallel Agents: 20 (évite saturation API)
-  ├─> Max Total Duration: 30min (timeout global)
-  ├─> Max Context Tokens: 200k (Claude 3.5 Sonnet limit)
-  └─> Max Retries: 3 per agent
-
-AGENT Level:
-  ├─> Max Duration: 5min (timeout individuel)
-  ├─> Max Output Size: 10MB
-  └─> Max API Calls: 100 (évite boucles infinies)
-
-HOOK Level:
-  ├─> Max Duration: 30s (validation rapide)
-  └─> Timeout → Auto-Approve (fail-open strategy)
-```
+**Limits** : Command (20 agents, 30min, 200k tokens) | Agent (5min, 10MB, 100 calls) | Hook (30s, fail-open)
 
 ---
 
 ### 5. Security & Compliance
 
-```
-┌─────────────────────────────────────────────────────────┐
-│              SECURITY CHECKLIST                         │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  ✅ Input Validation                                    │
-│     └─> Hook: Schema-Validation (reject malformed)     │
-│                                                         │
-│  ✅ Output Sanitization                                 │
-│     └─> Hook: Format-Checker (strip PII if needed)     │
-│                                                         │
-│  ✅ Access Control                                      │
-│     └─> MCP: Role-Based Access (agents can't sudo)     │
-│                                                         │
-│  ✅ Secrets Management                                  │
-│     └─> MCP: 1Password/Vault (jamais hardcodé)         │
-│                                                         │
-│  ✅ Audit Trail                                         │
-│     └─> Logs JSONL immutables (append-only)            │
-│                                                         │
-│  ✅ Human Approval                                      │
-│     └─> Hook: Sign-Off sur actions critiques           │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
+**Checklist** : Input validation | Output sanitization | Access control (RBAC) | Secrets (MCP vault) | Audit logs (JSONL) | Human approval
 
 ---
 

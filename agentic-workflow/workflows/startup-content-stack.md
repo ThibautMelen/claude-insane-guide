@@ -1006,6 +1006,13 @@ Community Management
 
 ## 📚 Shared Resources {#shared-resources}
 
+**Voir aussi** :
+- [Skills Guide](../../../themes/4-skills/) - Dual Role (Knowledge + Composition)
+- [MCP Guide](../../../themes/5-mcp/) - External integrations
+- [Hooks Guide](../../../themes/3-hooks/) - Automation lifecycle
+- [Commands Guide](../../../themes/2-commands/) - Slash commands patterns
+- [Core 4 Fundamentals](../../../themes/8-advanced/core-4-fundamentals.md) - The Primitive
+
 ### Skills Communs (Tous Workflows)
 
 **1. Brand-Voice Skill** (`.claude/skills/brand-voice.md`)

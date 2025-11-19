@@ -54,6 +54,9 @@
 - ❌ Testing phase → Start with Command first
 - ❌ Event-driven → Use Hook instead
 
+**📚 Pattern Anthropic** :
+- [Pattern 2: Routing](../../agentic-workflow/6-composable-patterns/2-routing.md) - Skills auto-invocation officielle
+
 **Structure Fichier** :
 ```
 .claude/skills/skill-name/

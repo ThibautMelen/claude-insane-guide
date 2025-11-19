@@ -89,3 +89,5 @@ Claude analyzes:
 - 📐 [Skills Progressive Disclosure](../architecture/skills-progressive-disclosure.md)
 - 📄 [Orchestration Principles](../orchestration-principles.md)
 - 📄 [Skills Deep Dive (Lee Hanchung)](https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/)
+
+**Voir** : [Skills Guide Complet](../../../themes/4-skills/guide.md) - Implémentation technique détaillée
