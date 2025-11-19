@@ -11,25 +11,27 @@
 
 ## 📐 Core Pattern: Hierarchical Memory
 
-```
-╔════════════════════════════════════════════╗
-║         Memory Hierarchy (Priority)        ║
-╚════════════════════════════════════════════╝
+```mermaid
+flowchart TD
+    Enterprise["🏢 ENTERPRISE<br/><br/>Team-wide Memory<br/>Lowest Priority"]
+    User["👤 USER<br/><br/>~/.claude/CLAUDE.md<br/>Medium Priority"]
+    Project["📦 PROJECT<br/><br/>.claude/CLAUDE.md<br/>HIGHEST Priority"]
+    Session["🔄 SESSION<br/><br/>Variables<br/>Ephemeral/In-memory"]
+    Agent["⚡ AGENT<br/><br/>Context<br/>Minimal/Task-specific"]
 
-        🏢 ENTERPRISE Memory
-             (Team-wide)
-                 ↓
-           👤 USER Memory
-          (~/.claude/CLAUDE.md)
-                 ↓
-          📦 PROJECT Memory
-        (.claude/CLAUDE.md)
-                 ↓
-          🔄 SESSION Variables
-         (ephemeral, in-memory)
-                 ↓
-          ⚡ AGENT Context
-        (minimal, task-specific)
+    Enterprise ==> User
+    User ==> Project
+    Project ==> Session
+    Session ==> Agent
+
+    Note["📋 Override Rule:<br/>Project > User > Enterprise"]
+
+    style Enterprise fill:#e2e3e5,stroke:#6c757d,stroke-width:2px,color:#000
+    style User fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Project fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Session fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Agent fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Note fill:#e2e3e5,stroke:#6c757d,stroke-width:1px,color:#000
 ```
 
 **Principes clés**:
@@ -48,40 +50,37 @@ Organiser les **préférences et conventions** sur 3 niveaux avec **override** :
 
 ### Flow Hiérarchique
 
-```
-╔════════════════════════════════════════════╗
-║      Memory Resolution Flow                ║
-╚════════════════════════════════════════════╝
+```mermaid
+flowchart TD
+    Start["🚀 CLAUDE START<br/><br/>Memory Resolution"]
 
-Claude démarre
-    ↓
-┌────────────────────────────────┐
-│ 1. Load ENTERPRISE Memory      │
-│    (if workspace configured)   │
-│    - Team conventions          │
-│    - Company policies          │
-│    - Shared MCP configs        │
-└────────────────────────────────┘
-    ↓
-┌────────────────────────────────┐
-│ 2. Load USER Memory            │
-│    ~/.claude/CLAUDE.md         │
-│    - Personal preferences      │
-│    - Global MCP servers        │
-│    - Default tools config      │
-│    OVERRIDE Enterprise         │
-└────────────────────────────────┘
-    ↓
-┌────────────────────────────────┐
-│ 3. Load PROJECT Memory         │
-│    .claude/CLAUDE.md           │
-│    - Project-specific rules    │
-│    - Tech stack config         │
-│    - Custom workflows          │
-│    OVERRIDE User & Enterprise  │
-└────────────────────────────────┘
-    ↓
-Final merged config
+    Step1["🏢 STEP 1<br/><br/>Load ENTERPRISE Memory<br/>(if workspace configured)"]
+    Items1["• Team conventions<br/>• Company policies<br/>• Shared MCP configs"]
+
+    Step2["👤 STEP 2<br/><br/>Load USER Memory<br/>~/.claude/CLAUDE.md"]
+    Items2["• Personal preferences<br/>• Global MCP servers<br/>• Default tools config<br/>⚠️ OVERRIDE Enterprise"]
+
+    Step3["📦 STEP 3<br/><br/>Load PROJECT Memory<br/>.claude/CLAUDE.md"]
+    Items3["• Project-specific rules<br/>• Tech stack config<br/>• Custom workflows<br/>⚠️ OVERRIDE User & Enterprise"]
+
+    End["✅ FINAL CONFIG<br/><br/>Merged Memory"]
+
+    Start ==> Step1
+    Step1 -.-> Items1
+    Step1 ==> Step2
+    Step2 -.-> Items2
+    Step2 ==> Step3
+    Step3 -.-> Items3
+    Step3 ==> End
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Step1 fill:#e2e3e5,stroke:#6c757d,stroke-width:2px,color:#000
+    style Items1 fill:#ffffff,stroke:#6c757d,stroke-width:1px,color:#000
+    style Step2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Items2 fill:#ffffff,stroke:#0066cc,stroke-width:1px,color:#000
+    style Step3 fill:#d4edda,stroke:#28a745,stroke-width:3px,color:#000
+    style Items3 fill:#ffffff,stroke:#28a745,stroke-width:1px,color:#000
+    style End fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
 ```
 
 ### Exemple Concret: Code Style Preferences
@@ -153,46 +152,49 @@ Variables **éphémères** (non persistées) pour stocker état temporaire penda
 
 ### Flow de Session State
 
-```
-╔════════════════════════════════════════════╗
-║       Session Variables Lifecycle          ║
-╚════════════════════════════════════════════╝
+```mermaid
+flowchart TD
+    Start["🎯 COMMAND START<br/><br/>Session Begins"]
 
-COMMAND démarre
-    ↓
-┌────────────────────────────────┐
-│ Initialize Session State       │
-│ sessionState = {               │
-│   api_calls_count: 0,          │
-│   processed_items: [],         │
-│   errors: [],                  │
-│   current_wave: 0              │
-│ }                              │
-└────────────────────────────────┘
-    ↓
-WAVE 1 processing
-    ↓
-┌────────────────────────────────┐
-│ Update Session State           │
-│ sessionState.current_wave = 1  │
-│ sessionState.api_calls_count += 10 │
-│ sessionState.processed_items.push(...) │
-└────────────────────────────────┘
-    ↓
-WAVE 2 processing
-    ↓
-┌────────────────────────────────┐
-│ Read Session State             │
-│ IF sessionState.api_calls > 900: │
-│   Warn user (rate limit)       │
-└────────────────────────────────┘
-    ↓
-COMMAND complète
-    ↓
-┌────────────────────────────────┐
-│ Session State DESTROYED        │
-│ (not persisted to disk)        │
-└────────────────────────────────┘
+    Init["🔧 INITIALIZE<br/><br/>Session State"]
+    InitData["api_calls_count: 0<br/>processed_items: []<br/>errors: []<br/>current_wave: 0"]
+
+    Wave1["🌊 WAVE 1<br/><br/>Processing"]
+
+    Update["📝 UPDATE<br/><br/>Session State"]
+    UpdateData["current_wave = 1<br/>api_calls_count += 10<br/>processed_items.push(...)"]
+
+    Wave2["🌊 WAVE 2<br/><br/>Processing"]
+
+    Check["🔍 CHECK<br/><br/>Session State"]
+    CheckData["IF api_calls > 900:<br/>⚠️ Warn rate limit"]
+
+    Complete["✅ COMMAND<br/><br/>Complete"]
+
+    Destroy["💥 DESTROYED<br/><br/>Session State<br/>(not persisted)"]
+
+    Start ==> Init
+    Init -.-> InitData
+    Init ==> Wave1
+    Wave1 ==> Update
+    Update -.-> UpdateData
+    Update ==> Wave2
+    Wave2 ==> Check
+    Check -.-> CheckData
+    Check ==> Complete
+    Complete ==> Destroy
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Init fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style InitData fill:#ffffff,stroke:#0066cc,stroke-width:1px,color:#000
+    style Wave1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Update fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style UpdateData fill:#ffffff,stroke:#cc8800,stroke-width:1px,color:#000
+    style Wave2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Check fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style CheckData fill:#ffffff,stroke:#cc8800,stroke-width:1px,color:#000
+    style Complete fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style Destroy fill:#f8d7da,stroke:#cc0000,stroke-width:3px,color:#000
 ```
 
 ### Exemple: Batch Processing State
@@ -269,42 +271,58 @@ Passer **contexte et état** entre COMMAND et AGENTS via **hooks** (notamment `S
 
 ### Flow avec SubagentStop Hook
 
-```
-╔════════════════════════════════════════════╗
-║    Cross-Agent Communication via Hook      ║
-╚════════════════════════════════════════════╝
+```mermaid
+flowchart TD
+    Launch["🎯 COMMAND<br/><br/>Launch Agent1"]
+    Execute["⚙️ AGENT 1<br/><br/>Execute Task"]
+    Complete["✅ AGENT 1<br/><br/>Complete"]
 
-COMMAND lance Agent1
-    ↓
-Agent1 exécute task
-    ↓
-Agent1 complète
-    ↓
-┌────────────────────────────────┐
-│ HOOK: SubagentStop déclenché   │
-│ (before agent returns result)  │
-└────────────────────────────────┘
-    ↓
-Hook lit résultat Agent1:
-  - Success: true
-  - Data: {locale: 'ar', file_path: '/docs/ar.md'}
-    ↓
-Hook ENRICHIT contexte:
-  - Add metadata: {source: 'context7', timestamp: '...'}
-  - Validate output
-  - Log to .claude/agent-results.json
-    ↓
-Hook RETOURNE contexte enrichi
-    ↓
-COMMAND reçoit:
-  - Original result
-  - + Metadata ajouté par hook
-    ↓
-COMMAND agrège résultats
-    ↓
-COMMAND lance Agent2 avec contexte:
-  - "Agent1 generated ar.md successfully"
-  - "Use similar approach for bg.md"
+    Hook["🪝 HOOK<br/><br/>SubagentStop Triggered<br/>(before return)"]
+
+    Read["📖 READ<br/><br/>Agent1 Result"]
+    ReadData["Success: true<br/>Data: {locale: 'ar',<br/>file_path: '/docs/ar.md'}"]
+
+    Enrich["✨ ENRICH<br/><br/>Context"]
+    EnrichData["Add metadata<br/>Validate output<br/>Log to .claude/<br/>agent-results.json"]
+
+    Return["📤 RETURN<br/><br/>Enriched Context"]
+
+    Receive["📥 COMMAND<br/><br/>Receive Result"]
+    ReceiveData["Original result<br/>+ Metadata from hook"]
+
+    Aggregate["📊 AGGREGATE<br/><br/>Results"]
+
+    Launch2["🚀 LAUNCH<br/><br/>Agent2 with Context"]
+    Context2["'Agent1 generated<br/>ar.md successfully'<br/>'Use similar approach<br/>for bg.md'"]
+
+    Launch ==> Execute
+    Execute ==> Complete
+    Complete ==> Hook
+    Hook ==> Read
+    Read -.-> ReadData
+    Read ==> Enrich
+    Enrich -.-> EnrichData
+    Enrich ==> Return
+    Return ==> Receive
+    Receive -.-> ReceiveData
+    Receive ==> Aggregate
+    Aggregate ==> Launch2
+    Launch2 -.-> Context2
+
+    style Launch fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Execute fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Complete fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style Hook fill:#fff3cd,stroke:#cc8800,stroke-width:3px,color:#000
+    style Read fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style ReadData fill:#ffffff,stroke:#0066cc,stroke-width:1px,color:#000
+    style Enrich fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style EnrichData fill:#ffffff,stroke:#cc8800,stroke-width:1px,color:#000
+    style Return fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Receive fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style ReceiveData fill:#ffffff,stroke:#0066cc,stroke-width:1px,color:#000
+    style Aggregate fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Launch2 fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style Context2 fill:#ffffff,stroke:#28a745,stroke-width:1px,color:#000
 ```
 
 ### Exemple: SubagentStop Hook
@@ -392,62 +410,80 @@ Pour **long workflows** (>5 min), sauvegarder état intermédiaire pour **recove
 
 ### Flow avec Checkpoints
 
-```
-╔════════════════════════════════════════════╗
-║      Checkpoint-Based Recovery             ║
-╚════════════════════════════════════════════╝
+```mermaid
+flowchart TD
+    Start["🎯 COMMAND START<br/><br/>50 Locales to Generate"]
 
-COMMAND démarre (50 locales à générer)
-    ↓
-┌────────────────────────────────┐
-│ Check for existing checkpoint  │
-│ .claude/checkpoint.json        │
-└────────────────────────────────┘
-    ↓
-[Checkpoint exists?] ────YES───→ Resume from checkpoint
-    │                           (skip completed items)
-    NO
-    ↓
-Start from beginning
-    ↓
-WAVE 1 complète (10 locales)
-    ↓
-┌────────────────────────────────┐
-│ SAVE CHECKPOINT                │
-│ .claude/checkpoint.json:       │
-│ {                              │
-│   "command": "generate-locales",│
-│   "total": 50,                 │
-│   "completed": ["ar", "bg"...],│
-│   "failed": [],                │
-│   "current_wave": 1,           │
-│   "timestamp": "..."           │
-│ }                              │
-└────────────────────────────────┘
-    ↓
-WAVE 2 complète (10 locales)
-    ↓
-UPDATE CHECKPOINT (completed: 20)
-    ↓
-... [CRASH / TIMEOUT] ...
-    ↓
-User re-run command
-    ↓
-┌────────────────────────────────┐
-│ LOAD CHECKPOINT                │
-│ Found: 20/50 completed         │
-└────────────────────────────────┘
-    ↓
-AskUserQuestion:
-  "Found checkpoint: 20/50 done. Resume?"
-    - "Yes" → Skip first 20, continue from wave 3
-    - "Restart" → Delete checkpoint, start fresh
-    ↓
-Resume from wave 3 (30 locales remaining)
-    ↓
-Complete workflow
-    ↓
-DELETE checkpoint (success)
+    Check["🔍 CHECK<br/><br/>Checkpoint Exists?<br/>.claude/checkpoint.json"]
+
+    Exists{Checkpoint<br/>Exists?}
+
+    Resume["♻️ RESUME<br/><br/>From Checkpoint<br/>Skip completed items"]
+
+    Fresh["🆕 START<br/><br/>From Beginning"]
+
+    Wave1["🌊 WAVE 1<br/><br/>Complete (10 locales)"]
+
+    Save["💾 SAVE<br/><br/>Checkpoint"]
+    SaveData["command: 'generate-locales'<br/>total: 50<br/>completed: ['ar', 'bg'...]<br/>current_wave: 1"]
+
+    Wave2["🌊 WAVE 2<br/><br/>Complete (10 locales)"]
+
+    Update["💾 UPDATE<br/><br/>Checkpoint<br/>completed: 20"]
+
+    Crash["💥 CRASH<br/><br/>Timeout/Error"]
+
+    Rerun["🔄 RERUN<br/><br/>User Re-run Command"]
+
+    Load["📂 LOAD<br/><br/>Checkpoint<br/>Found: 20/50 completed"]
+
+    Ask["❓ ASK USER<br/><br/>'Resume or Restart?'"]
+
+    Decision{User<br/>Choice}
+
+    Wave3["🌊 WAVE 3<br/><br/>Resume (30 remaining)"]
+
+    Complete["✅ COMPLETE<br/><br/>Workflow Done"]
+
+    Delete["🗑️ DELETE<br/><br/>Checkpoint (success)"]
+
+    Start ==> Check
+    Check ==> Exists
+    Exists -->|YES| Resume
+    Exists -->|NO| Fresh
+    Fresh ==> Wave1
+    Wave1 ==> Save
+    Save -.-> SaveData
+    Save ==> Wave2
+    Wave2 ==> Update
+    Update ==> Crash
+    Crash ==> Rerun
+    Rerun ==> Load
+    Load ==> Ask
+    Ask ==> Decision
+    Decision -->|Resume| Wave3
+    Decision -->|Restart| Fresh
+    Wave3 ==> Complete
+    Complete ==> Delete
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Check fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Exists fill:#fff3cd,stroke:#cc8800,stroke-width:3px,color:#000
+    style Resume fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Fresh fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Wave1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Save fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style SaveData fill:#ffffff,stroke:#cc8800,stroke-width:1px,color:#000
+    style Wave2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Update fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Crash fill:#f8d7da,stroke:#cc0000,stroke-width:3px,color:#000
+    style Rerun fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Load fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Ask fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Decision fill:#fff3cd,stroke:#cc8800,stroke-width:3px,color:#000
+    style Wave3 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Complete fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style Delete fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
 ```
 
 ### Exemple: Checkpoint Implementation

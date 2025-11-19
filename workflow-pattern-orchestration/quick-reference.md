@@ -4,30 +4,53 @@
 
 ## 🎯 Decision Tree : Quel composant utiliser ?
 
-```
-┌─────────────────────────────────────────────────────────┐
-│              COMPONENT SELECTION TREE                   │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  Question 1 : Invoqué par qui ?                        │
-│       │                                                 │
-│       ├─> USER (/command) → COMMAND                    │
-│       ├─> CLAUDE (auto) → SKILL                        │
-│       └─> COMMAND (Task tool) → AGENT                  │
-│                                                         │
-│  Question 2 : Orchestration ou exécution ?             │
-│       │                                                 │
-│       ├─> Orchestre plusieurs tâches → COMMAND         │
-│       ├─> Tâche atomique unique → AGENT                │
-│       └─> Base de connaissances → SKILL                │
-│                                                         │
-│  Question 3 : Parallel ou Sequential ?                 │
-│       │                                                 │
-│       ├─> Tâches indépendantes → PARALLEL (Nx speedup)│
-│       ├─> Dépendances partielles → PIPELINE           │
-│       └─> Dépendances fortes → SEQUENTIAL             │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    Start["🎯 COMPONENT<br/><br/>Selection Tree"]
+
+    Q1{"❓ Question 1<br/><br/>Invoqué par qui?"}
+    User["👤 USER<br/><br/>/command<br/>→ COMMAND"]
+    Claude["🤖 CLAUDE<br/><br/>auto invoke<br/>→ SKILL"]
+    TaskTool["⚙️ COMMAND<br/><br/>Task tool<br/>→ AGENT"]
+
+    Q2{"❓ Question 2<br/><br/>Orchestration ou<br/>exécution?"}
+    Orchestrate["🎯 Orchestre<br/><br/>plusieurs tâches<br/>→ COMMAND"]
+    Atomic["⚡ Tâche atomique<br/><br/>unique<br/>→ AGENT"]
+    Knowledge["📚 Base de<br/><br/>connaissances<br/>→ SKILL"]
+
+    Q3{"❓ Question 3<br/><br/>Parallel ou<br/>Sequential?"}
+    Parallel["⚡ PARALLEL<br/><br/>Tâches indépendantes<br/>Nx speedup"]
+    Pipeline["🔗 PIPELINE<br/><br/>Dépendances partielles"]
+    Sequential["📋 SEQUENTIAL<br/><br/>Dépendances fortes"]
+
+    Start ==> Q1
+    Q1 -->|"USER"| User
+    Q1 -->|"CLAUDE"| Claude
+    Q1 -->|"COMMAND"| TaskTool
+
+    User & Claude & TaskTool ==> Q2
+    Q2 -->|"Orchestre"| Orchestrate
+    Q2 -->|"Atomique"| Atomic
+    Q2 -->|"Knowledge"| Knowledge
+
+    Orchestrate & Atomic ==> Q3
+    Q3 -->|"Indépendant"| Parallel
+    Q3 -->|"Partiel"| Pipeline
+    Q3 -->|"Fort"| Sequential
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Q1 fill:#fff3cd,stroke:#cc8800,stroke-width:3px,color:#000
+    style User fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Claude fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style TaskTool fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Q2 fill:#fff3cd,stroke:#cc8800,stroke-width:3px,color:#000
+    style Orchestrate fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style Atomic fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Knowledge fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Q3 fill:#fff3cd,stroke:#cc8800,stroke-width:3px,color:#000
+    style Parallel fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style Pipeline fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Sequential fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
 ```
 
 ---

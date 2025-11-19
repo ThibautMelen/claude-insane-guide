@@ -11,19 +11,29 @@ Le **Agent Orchestration Pattern** définit comment optimiser l'exécution d'age
 
 > **"Agents execute, NEVER coordinate. Choose pattern based on task dependencies."**
 
-```
-╔══════════════════════════════════════════════════╗
-║         AGENT EXECUTION PATTERNS                 ║
-╚══════════════════════════════════════════════════╝
-                      ↓
-        ┌─────────────┴─────────────┐
-        │  Pattern Decision:         │
-        │                            │
-        │  Independent? → PARALLEL   │
-        │  Dependent?   → SEQUENTIAL │
-        │  Large scale? → BATCH      │
-        │  Dynamic?     → CONDITIONAL│
-        └────────────────────────────┘
+```mermaid
+flowchart TD
+    Start["🎯 AGENT EXECUTION<br/><br/>Pattern Selection"]
+
+    Q{Pattern Decision}
+
+    P1["⚡ PARALLEL<br/><br/>Independent tasks"]
+    P2["🔗 SEQUENTIAL<br/><br/>Dependent tasks"]
+    P3["📦 BATCH<br/><br/>Large scale"]
+    P4["🔀 CONDITIONAL<br/><br/>Dynamic logic"]
+
+    Start --> Q
+    Q -->|"Independent?"| P1
+    Q -->|"Dependent?"| P2
+    Q -->|"Large scale?"| P3
+    Q -->|"Dynamic?"| P4
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Q fill:#fff3cd,stroke:#cc8800,stroke-width:3px,color:#000
+    style P1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style P2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style P3 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style P4 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
 ```
 
 ---
@@ -36,24 +46,28 @@ Le **Agent Orchestration Pattern** définit comment optimiser l'exécution d'age
 **Speedup** : 5-20x (depends on # of agents)
 **Resource** : High (multiple agents running concurrently)
 
-```
-┌────────────────────────────────────────┐
-│         PARALLEL PATTERN               │
-└────────────────────────────────────────┘
-                  ↓
-        ┌─────────┴─────────┐
-        ↓         ↓         ↓
-    ┌───────┐ ┌───────┐ ┌───────┐
-    │Agent 1│ │Agent 2│ │Agent 3│
-    │  ES   │ │  FR   │ │  DE   │
-    └───────┘ └───────┘ └───────┘
-        ↓         ↓         ↓
-        └─────────┬─────────┘
-                  ↓
-          Aggregate Results
+```mermaid
+flowchart TD
+    Start["⚡ PARALLEL PATTERN"]
 
-⚡ Speedup: N tasks × T time → max(T)
-Example: 15 × 20min = 300min → 20min = 15x
+    A1["🤖 Agent 1<br/><br/>ES<br/>⏱️ 20min"]
+    A2["🤖 Agent 2<br/><br/>FR<br/>⏱️ 20min"]
+    A3["🤖 Agent 3<br/><br/>DE<br/>⏱️ 20min"]
+
+    Agg["📊 AGGREGATE<br/><br/>Merge Results"]
+
+    Metrics["⚡ SPEEDUP<br/><br/>15 tasks × 20min = 300min<br/>→ max(20min)<br/>Gain: 15x"]
+
+    Start --> A1 & A2 & A3
+    A1 & A2 & A3 --> Agg
+    Agg -.-> Metrics
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style A1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style A2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style A3 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Agg fill:#fff3cd,stroke:#cc8800,stroke-width:3px,color:#000
+    style Metrics fill:#e2e3e5,stroke:#6c757d,stroke-width:1px,color:#000
 ```
 
 **Use Cases** :
@@ -83,28 +97,35 @@ All agents run concurrently → 15x speedup
 **Speedup** : 1x (quality > speed)
 **Resource** : Low (one agent at a time)
 
-```
-┌────────────────────────────────────────┐
-│        SEQUENTIAL PATTERN              │
-└────────────────────────────────────────┘
-                  ↓
-            ┌─────────┐
-            │ Agent 1 │
-            │  BUILD  │
-            └─────────┘
-                  ↓ (wait)
-            ┌─────────┐
-            │ Agent 2 │
-            │  TEST   │
-            └─────────┘
-                  ↓ (wait)
-            ┌─────────┐
-            │ Agent 3 │
-            │ DEPLOY  │
-            └─────────┘
+```mermaid
+flowchart TD
+    Start["🎯 SEQUENTIAL<br/><br/>Pattern Start"]
+    Build["🏗️ AGENT 1<br/><br/>BUILD Phase"]
+    Wait1["⏳ WAIT<br/><br/>Validate Before Next"]
+    Test["🧪 AGENT 2<br/><br/>TEST Phase"]
+    Wait2["⏳ WAIT<br/><br/>Validate Before Next"]
+    Deploy["🚀 AGENT 3<br/><br/>DEPLOY Phase"]
+    End["✅ COMPLETE<br/><br/>All Phases Validated"]
 
-⏱️ Time: T1 + T2 + T3 (no parallelism)
-✅ Quality: Each phase validated before next
+    Start ==> Build
+    Build ==> Wait1
+    Wait1 ==> Test
+    Test ==> Wait2
+    Wait2 ==> Deploy
+    Deploy ==> End
+
+    Note1["⏱️ Time: T1 + T2 + T3<br/>(no parallelism)"]
+    Note2["✅ Quality: Each phase<br/>validated before next"]
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Build fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Wait1 fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Test fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Wait2 fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Deploy fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style End fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Note1 fill:#e2e3e5,stroke:#6c757d,stroke-width:1px,color:#000
+    style Note2 fill:#e2e3e5,stroke:#6c757d,stroke-width:1px,color:#000
 ```
 
 **Use Cases** :
@@ -140,30 +161,40 @@ Task(subagent_type="deployer", prompt="Deploy to production")
 **Resource** : Medium (waves of N agents)
 **Batch Size** : 10-20 items per wave
 
-```
-┌────────────────────────────────────────────┐
-│           BATCH PATTERN                    │
-└────────────────────────────────────────────┘
-                    ↓
-        ┌───────────────────────┐
-        │ Wave 1 (Items 1-20)   │
-        │  20 agents (parallel) │
-        └───────────────────────┘
-                    ↓ (wait)
-        ┌───────────────────────┐
-        │ Wave 2 (Items 21-40)  │
-        │  20 agents (parallel) │
-        └───────────────────────┘
-                    ↓ (wait)
-              ... more waves ...
-                    ↓
-        ┌───────────────────────┐
-        │ Wave N (Items 181-200)│
-        │  14 agents (parallel) │
-        └───────────────────────┘
+```mermaid
+flowchart TD
+    Start["🎯 BATCH PATTERN<br/><br/>200 Items Total"]
 
-📊 200 items ÷ 20/wave = 10 waves
-⚡ Speedup: 200 × 30min → 10 × 30min = 100h → 5h = 20x
+    Wave1["🌊 WAVE 1<br/><br/>Items 1-20<br/>20 agents parallel"]
+    Wait1["⏳ WAIT<br/><br/>Wave Complete"]
+
+    Wave2["🌊 WAVE 2<br/><br/>Items 21-40<br/>20 agents parallel"]
+    Wait2["⏳ WAIT<br/><br/>Wave Complete"]
+
+    More["... More Waves ...<br/><br/>Waves 3-9"]
+
+    WaveN["🌊 WAVE 10<br/><br/>Items 181-200<br/>14 agents parallel"]
+    End["✅ COMPLETE<br/><br/>All Items Processed"]
+
+    Start ==> Wave1
+    Wave1 ==> Wait1
+    Wait1 ==> Wave2
+    Wave2 ==> Wait2
+    Wait2 ==> More
+    More ==> WaveN
+    WaveN ==> End
+
+    Metrics["📊 METRICS<br/><br/>200 items ÷ 20/wave = 10 waves<br/>⚡ Speedup: 20x<br/>(100h → 5h)"]
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Wave1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Wait1 fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Wave2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Wait2 fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style More fill:#e2e3e5,stroke:#6c757d,stroke-width:1px,color:#000
+    style WaveN fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style End fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Metrics fill:#e2e3e5,stroke:#6c757d,stroke-width:1px,color:#000
 ```
 
 **Use Cases** :

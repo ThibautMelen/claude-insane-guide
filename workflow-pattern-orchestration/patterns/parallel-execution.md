@@ -11,22 +11,36 @@
 
 ## 📐 Core Pattern: Concurrent Task Processing
 
-```
-COMMAND (Coordinator)
-    ↓
-Détermine stratégie
-    ↓
-┌─────────────────────────────────────┐
-│  CONCURRENT PATTERN                 │
-│  ┌──────┐ ┌──────┐ ┌──────┐        │
-│  │Agent1│ │Agent2│ │Agent3│ ...    │
-│  └──┬───┘ └──┬───┘ └──┬───┘        │
-│     │        │        │             │
-│     └────────┴────────┴─→ Results  │
-│  Parallel (même message)            │
-└─────────────────────────────────────┘
-    ↓
-COMMAND agrège résultats
+```mermaid
+flowchart TD
+    Command["🎯 COMMAND<br/><br/>Coordinator"]
+    Strategy["🔍 DETERMINE<br/><br/>Strategy"]
+
+    subgraph Concurrent["⚡ CONCURRENT PATTERN"]
+        direction LR
+        Agent1["🤖 Agent1"]
+        Agent2["🤖 Agent2"]
+        Agent3["🤖 Agent3"]
+        More["..."]
+    end
+
+    Results["📊 RESULTS<br/><br/>Parallel (same message)"]
+    Aggregate["📈 AGGREGATE<br/><br/>Results"]
+
+    Command ==> Strategy
+    Strategy ==> Agent1 & Agent2 & Agent3 & More
+    Agent1 & Agent2 & Agent3 & More ==> Results
+    Results ==> Aggregate
+
+    style Command fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Strategy fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Concurrent fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Agent1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Agent2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Agent3 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style More fill:#e2e3e5,stroke:#6c757d,stroke-width:1px,color:#000
+    style Results fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Aggregate fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
 ```
 
 **Principes clés**:
@@ -45,29 +59,42 @@ Lancer **plusieurs agents en parallèle** pour traiter des tâches indépendante
 
 ### Flow Parallèle
 
-```
-╔════════════════════════════════════════════╗
-║     Parallel vs Sequential Execution       ║
-╚════════════════════════════════════════════╝
+```mermaid
+flowchart TD
+    subgraph Sequential["📊 SEQUENTIAL (ancien pattern)"]
+        direction TD
+        Seq1["🤖 Agent1<br/>10s"]
+        Seq2["🤖 Agent2<br/>10s"]
+        Seq3["🤖 Agent3<br/>10s"]
+        SeqTotal["⏱️ Total: 30s"]
 
-📊 SEQUENTIAL (ancien pattern):
-   [Agent1] → 10s
-             ↓
-          [Agent2] → 10s
-                   ↓
-                [Agent3] → 10s
-                         ↓
-   Total: 30 secondes
+        Seq1 ==> Seq2 ==> Seq3 ==> SeqTotal
+    end
 
-⚡ PARALLEL (nouveau pattern):
-   ┌─────────┐
-   │ Agent1  │ → 10s
-   ├─────────┤
-   │ Agent2  │ → 10s  } Simultané
-   ├─────────┤
-   │ Agent3  │ → 10s
-   └─────────┘
-   Total: 10 secondes (3x plus rapide!)
+    subgraph Parallel["⚡ PARALLEL (nouveau pattern)"]
+        direction TD
+        Start["🚀 START"]
+        Par1["🤖 Agent1 - 10s"]
+        Par2["🤖 Agent2 - 10s"]
+        Par3["🤖 Agent3 - 10s"]
+        ParTotal["⏱️ Total: 10s<br/><br/>🚀 3x plus rapide!"]
+
+        Start ==> Par1 & Par2 & Par3
+        Par1 & Par2 & Par3 ==> ParTotal
+    end
+
+    style Sequential fill:#f8d7da,stroke:#cc0000,stroke-width:2px,color:#000
+    style Seq1 fill:#e2e3e5,stroke:#6c757d,stroke-width:2px,color:#000
+    style Seq2 fill:#e2e3e5,stroke:#6c757d,stroke-width:2px,color:#000
+    style Seq3 fill:#e2e3e5,stroke:#6c757d,stroke-width:2px,color:#000
+    style SeqTotal fill:#f8d7da,stroke:#cc0000,stroke-width:2px,color:#000
+
+    style Parallel fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style Par1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Par2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Par3 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style ParTotal fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
 ```
 
 ### Syntaxe Task Tool
@@ -331,43 +358,60 @@ You are a locale generation coordinator.
 
 ### Flow de Resource Gating
 
-```
-╔════════════════════════════════════════════╗
-║       Resource Management Strategy         ║
-╚════════════════════════════════════════════╝
+```mermaid
+flowchart TD
+    Start["🎯 COMMAND<br/><br/>Receive 100 Items"]
 
-COMMAND reçoit 100 items
-    ↓
-┌────────────────────────────────┐
-│ Check System Resources         │
-│ - CPU usage < 80%              │
-│ - Memory available > 2GB       │
-│ - API rate limit: 500/1000     │
-└────────────────────────────────┘
-    ↓
-[Resources OK?] ────NO───→ Reduce batch size (10 → 5)
-    │                      OR delay between waves
-   YES
-    ↓
-Proceed with batching
-    ↓
-┌────────────────────────────────┐
-│ WAVE 1: 10 agents (parallel)  │
-└────────────────────────────────┘
-    ↓
-WAIT for completion
-    ↓
-┌────────────────────────────────┐
-│ Check Rate Limits              │
-│ - API calls consumed: 50       │
-│ - Remaining: 450/1000          │
-└────────────────────────────────┘
-    ↓
-[Near limit?] ────YES───→ Delay 5s before next wave
-    │                     OR switch to cache
-    NO
-    ↓
-WAVE 2...
+    Check["🔍 CHECK<br/><br/>System Resources"]
+    CheckData["• CPU usage < 80%<br/>• Memory > 2GB<br/>• API: 500/1000"]
+
+    ResourcesOK{Resources<br/>OK?}
+
+    Reduce["⚠️ REDUCE<br/><br/>Batch Size 10→5<br/>OR delay waves"]
+
+    Proceed["✅ PROCEED<br/><br/>With Batching"]
+
+    Wave1["🌊 WAVE 1<br/><br/>10 agents parallel"]
+
+    Wait["⏳ WAIT<br/><br/>Completion"]
+
+    CheckLimit["🔍 CHECK<br/><br/>Rate Limits"]
+    LimitData["• API calls: 50<br/>• Remaining: 450/1000"]
+
+    NearLimit{Near<br/>Limit?}
+
+    Delay["⏸️ DELAY<br/><br/>5s before next wave<br/>OR switch to cache"]
+
+    Wave2["🌊 WAVE 2<br/><br/>Continue..."]
+
+    Start ==> Check
+    Check -.-> CheckData
+    Check ==> ResourcesOK
+    ResourcesOK -->|NO| Reduce
+    ResourcesOK -->|YES| Proceed
+    Reduce ==> Proceed
+    Proceed ==> Wave1
+    Wave1 ==> Wait
+    Wait ==> CheckLimit
+    CheckLimit -.-> LimitData
+    CheckLimit ==> NearLimit
+    NearLimit -->|YES| Delay
+    NearLimit -->|NO| Wave2
+    Delay ==> Wave2
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Check fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style CheckData fill:#ffffff,stroke:#0066cc,stroke-width:1px,color:#000
+    style ResourcesOK fill:#fff3cd,stroke:#cc8800,stroke-width:3px,color:#000
+    style Reduce fill:#f8d7da,stroke:#cc0000,stroke-width:2px,color:#000
+    style Proceed fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style Wave1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Wait fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style CheckLimit fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style LimitData fill:#ffffff,stroke:#0066cc,stroke-width:1px,color:#000
+    style NearLimit fill:#fff3cd,stroke:#cc8800,stroke-width:3px,color:#000
+    style Delay fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Wave2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
 ```
 
 ### Exemple: API Rate Limit Handling
@@ -424,52 +468,59 @@ WAVE 2...
 
 ### Flow d'Aggregation
 
-```
-╔════════════════════════════════════════════╗
-║         Aggregation Pattern                ║
-╚════════════════════════════════════════════╝
+```mermaid
+flowchart TD
+    Wave1["🌊 WAVE 1<br/><br/>Complete"]
 
-WAVE 1 complète
-    ↓
-┌────────────────────────────────┐
-│ Agent1: {locale: 'ar', ✅}     │
-│ Agent2: {locale: 'bg', ✅}     │
-│ Agent3: {locale: 'cs', ❌}     │
-│ ...                            │
-└────────────────────────────────┘
-    ↓
-Collect in-memory:
-  results_wave1 = [
-    {locale: 'ar', status: 'success', data: {...}},
-    {locale: 'bg', status: 'success', data: {...}},
-    {locale: 'cs', status: 'failed', error: 'API timeout'}
-  ]
-    ↓
-WAVE 2 complète
-    ↓
-Append to results_wave1:
-  results_all = [...results_wave1, ...results_wave2]
-    ↓
-After all waves:
-    ↓
-┌────────────────────────────────┐
-│ AGGREGATE METRICS              │
-│ - Total: 50                    │
-│ - Success: 47                  │
-│ - Failed: 3                    │
-│ - Success rate: 94%            │
-└────────────────────────────────┘
-    ↓
-┌────────────────────────────────┐
-│ GROUP BY STATUS                │
-│ - Successes: [ar, bg, de...]  │
-│ - Failures: [cs, ja, pt]      │
-└────────────────────────────────┘
-    ↓
-┌────────────────────────────────┐
-│ GENERATE REPORT                │
-│ (see Error Handling pattern)   │
-└────────────────────────────────┘
+    Results1["📦 RESULTS<br/><br/>Wave 1"]
+    Data1["Agent1: {ar, ✅}<br/>Agent2: {bg, ✅}<br/>Agent3: {cs, ❌}<br/>..."]
+
+    Collect1["💾 COLLECT<br/><br/>In-Memory"]
+    Array1["results_wave1 = [<br/>{ar: success},<br/>{bg: success},<br/>{cs: failed}<br/>]"]
+
+    Wave2["🌊 WAVE 2<br/><br/>Complete"]
+
+    Append["➕ APPEND<br/><br/>Results"]
+    ArrayAll["results_all =<br/>[...wave1, ...wave2]"]
+
+    More["... More Waves ..."]
+
+    Aggregate["📊 AGGREGATE<br/><br/>Metrics"]
+    Metrics["• Total: 50<br/>• Success: 47<br/>• Failed: 3<br/>• Rate: 94%"]
+
+    Group["📋 GROUP<br/><br/>By Status"]
+    Groups["• Success: [ar, bg, de...]<br/>• Failures: [cs, ja, pt]"]
+
+    Report["📄 GENERATE<br/><br/>Report<br/>(Error Handling pattern)"]
+
+    Wave1 ==> Results1
+    Results1 -.-> Data1
+    Results1 ==> Collect1
+    Collect1 -.-> Array1
+    Collect1 ==> Wave2
+    Wave2 ==> Append
+    Append -.-> ArrayAll
+    Append ==> More
+    More ==> Aggregate
+    Aggregate -.-> Metrics
+    Aggregate ==> Group
+    Group -.-> Groups
+    Group ==> Report
+
+    style Wave1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Results1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Data1 fill:#ffffff,stroke:#0066cc,stroke-width:1px,color:#000
+    style Collect1 fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Array1 fill:#ffffff,stroke:#cc8800,stroke-width:1px,color:#000
+    style Wave2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Append fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style ArrayAll fill:#ffffff,stroke:#cc8800,stroke-width:1px,color:#000
+    style More fill:#e2e3e5,stroke:#6c757d,stroke-width:1px,color:#000
+    style Aggregate fill:#d4edda,stroke:#28a745,stroke-width:3px,color:#000
+    style Metrics fill:#ffffff,stroke:#28a745,stroke-width:1px,color:#000
+    style Group fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Groups fill:#ffffff,stroke:#0066cc,stroke-width:1px,color:#000
+    style Report fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
 ```
 
 ### Exemple: Aggregation Implementation

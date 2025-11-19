@@ -93,18 +93,28 @@ COMMAND (Coordinator)
 
 ## 📐 Core Pattern: Hierarchical Orchestration
 
-```
-COMMAND (Coordinator)
-    ↓
-  Validates + Decides Strategy
-    ↓
-  Launches AGENTS (parallel)
-    ↓
-  AGENTS read SKILL (knowledge)
-    ↓
-  AGENTS execute (MCPs, tools)
-    ↓
-  COMMAND aggregates + reports
+```mermaid
+flowchart TD
+    Start["🎯 COMMAND<br/><br/>Coordinator"]
+
+    Validate["✓ VALIDATE<br/><br/>Decide Strategy"]
+
+    Launch["🚀 LAUNCH<br/><br/>Parallel Agents"]
+
+    Read["📚 READ SKILL<br/><br/>Knowledge Base"]
+
+    Execute["⚙️ EXECUTE<br/><br/>MCPs & Tools"]
+
+    Report["📊 REPORT<br/><br/>Aggregate Results"]
+
+    Start --> Validate --> Launch --> Read --> Execute --> Report
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    style Validate fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Launch fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Read fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Execute fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Report fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
 ```
 
 **Key Principles**:
@@ -332,34 +342,53 @@ You are [Agent Role]. Your task is to...
 
 **Definition** : "Context poisoning" occurs when detailed implementation work clutters your main conversation context, making it harder to maintain focus and increasing token usage unnecessarily.
 
-```
-╔═══════════════════════════════════════════════════════════╗
-║                   CONTEXT POISONING                       ║
-╚═══════════════════════════════════════════════════════════╝
+```mermaid
+flowchart LR
+    subgraph Without["❌ WITHOUT AGENTS (Context Pollution)"]
+        direction TB
+        W0["Main Context<br/>50K tokens"]
+        W1["Task 1<br/>+50K<br/>(Total: 100K)"]
+        W2["Task 2<br/>+50K<br/>(Total: 150K)"]
+        W3["Task 3<br/>+50K<br/>(Total: 200K)"]
+        WX["🚫 OVERFLOW<br/><br/>Context limit<br/>exceeded"]
 
-❌ WITHOUT AGENTS (Context Poisoning):
-   Main Context (200k tokens)
-   ├─> Initial discussion (10k tokens)
-   ├─> Security deep dive (50k tokens) 🔴 POLLUTION
-   ├─> Test generation (40k tokens) 🔴 POLLUTION
-   ├─> Refactoring details (60k tokens) 🔴 POLLUTION
-   └─> Final discussion cluttered with noise
+        W0 --> W1 --> W2 --> W3 --> WX
+    end
 
-   Problem: Main conversation filled with implementation details
-   Result: Hard to navigate, expensive, context limit reached
+    subgraph With["✅ WITH AGENTS (Context Isolation)"]
+        direction TB
+        M["Main Context<br/>50K tokens"]
 
-✅ WITH AGENTS (Isolated Contexts):
-   Main Context (20k tokens)
-   ├─> Initial discussion (10k tokens)
-   ├─> Delegation to agents (3k tokens)
-   └─> Results aggregation (7k tokens)
+        A1["Agent 1<br/>50K isolated"]
+        A2["Agent 2<br/>50K isolated"]
+        A3["Agent 3<br/>50K isolated"]
 
-   Agent A Context (isolated 50k tokens) ✅ ISOLATED
-   Agent B Context (isolated 40k tokens) ✅ ISOLATED
-   Agent C Context (isolated 60k tokens) ✅ ISOLATED
+        Agg["Aggregate<br/>+3K tokens<br/>(Total: 53K)"]
 
-   Benefit: Main conversation stays clean and focused
-   Result: Easy to navigate, cheaper, context efficient
+        Success["✅ SUCCESS<br/><br/>Clean & Efficient<br/>8x reduction"]
+
+        M --> A1 & A2 & A3
+        A1 & A2 & A3 --> Agg
+        Agg --> Success
+    end
+
+    Without -.->|"Problem"| With
+
+    style Without fill:#fff0f0,stroke:#cc0000,stroke-width:2px
+    style With fill:#f0fff4,stroke:#28a745,stroke-width:2px
+
+    style W0 fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style W1 fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style W2 fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style W3 fill:#f8d7da,stroke:#cc0000,stroke-width:2px,color:#000
+    style WX fill:#cc0000,stroke:#990000,stroke-width:4px,color:#fff
+
+    style M fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style A1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style A2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style A3 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style Agg fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style Success fill:#28a745,stroke:#1e7e34,stroke-width:4px,color:#fff
 ```
 
 **When to Use Agents for Context Isolation** :
@@ -536,32 +565,30 @@ Sources breakdown:
 
 **Skills are officially supported by Anthropic** as prompt-based meta-tools that extend Claude's capabilities through specialized instruction injection.
 
-```
-╔═══════════════════════════════════════════════════════════╗
-║              SKILLS META-ARCHITECTURE                     ║
-╚═══════════════════════════════════════════════════════════╝
+```mermaid
+flowchart TD
+    subgraph Components["📦 KEY CONCEPTS"]
+        direction TB
 
-KEY CONCEPTS:
+        ST["1️⃣ Skill tool<br/><br/>Capital S<br/>Meta-tool in<br/>tools array"]
 
-1. Skill tool (capital S) = Meta-tool in tools array
-   - Lives in tools array alongside Read, Write, Bash
-   - NOT in system prompt
-   - Aggregates all available skills in description
+        SK["2️⃣ skills<br/><br/>lowercase s<br/>Individual skills<br/>(pdf, xlsx, etc)"]
 
-2. skills (lowercase s) = Individual skills
-   - Examples: pdf, xlsx, skill-creator
-   - Each has SKILL.md file with instructions
+        SEL["3️⃣ Selection<br/><br/>LLM reasoning<br/>Natural language<br/>matching"]
 
-3. Selection Mechanism = LLM reasoning
-   - Claude reads <available_skills> in Skill tool description
-   - Uses natural language understanding to match intent
-   - NO algorithmic routing, NO keyword matching
-   - Pure transformer-based decision
+        EXEC["4️⃣ Execution<br/><br/>Prompt injection<br/>Context modification"]
 
-4. Execution = Prompt injection + Context modification
-   - Injects 2 messages (metadata + full prompt)
-   - Modifies execution context (tools, model)
-   - Skills prepare Claude, don't execute directly
+        ST -.-> SK
+        SK -.-> SEL
+        SEL -.-> EXEC
+    end
+
+    style Components fill:#f0fff4,stroke:#86d99d,stroke-width:2px
+
+    style ST fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style SK fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style SEL fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style EXEC fill:#f8d7da,stroke:#cc0000,stroke-width:2px,color:#000
 ```
 
 ### Skills vs Commands vs Agents
@@ -579,43 +606,37 @@ KEY CONCEPTS:
 
 **Claude Code uses a 3-tier hierarchy for skill discovery** :
 
-```
-╔═══════════════════════════════════════════════════════════╗
-║              SKILLS LOCATION HIERARCHY                    ║
-╚═══════════════════════════════════════════════════════════╝
+```mermaid
+flowchart TD
+    T1["🌍 TIER 1<br/><br/>Personal Skills<br/>~/.claude/skills/<br/><br/>Global scope<br/>Lowest priority"]
 
-TIER 1: Personal Skills (~/.claude/skills/)
-        ├─> Applies to ALL projects globally
-        ├─> User preferences, work style, personal context
-        ├─> Examples:
-        │   ├─> user-manual.md (personal preferences)
-        │   ├─> writing-style.md (tone/voice guidelines)
-        │   └─> team-context.md (company standards)
-        └─> Loaded first, lowest priority in conflicts
+    T2["📦 TIER 2<br/><br/>Project Skills<br/>.claude/skills/<br/><br/>Current project<br/>Higher priority"]
 
-TIER 2: Project Skills (.claude/skills/)
-        ├─> Applies to CURRENT project only
-        ├─> Project-specific knowledge, domain context
-        ├─> Examples:
-        │   ├─> stakeholder-context.md (project stakeholders)
-        │   ├─> product-context.md (product domain knowledge)
-        │   └─> technical-standards.md (project tech stack)
-        └─> Loaded second, higher priority than Personal
+    T3["📚 TIER 3<br/><br/>Shared Skills<br/>~/.claude/skills/shared/<br/><br/>Templates<br/>Reference only"]
 
-TIER 3: Shared Skills (~/.claude/skills/shared/)
-        ├─> Templates and reusable patterns
-        ├─> Used across multiple projects
-        ├─> Examples:
-        │   ├─> templates/skill-template.md
-        │   ├─> templates/stakeholder.md
-        │   └─> patterns/api-integration.md
-        └─> Reference location, not auto-loaded
+    Rules["⚖️ PRIORITY RULES"]
 
-PRIORITY RULES:
-──────────────
-1. Project skills override Personal skills (same name)
-2. Explicit invocation overrides auto-invocation
-3. More specific descriptions match before generic ones
+    R1["1️⃣ Project > Personal<br/>(same name)"]
+    R2["2️⃣ Explicit > Auto<br/>(invocation)"]
+    R3["3️⃣ Specific > Generic<br/>(description)"]
+
+    T1 -.->|"Override"| T2
+    T2 -.->|"Reference"| T3
+
+    T3 ==> Rules
+    Rules --> R1
+    Rules --> R2
+    Rules --> R3
+
+    style T1 fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    style T2 fill:#cce5ff,stroke:#0066cc,stroke-width:3px,color:#000
+    style T3 fill:#e2e3e5,stroke:#6c757d,stroke-width:2px,color:#000
+
+    style Rules fill:#f8d7da,stroke:#cc0000,stroke-width:3px,color:#000
+
+    style R1 fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style R2 fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    style R3 fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
 ```
 
 **Scoping Pattern** :
@@ -1564,17 +1585,32 @@ git push origin main
 
 **Use case**: Multiple independent locales
 
-```
-COMMAND launches agents:
-├─ AGENT 1 (ja-JP) ─── ⏱️ 35s ──→ ✓
-├─ AGENT 2 (en-US) ─── ⏱️ 28s ──→ ✓
-├─ AGENT 3 (fr-FR) ─── ⏱️ 31s ──→ ✓
-└─ AGENT N (ar-SA) ─── ⏱️ 42s ──→ ✓
+```mermaid
+flowchart TD
+    Start["🎯 COMMAND<br/><br/>Concurrent Pattern"]
 
-Total time: max(35s, 28s, 31s, 42s) = 42s
-vs Sequential: 35s + 28s + 31s + 42s = 136s
+    A1["🤖 AGENT 1<br/><br/>ja-JP<br/>⏱️ 35s"]
+    A2["🤖 AGENT 2<br/><br/>en-US<br/>⏱️ 28s"]
+    A3["🤖 AGENT 3<br/><br/>fr-FR<br/>⏱️ 31s"]
+    A4["🤖 AGENT N<br/><br/>ar-SA<br/>⏱️ 42s"]
 
-Speedup: 3.2x for 4 agents
+    Agg["📊 AGGREGATE<br/><br/>Merge Results"]
+
+    Metrics["⚡ SPEEDUP<br/><br/>Total: max(42s) = 42s<br/>Sequential: 136s<br/>Gain: 3.2x"]
+
+    Start --> A1 & A2 & A3 & A4
+    A1 & A2 & A3 & A4 --> Agg
+    Agg -.-> Metrics
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+
+    style A1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style A2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style A3 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style A4 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+
+    style Agg fill:#fff3cd,stroke:#cc8800,stroke-width:3px,color:#000
+    style Metrics fill:#e2e3e5,stroke:#6c757d,stroke-width:1px,color:#000
 ```
 
 **Implementation**:
@@ -1598,16 +1634,41 @@ Aggregate results.
 
 **Use case**: 200 locales (avoid overwhelming)
 
-```
-COMMAND launches batches:
+```mermaid
+flowchart TD
+    Start["🎯 COMMAND<br/><br/>Batch Pattern<br/>200 locales"]
 
-Batch 1 (20 agents) ─── ⏱️ 60s ──→ ✓
-Batch 2 (20 agents) ─── ⏱️ 58s ──→ ✓
-Batch 3 (20 agents) ─── ⏱️ 62s ──→ ✓
-...
-Batch 9 (20 agents) ─── ⏱️ 45s ──→ ✓
+    B1["📦 BATCH 1<br/><br/>Items 1-20<br/>20 agents parallel<br/>⏱️ 60s"]
 
-Total time: 9 batches × ~60s = 9-10 min
+    Wait1["⏳ Wait"]
+
+    B2["📦 BATCH 2<br/><br/>Items 21-40<br/>20 agents parallel<br/>⏱️ 58s"]
+
+    Wait2["⏳ Wait"]
+
+    B3["📦 BATCH 3<br/><br/>Items 41-60<br/>20 agents parallel<br/>⏱️ 62s"]
+
+    Dots["... 6 more batches ..."]
+
+    B9["📦 BATCH 9<br/><br/>Items 161-180<br/>20 agents parallel<br/>⏱️ 45s"]
+
+    Metrics["⚡ METRICS<br/><br/>Total: 9 batches × 60s<br/>= 9-10 minutes<br/>vs Sequential: 100 hours<br/>Speedup: 600x"]
+
+    Start --> B1 --> Wait1 --> B2 --> Wait2 --> B3 --> Dots --> B9
+    B9 -.-> Metrics
+
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+
+    style B1 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style B2 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style B3 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    style B9 fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+
+    style Wait1 fill:#fff3cd,stroke:#cc8800,stroke-width:1px,color:#000
+    style Wait2 fill:#fff3cd,stroke:#cc8800,stroke-width:1px,color:#000
+
+    style Dots fill:#e2e3e5,stroke:#6c757d,stroke-width:1px,color:#000
+    style Metrics fill:#f8d7da,stroke:#cc0000,stroke-width:2px,color:#000
 ```
 
 **Batch size optimization**:
