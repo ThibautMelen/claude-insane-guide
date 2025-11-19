@@ -2,335 +2,136 @@
 
 Recommandations éprouvées pour workflows Claude Code en production, basées sur cas réels d'entreprises (Tesla, JP Morgan, Mayo Clinic, etc.).
 
+## 📋 Quick Reference
+
+| Aspect | Recommandation Clé | Impact | Fichier |
+|--------|-------------------|--------|---------|
+| **Performance** | Parallel execution + batch tuning | 5-20x speedup | [📄 performance.md](./performance.md) |
+| **Cost Optimization** | Fallback chains (cheap → expensive) | 90%+ reduction | [📄 cost-optimization.md](./cost-optimization.md) |
+| **Error Resilience** | Retry once + graceful fallback | 99.9% uptime | [📄 error-resilience.md](./error-resilience.md) |
+
 ---
 
-## 📚 Vue d'Ensemble
+## 🔥 Top 3 Optimizations
 
-Ces best practices couvrent **4 piliers critiques** pour workflows production-ready :
+### 1. Parallel Execution (Performance)
+- **Use case**: Independent tasks (locales, batch processing)
+- **Implementation**: Task tool with multiple parallel calls
+- **Benchmark**: 200 locales: 25min → 2min35s (9.7x speedup)
+- **Voir**: [performance.md](./performance.md) pour détails complets
+
+### 2. Fallback Chains (Cost Optimization)
+- **Use case**: Minimize API costs via intelligent routing
+- **Implementation**: Local data → Context7 → Perplexity → Firecrawl
+- **Benchmark**: RFP: 97% reduction ($25,500 → $750), Localization: 98% reduction
+- **Voir**: [cost-optimization.md](./cost-optimization.md) pour implémentation
+
+### 3. Retry + Graceful Degradation (Error Resilience)
+- **Use case**: Production stability (critical workflows)
+- **Implementation**: Try → Retry once → Fallback → Report
+- **Benchmark**: Expected failures handled, 99.9% uptime
+- **Voir**: [error-resilience.md](./error-resilience.md) pour patterns
+
+---
+
+## 🎯 Decision Framework: When to Optimize
 
 ```
-╔════════════════════════════════════════╗
-║   PRODUCTION-READY WORKFLOWS           ║
-╚════════════════════════════════════════╝
-                ↓
-    ┌───────────┴───────────┐
-    ↓           ↓           ↓
-┌────────┐ ┌────────┐ ┌────────┐
-│PERFORM │ │  COST  │ │ ERROR  │
-│ ANCE   │ │  OPT   │ │RESILIEN│
-└────────┘ └────────┘ └────────┘
-    ↓           ↓           ↓
-    └───────────┬───────────┘
-                ↓
-         ┌────────────┐
-         │   TEAM     │
-         │COLLABORA-  │
-         │   TION     │
-         └────────────┘
+START: Evaluating workflow optimization
+  ↓
+Q1: High volume (1000+ requests/day)?
+  ├─ YES → COST FIRST (fallback chains = immediate ROI)
+  └─ NO  → Q2
+
+Q2: Latency critical (< 1 min response)?
+  ├─ YES → PERFORMANCE (parallel/batch)
+  └─ NO  → Q3
+
+Q3: Production environment (uptime SLA)?
+  ├─ YES → ERROR RESILIENCE (retry + fallback)
+  └─ NO  → TEAM COLLAB (documentation + standards)
 ```
 
 ---
 
-## 📋 Guides Disponibles
+## ✅ Production Checklist
 
-### [Performance](./performance.md)
-**Objectif** : Maximiser vitesse d'exécution
-
-**Topics** :
-- Parallel vs Sequential optimization
-- Batch size tuning (10-20 items/wave)
-- Resource management (avoid overwhelm)
-- Caching strategies (Translation-Memory, Skills)
-- Benchmarking & metrics
-
-**Benchmarks** :
-- Parallel: 5-20x speedup
-- Batch: 10-15x speedup
-- Caching: 30-50% reuse
-
-**Use Cases** :
-- Large-scale processing (100+ items)
-- Real-time workflows (< 1 min response)
-- Multi-agent coordination
-
----
-
-### [Cost Optimization](./cost-optimization.md)
-**Objectif** : Minimiser coûts API + compute
-
-**Topics** :
-- Token usage optimization
-- MCP fallback chains (cheap → expensive)
-- Skill reuse (avoid duplication)
-- Batch efficiency (reduce API calls)
-- Budget monitoring hooks
-
-**Benchmarks** :
-- RFP: 97% cost reduction ($25,500 → $750)
-- Localization: 98% cost reduction ($15,000 → $300)
-- CI/CD: 93% cost reduction ($100 → $7)
-
-**ROI** :
-- Enterprise workflows: $407M+ annual savings
-
-**Use Cases** :
-- High-volume workflows (1000+ requests/day)
-- Budget-constrained projects
-- API-heavy integrations
-
----
-
-### [Error Resilience](./error-resilience.md)
-**Objectif** : Gérer erreurs gracefully
-
-**Topics** :
-- Fallback chains (MCP → Context7 → Perplexity → Firecrawl)
-- Retry logic (once per failure)
-- Graceful degradation (partial success)
-- Error aggregation (batch processing)
-- Auto-rollback (CI/CD)
-
-**Patterns** :
-- ✅ Try → Fallback → Report
-- ✅ Retry once → BLOCK if still fails
-- ✅ Aggregate failures → Retry batch
-
-**Use Cases** :
-- Critical workflows (P1 incidents)
-- External API integrations (rate limits, timeouts)
-- Large-scale processing (expect failures)
-
----
-
-### [Team Collaboration](./team-collaboration.md)
-**Objectif** : Workflows partagés & maintenables
-
-**Topics** :
-- Documentation standards (README, examples)
-- Naming conventions (commands, agents, skills)
-- Memory hierarchy (Enterprise > User > Project)
-- Version control (git workflows)
-- Testing strategies (validate before deploy)
-
-**Structure** :
-```
-.claude/
-├── CLAUDE.md (Enterprise memory)
-├── commands/ (shared orchestrators)
-├── agents/ (reusable workers)
-├── skills/ (team knowledge bases)
-└── hooks/ (automated validation)
-```
-
-**Use Cases** :
-- Multi-developer teams
-- Enterprise deployments
-- Open-source workflows
-
----
-
-## 🎯 Priority Matrix
-
-| Best Practice | Impact | Effort | Priority |
-|---------------|--------|--------|----------|
-| **Performance** | High (5-20x) | Medium | 🔥 High |
-| **Cost Opt** | High (90%+) | Low | 🔥 High |
-| **Error Resilience** | High (0 downtime) | Medium | ⭐ Medium |
-| **Team Collab** | Medium | High | ⭐ Medium |
-
-**Recommended Order** :
-1. 🔥 **Cost Optimization** (quick wins, 90%+ reduction)
-2. 🔥 **Performance** (5-20x speedup)
-3. ⭐ **Error Resilience** (production stability)
-4. ⭐ **Team Collaboration** (long-term maintainability)
-
----
-
-## 🏗️ Production Checklist
-
-Avant de déployer un workflow en production, vérifier :
-
-### Performance ✅
+### Performance
 - [ ] Parallel execution for independent tasks
 - [ ] Batch processing for large datasets (100+)
-- [ ] Skills used for shared knowledge
-- [ ] Benchmarks measured (time, speedup)
+- [ ] Benchmarks measured (time + speedup)
 
-### Cost ✅
+### Cost
 - [ ] Fallback chains implemented (cheap → expensive)
 - [ ] Token usage monitored (PostToolUse hook)
 - [ ] Budget thresholds set (alert at 80%)
-- [ ] ROI calculated (cost reduction %)
 
-### Error Resilience ✅
+### Error Resilience
 - [ ] Retry logic (once per failure)
 - [ ] Graceful degradation (partial success OK)
 - [ ] Error aggregation (batch failures tracked)
-- [ ] Auto-rollback (critical workflows)
 
-### Team Collaboration ✅
-- [ ] README documentation (usage, examples)
+### Team Collaboration
+- [ ] README documentation (usage + examples)
 - [ ] Naming conventions followed
 - [ ] Memory hierarchy configured
-- [ ] Version control (git + .gitignore)
-- [ ] Testing strategy (validation before deploy)
+
+---
+
+## 📊 Enterprise ROI (3 workflows)
+
+| Workflow | Manual | Automated | Annual Savings |
+|----------|--------|-----------|-----------------|
+| RFP Automation | $25,500/RFP | $750 (97% ↓) | $618,750 (25/year) |
+| CI/CD Pipeline | $600-1200/week | $15/week (98% ↓) | $30-62K/year |
+| Global Localization | $15,000/project | $300 (98% ↓) | $147K/year (10/year) |
+| **TOTAL** | | | **$407K+ annual savings** |
+
+---
+
+## 🎓 Learning Path (4 weeks)
+
+```
+Week 1: Cost Optimization → Quick wins (fallback chains)
+Week 2: Performance → Benchmark + parallel execution
+Week 3: Error Resilience → Retry logic + graceful fallbacks
+Week 4: Team Collaboration → Documentation + shared workflows
+```
+
+**Result**: Production-ready workflows = 90%+ cost reduction + 5-20x speedup + 99.9% uptime ✨
+
+---
+
+## 🔗 Complete Guides
+
+- 🎓 [Performance](./performance.md) - Parallel, batch, caching, benchmarking
+- 💰 [Cost Optimization](./cost-optimization.md) - Fallback chains, MCP routing, token optimization
+- 🛡️ [Error Resilience](./error-resilience.md) - Retry patterns, graceful degradation, auto-rollback
+- 👥 [Team Collaboration](./team-collaboration.md) - Docs, naming, memory hierarchy, testing
 
 ---
 
 ## 💡 Golden Rules
 
-### ✅ DO
+✅ **DO**: Optimize for cost first, then performance
+✅ **DO**: Always measure before optimizing
+✅ **DO**: Plan for failures (expect, handle gracefully)
+✅ **DO**: Document for your team
 
-**1. Optimize for cost first, then performance**
-```
-❌ WRONG: Use expensive MCP for everything
-✅ CORRECT: Fallback chain (local data → Context7 → Perplexity)
-💰 Savings: 95%+ cost reduction
-```
-
-**2. Always measure before optimizing**
-```
-❌ WRONG: Assume parallel is faster
-✅ CORRECT: Benchmark sequential vs parallel vs batch
-📊 Data-driven decisions
-```
-
-**3. Plan for failures (expect, don't hope)**
-```
-❌ WRONG: Assume API calls succeed
-✅ CORRECT: Try → Retry once → Fallback → Report
-🛡️ Production-ready
-```
-
-**4. Document for future you (and your team)**
-```
-❌ WRONG: Complex command without README
-✅ CORRECT: README with usage, examples, troubleshooting
-🤝 Team-friendly
-```
-
----
-
-### ❌ DON'T
-
-**1. Don't over-engineer early**
-```
-❌ WRONG: Start with complex batch + conditional
-✅ CORRECT: Start simple (parallel), optimize if needed
-```
-
-**2. Don't ignore costs**
-```
-❌ WRONG: No budget tracking
-✅ CORRECT: PostToolUse hook monitors costs
-💸 Budget blowout avoided
-```
-
-**3. Don't skip error handling**
-```
-❌ WRONG: Assume success, no retry
-✅ CORRECT: Retry once + fallback + report
-```
-
-**4. Don't hardcode configuration**
-```
-❌ WRONG: API keys in code
-✅ CORRECT: Memory (.claude/CLAUDE.md) + Skills
-```
-
----
-
-## 📊 ROI Calculator
-
-### Enterprise Workflow ROI
-
-**Example : RFP Automation**
-- Manual: 2-4 weeks × $25/hour × 160h = $25,500
-- Automated: 3.5h × $15/hour = $750 (one-time + $200 monthly)
-- **Savings**: $24,750 per RFP (97% reduction)
-- **ROI**: 25 RFPs/year = $618,750 annual savings
-
-**Example : CI/CD Pipeline**
-- Manual: 4-8h × 3 deploys/week × $50/hour = $600-1,200/week
-- Automated: 1h × 3 deploys/week × $5 = $15/week
-- **Savings**: $585-1,185/week (98% reduction)
-- **ROI**: $30,420-61,620 annual savings
-
-**Example : Global Localization**
-- Manual: 2-3 weeks × $25/hour × 120h = $15,000
-- Automated: 3-6h × $15/hour = $300 (one-time + $50 monthly)
-- **Savings**: $14,700 per project (98% reduction)
-- **ROI**: 10 projects/year = $147,000 annual savings
-
-**Total ROI (3 workflows)** : $407,000+ annual savings
-
----
-
-## 🎓 Learning Path
-
-```
-1️⃣ Start: Cost Optimization
-   └─> Quick wins (fallback chains, caching)
-   └─> Immediate ROI (90%+ cost reduction)
-
-2️⃣ Add: Performance
-   └─> Parallel execution (5-20x speedup)
-   └─> Batch processing (large datasets)
-
-3️⃣ Harden: Error Resilience
-   └─> Retry logic + fallbacks
-   └─> Auto-rollback (production)
-
-4️⃣ Scale: Team Collaboration
-   └─> Documentation standards
-   └─> Shared workflows
-```
-
-**Estimated Time** :
-- Week 1: Cost Optimization (apply to 1 workflow)
-- Week 2: Performance (benchmark + optimize)
-- Week 3: Error Resilience (add fallbacks + retry)
-- Week 4: Team Collaboration (document + share)
-
-**Result** : Production-ready workflows with 90%+ cost reduction, 5-20x speedup, 99.9% uptime
+❌ **DON'T**: Over-engineer early
+❌ **DON'T**: Ignore budget tracking
+❌ **DON'T**: Skip error handling
+❌ **DON'T**: Hardcode configuration
 
 ---
 
 ## 📚 Ressources
 
-### Documentation Interne
-- 🎓 [Orchestration Principles](../orchestration-principles.md)
-- 🔗 [Patterns](../6-composable-patterns/README.md)
-- 🚀 [Workflows](../workflows/README.md)
-
-### Documentation Officielle
-- 📄 [Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)
-- 📄 [Production Deployment](https://code.claude.com/docs/en/production)
-
-### Workflows Référencés
-- 🎯 [Enterprise RFP](../workflows/enterprise-rfp.md) - $618K annual ROI
-- 🎯 [CI/CD Pipeline](../workflows/ci-cd-pipeline.md) - $60K annual ROI
-- 🎯 [Global Localization](../workflows/global-localization.md) - $147K annual ROI
-- 🎯 [Security Incident Response](../workflows/security-incident-response.md) - 10-15x MTTR
+- 📄 [Orchestration Principles](../orchestration-principles.md)
+- 📄 [Composable Patterns](../6-composable-patterns/README.md)
+- 🎯 [Enterprise Workflows](../workflows/README.md) (RFP, CI/CD, Localization)
+- 📄 [Anthropic Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)
 
 ---
 
-## 🎯 Points Clés
-
-✅ **Cost Optimization FIRST** = 90%+ reduction (quick wins)
-✅ **Performance SECOND** = 5-20x speedup (measure first)
-✅ **Error Resilience** = Production stability (retry + fallback)
-✅ **Team Collaboration** = Long-term maintainability (docs + standards)
-✅ **Measure everything** = Benchmarks, ROI, metrics
-✅ **Plan for failures** = Expect, handle gracefully
-✅ **Document always** = Future you + team will thank you
-
-**Impact** : Production-ready workflows = $407K+ ROI + 0 downtime ✨
-
----
-
-**Prochaines Étapes** :
-1. Lire [Cost Optimization](./cost-optimization.md) pour quick wins
-2. Appliquer [Performance](./performance.md) à vos workflows
-3. Ajouter [Error Resilience](./error-resilience.md) pour production
-4. Partager avec [Team Collaboration](./team-collaboration.md)
+**Prochaines Étapes**: Lire [Cost Optimization](./cost-optimization.md) pour quick wins rapides
