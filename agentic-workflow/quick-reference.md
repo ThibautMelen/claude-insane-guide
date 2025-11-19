@@ -551,8 +551,8 @@ Approval Gates:
 
 **Documentation Détaillée** :
 - 📄 [Orchestration Principles](./orchestration-principles.md) - Règles fondamentales
-- 📄 [Command/Agent/Skill Patterns](./patterns/command-agent-skill.md) - Architecture détaillée
-- 📄 [Skill Invocation Lifecycle](./patterns/skill-invocation.md) - isMeta, 2-message pattern
+- 📄 [Command/Agent/Skill Patterns]../6-composable-patterns/4-orchestrator-workers.md) - Architecture détaillée
+- 📄 [Skill Invocation Lifecycle]../architecture/skills-progressive-disclosure.md) - isMeta, 2-message pattern
 - 📄 [Performance Optimization](./best-practices/performance.md) - Stratégies 1-7
 
 **Articles Externes** :

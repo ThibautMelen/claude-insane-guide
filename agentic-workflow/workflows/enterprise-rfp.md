@@ -1241,9 +1241,9 @@ T+160min : ✅ HUMAN-IN-LOOP REQUIS
 ### Documentation Interne
 
 - 📄 [Orchestration Principles](../orchestration-principles.md) - Règles Anthropic
-- 📄 [Command-Agent-Skill Pattern](../patterns/command-agent-skill.md) - Architecture de base
-- 📄 [Error Handling Pattern](../patterns/error-handling.md) - Gestion erreurs robuste
-- 📄 [Parallel Execution Pattern](../patterns/parallel-execution.md) - Optimisation performance
+- 📄 [Command-Agent-Skill Pattern](../6-composable-patterns/4-orchestrator-workers.md) - Architecture de base
+- 📄 [Error Handling Pattern](../best-practices/error-resilience.md) - Gestion erreurs robuste
+- 📄 [Parallel Execution Pattern](../6-composable-patterns/3-parallelization.md) - Optimisation performance
 
 ### Workflows Similaires
 

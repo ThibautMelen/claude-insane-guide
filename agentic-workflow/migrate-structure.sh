@@ -93,11 +93,10 @@ if [ -f "patterns/command-agent-skill.md" ]; then
   mv patterns/command-agent-skill.md 6-composable-patterns/4-orchestrator-workers.md
 fi
 
-# Move agent-orchestration.md → will be split/refactored (for now, backup)
-if [ -f "patterns/agent-orchestration.md" ]; then
-  echo "✓ Backing up agent-orchestration.md (will be refactored)"
-  cp patterns/agent-orchestration.md 6-composable-patterns/agent-orchestration-BACKUP.md
-fi
+# agent-orchestration.md content has been integrated into 4-orchestrator-workers.md
+# BACKUP file was deleted on 2025-11-19 (content already integrated)
+echo "✓ agent-orchestration.md was previously backed up and has been deleted"
+echo "  (Content integrated into 6-composable-patterns/4-orchestrator-workers.md)"
 
 # Patterns 5 and 6 already created
 echo "✓ Pattern 5 (evaluator-optimizer.md) already created"

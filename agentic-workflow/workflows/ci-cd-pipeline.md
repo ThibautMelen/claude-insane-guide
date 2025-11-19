@@ -634,8 +634,8 @@ Deploy to 100% production immediately
 ## 📚 Ressources
 
 - 📄 [Orchestration Principles](../orchestration-principles.md)
-- 📄 [Parallel Execution Pattern](../patterns/parallel-execution.md)
-- 📄 [Error Handling Pattern](../patterns/error-handling.md)
+- 📄 [Parallel Execution Pattern](../6-composable-patterns/3-parallelization.md)
+- 📄 [Error Handling Pattern](../best-practices/error-resilience.md)
 - 📄 [Enterprise RFP Workflow](./enterprise-rfp.md)
 
 **Ce workflow CI/CD est production-ready et suit les standards Anthropic 2025 !**

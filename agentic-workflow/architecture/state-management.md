@@ -757,8 +757,8 @@ IF context > 50k tokens:
 ## 📚 Ressources
 
 ### Documentation Interne
-- 📄 [Memory Guide](../themes/1-memory/guide.md) - CLAUDE.md configuration
-- 📄 [Hooks Guide](../themes/6-hooks/guide.md) - SubagentStop automation
+- 📄 [Memory Guide](../../themes/1-memory/guide.md) - CLAUDE.md configuration
+- 📄 [Hooks Guide](../../themes/6-hooks/guide.md) - SubagentStop automation
 - 📄 [Command/Agent Pattern](./command-agent-skill.md) - Orchestration base
 - 📄 [Error Handling](./error-handling.md) - Checkpoints & recovery
 - 📄 [Parallel Execution](./parallel-execution.md) - Session state in batches

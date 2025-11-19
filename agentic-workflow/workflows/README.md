@@ -524,9 +524,9 @@ Hybrid Orchestré:
 ## 🔗 Ressources
 
 ### Documentation Interne
-- 📄 [../patterns/command-agent-skill.md](../patterns/command-agent-skill.md) - Architecture hiérarchique
-- 📄 [../patterns/error-handling.md](../patterns/error-handling.md) - Fallback chains
-- 📄 [../patterns/parallel-execution.md](../patterns/parallel-execution.md) - Batching
+- 📄 [../6-composable-patterns/4-orchestrator-workers.md](../6-composable-patterns/4-orchestrator-workers.md) - Architecture hiérarchique
+- 📄 [../best-practices/error-resilience.md](../best-practices/error-resilience.md) - Fallback chains
+- 📄 [../6-composable-patterns/3-parallelization.md](../6-composable-patterns/3-parallelization.md) - Batching
 - 📄 [../best-practices/performance.md](../best-practices/performance.md) - Optimisations
 
 ### Documentation Externe

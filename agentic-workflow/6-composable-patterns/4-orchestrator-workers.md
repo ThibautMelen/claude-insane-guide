@@ -42,7 +42,7 @@
 
 ### 📚 Framework Complet
 
-**Voir [Core 4 & Fundamentals](../themes/8-advanced/core-4-fundamentals.md) pour** :
+**Voir [Core 4 & Fundamentals](../../themes/8-advanced/core-4-fundamentals.md) pour** :
 - 📊 Tableau comparatif Dan (toutes features)
 - 🔥 Golden Rule workflow complet (jamais skip étapes)
 - 📈 Progressive Disclosure (Skills vs MCP)
@@ -50,7 +50,7 @@
 - 🤖 vs 👤 Distinction (Manual vs Auto trigger)
 - 📚 Skills Dual Role (Knowledge + Composition)
 
-**Voir [Decision Trees](../themes/8-advanced/decision-trees.md) pour** :
+**Voir [Decision Trees](../../themes/8-advanced/decision-trees.md) pour** :
 - 🎯 Framework 3 questions (Q1, Q2, Q3)
 - 📋 Decision trees par feature
 - 🔄 Scenarios réels et anti-patterns

@@ -300,7 +300,7 @@ Avant de déployer un workflow en production, vérifier :
 
 ### Documentation Interne
 - 🎓 [Orchestration Principles](../orchestration-principles.md)
-- 🔗 [Patterns](../patterns/README.md)
+- 🔗 [Patterns](../6-composable-patterns/README.md)
 - 🚀 [Workflows](../workflows/README.md)
 
 ### Documentation Officielle

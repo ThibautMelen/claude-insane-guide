@@ -744,11 +744,11 @@ report = generateReport(metrics)
 ## 📚 Ressources
 
 ### Documentation Interne
-- 📄 [Command/Agent/Skill Pattern](./command-agent-skill.md) - Architecture base
-- 📄 [Error Handling](./error-handling.md) - Retry et fallback logic
-- 📄 [State Management](./state-management.md) - Context entre agents
-- 📄 [Task Tool Guide](../themes/7-subagents/guide.md) - Sub-agents avec Task
-- 📄 [Performance Tips](../TROUBLESHOOTING.md) - Optimisations
+- 📄 [Command-Agent-Skill Pattern](../architecture/command-subcommand-agent.md) - Architecture base
+- 📄 [Error Handling](../best-practices/error-resilience.md) - Retry et fallback logic
+- 📄 [State Management](../architecture/state-management.md) - Context entre agents
+- 📄 [Plugins & Subagents Guide](../../themes/7-plugins/guide.md) - Sub-agents avec Task
+- 📄 [Performance Tips](../best-practices/performance.md) - Optimisations
 
 ### Documentation Externe
 - 📄 [Claude Code Task Tool](https://code.claude.com/docs/task-tool) - API officielle

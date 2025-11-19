@@ -780,7 +780,7 @@ Command orchestre, pas un agent.
 ## 📚 Ressources
 
 - 📄 [Orchestration Principles](../orchestration-principles.md)
-- 📄 [Error Handling Pattern](../patterns/error-handling.md)
+- 📄 [Error Handling Pattern](../best-practices/error-resilience.md)
 - 📄 [Enterprise RFP](./enterprise-rfp.md) - Human-in-loop pattern
 - 📄 [CI/CD Pipeline](./ci-cd-pipeline.md) - Sequential + Parallel patterns
 

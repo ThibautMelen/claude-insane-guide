@@ -1321,8 +1321,8 @@ Typical saving: 30-70% reduction in context
 
 ### Patterns Spécifiques
 
-- 📄 [Parallel Execution Pattern](../patterns/parallel-execution.md)
-- 📄 [Hook Automation Pattern](../patterns/hook-automation.md)
+- 📄 [Parallel Execution Pattern](../6-composable-patterns/3-parallelization.md)
+- 📄 [Hook Automation Pattern](../architecture/hooks-lifecycle.md)
 
 ---
 

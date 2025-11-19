@@ -685,7 +685,7 @@ Savings: 30-50% time + cost
 ## 📚 Ressources
 
 - 📄 [Orchestration Principles](../orchestration-principles.md)
-- 📄 [Parallel Execution Pattern](../patterns/parallel-execution.md)
+- 📄 [Parallel Execution Pattern](../6-composable-patterns/3-parallelization.md)
 - 📄 [CI/CD Pipeline](./ci-cd-pipeline.md) - Pattern parallèle
 - 📄 [Enterprise RFP](./enterprise-rfp.md) - Skills partagés
 
