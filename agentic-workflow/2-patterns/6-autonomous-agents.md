@@ -10,6 +10,23 @@
 
 **Notre choix**: Workers pour production (contrôle total), Autonomous pour research (flexibility)
 
+---
+
+## 🧩 Pattern vs Workflow
+
+**Ce fichier documente un PATTERN** (brique technique réutilisable).
+
+| Aspect | Description |
+|--------|-------------|
+| 🔧 **Type** | Pattern architectural (autonomie décisionnelle) |
+| 🎯 **Problème résolu** | Tâches ouvertes où steps sont imprévisibles |
+| 🧩 **Combinable avec** | Pattern 4 (Workers) pour production, Evaluator pour validation |
+| 🚀 **Utilisé dans workflows** | SWE-bench, Research exploration, Unknown bug resolution |
+
+**Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
+
+⚠️ **Note importante** : Ce pattern documente la distinction **Workers (production) vs Autonomous (research)**.
+
 ## 📐 Deux Architectures
 
 ```
@@ -75,6 +92,24 @@ Research (exploration, prototype)?
   → Autonomous Agents ⚠️ (avec sandbox)
 ```
 
+## ⚖️ Trade-offs : Workers vs Autonomous
+
+| Dimension | Workers ✅ (Production) | Autonomous ⚠️ (Research) |
+|-----------|------------------------|-------------------------|
+| **Control** | ⬆️ Command décide tout | ⬇️ Agent décide autonome |
+| **Predictability** | ⬆️ Steps prédéfinis | ⬇️ Steps dynamiques |
+| **Auditability** | ⬆️ Logs complets, traçabilité | ⬇️ Décisions opaques LLM |
+| **Scalability** | ⬆️ Parallel workers facile | ⬇️ Autonomous agents complexe |
+| **Production-ready** | ✅ OUI (robuste) | ⚠️ NON (requires sandbox) |
+| **Flexibility** | ⬇️ Rigide (steps fixes) | ⬆️ Adaptatif (open-ended) |
+| **Use case** | Tâches prévisibles | Problèmes ouverts |
+
+**Verdict** :
+- ✅ **Workers (Pattern 4)** : Default pour production (contrôle, audit, scalabilité)
+- ⚠️ **Autonomous (Pattern 6)** : Seulement research avec sandbox (flexibility, exploration)
+
+---
+
 ## 🎯 Best Practices
 
 ### ✅ DO (Workers - Production)
@@ -120,5 +155,5 @@ NOTRE CHOIX ✅
 
 - 📄 [Vue d'ensemble 6 Patterns](./README.md)
 - 📐 [Pattern 4: Orchestrator-Workers](./4-orchestrator-workers.md) (notre implémentation)
-- 📐 [Command-Subcommand-Agent](../architecture/command-coordinator-workers.md)
+- 📐 [Command-Subcommand-Agent](../3-architecture/command-coordinator-workers.md)
 - 📄 [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)

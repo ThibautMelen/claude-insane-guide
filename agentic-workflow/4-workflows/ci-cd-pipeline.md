@@ -2,6 +2,38 @@
 
 > **Use Case Professionnel** : Pipeline complet automatisé de build, test et déploiement avec quality gates et rollback automatique.
 
+---
+
+## 🚀 Workflow vs Pattern
+
+**Ce fichier documente un WORKFLOW** (cas d'usage métier complet).
+
+| Aspect | Description |
+|--------|-------------|
+| 🚀 **Type** | Workflow production-ready (bout-en-bout) |
+| 🏢 **Contexte métier** | Automatiser releases software avec quality gates |
+| 🧩 **Patterns utilisés** | Pattern 1 (Chaining), Pattern 3 (Parallelization), Pattern 4 (Orchestrator) |
+| 📊 **ROI** | 4-8h → 15min (16-32x speedup), 15-20% taux échec → 2-3% |
+
+### 🧱 Décomposition Patterns
+
+```
+Pipeline CI/CD = Combinaison de 3 patterns :
+
+1️⃣ Pattern 1 : Prompt Chaining (SEQUENTIAL)
+   └─> Build → Test → Deploy (séquence fixe)
+
+3️⃣ Pattern 3 : Parallelization (CONCURRENT)
+   └─> Build (3 agents //), Test (3 agents //)
+
+4️⃣ Pattern 4 : Orchestrator-Workers
+   └─> Release-Manager (Command) → Subcommands → Agents
+```
+
+**Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
+
+---
+
 ## 📋 Vue d'Ensemble
 
 **Problème Résolu** :
@@ -634,8 +666,8 @@ Deploy to 100% production immediately
 ## 📚 Ressources
 
 - 📄 [Orchestration Principles](../orchestration-principles.md)
-- 📄 [Parallel Execution Pattern](../6-composable-patterns/3-parallelization.md)
-- 📄 [Error Handling Pattern](../best-practices/error-resilience.md)
+- 📄 [Parallel Execution Pattern](../2-patterns/3-parallelization.md)
+- 📄 [Error Handling Pattern](../5-best-practices/error-resilience.md)
 - 📄 [Enterprise RFP Workflow](./enterprise-rfp.md)
 
 **Ce workflow CI/CD est production-ready et suit les standards Anthropic 2025 !**

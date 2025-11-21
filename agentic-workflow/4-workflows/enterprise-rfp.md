@@ -2,6 +2,38 @@
 
 > **Use Case Professionnel** : Système automatisé de réponse aux appels d'offres (RFP) nécessitant coordination multi-départements (légal, technique, finance).
 
+---
+
+## 🚀 Workflow vs Pattern
+
+**Ce fichier documente un WORKFLOW** (cas d'usage métier complet).
+
+| Aspect | Description |
+|--------|-------------|
+| 🚀 **Type** | Workflow enterprise (multi-départements) |
+| 🏢 **Contexte métier** | Réponse RFP automatisée (Legal + Tech + Finance) |
+| 🧩 **Patterns utilisés** | Pattern 1 (Chaining), Pattern 4 (Orchestrator), Pattern 5 (Evaluator) |
+| 📊 **ROI** | 2-4 semaines → 2-3 jours (7-14x speedup), cohérence +40% |
+
+### 🧱 Décomposition Patterns
+
+```
+Enterprise RFP = Combinaison de 3 patterns :
+
+1️⃣ Pattern 1 : Prompt Chaining (SEQUENTIAL)
+   └─> Analysis → Writing → Review (séquence fixe)
+
+4️⃣ Pattern 4 : Orchestrator-Workers
+   └─> RFP-Orchestrator → Subcommands (Analysis/Writing/Review) → Agents
+
+5️⃣ Pattern 5 : Evaluator-Optimizer (QUALITY LOOP)
+   └─> Review → Evaluate → Refine (quality critical)
+```
+
+**Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
+
+---
+
 ## 📋 Vue d'Ensemble
 
 **Problème Résolu** :
@@ -1241,9 +1273,9 @@ T+160min : ✅ HUMAN-IN-LOOP REQUIS
 ### Documentation Interne
 
 - 📄 [Orchestration Principles](../orchestration-principles.md) - Règles Anthropic
-- 📄 [Command-Agent-Skill Pattern](../6-composable-patterns/4-orchestrator-workers.md) - Architecture de base
-- 📄 [Error Handling Pattern](../best-practices/error-resilience.md) - Gestion erreurs robuste
-- 📄 [Parallel Execution Pattern](../6-composable-patterns/3-parallelization.md) - Optimisation performance
+- 📄 [Command-Agent-Skill Pattern](../2-patterns/4-orchestrator-workers.md) - Architecture de base
+- 📄 [Error Handling Pattern](../5-best-practices/error-resilience.md) - Gestion erreurs robuste
+- 📄 [Parallel Execution Pattern](../2-patterns/3-parallelization.md) - Optimisation performance
 
 ### Workflows Similaires
 

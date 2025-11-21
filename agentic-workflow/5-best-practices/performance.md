@@ -1309,9 +1309,9 @@ Typical saving: 30-70% reduction in context
 ### Documentation Interne
 
 - 📄 [Orchestration Principles](../orchestration-principles.md)
-- 📄 [Enterprise RFP Workflow](../workflows/enterprise-rfp.md)
-- 📄 [Global Localization Workflow](../workflows/global-localization.md)
-- 📄 [CI/CD Pipeline Workflow](../workflows/ci-cd-pipeline.md)
+- 📄 [Enterprise RFP Workflow](../4-workflows/enterprise-rfp.md)
+- 📄 [Global Localization Workflow](../4-workflows/global-localization.md)
+- 📄 [CI/CD Pipeline Workflow](../4-workflows/ci-cd-pipeline.md)
 
 ### Patterns Connexes
 
@@ -1321,8 +1321,8 @@ Typical saving: 30-70% reduction in context
 
 ### Patterns Spécifiques
 
-- 📄 [Parallel Execution Pattern](../6-composable-patterns/3-parallelization.md)
-- 📄 [Hook Automation Pattern](../architecture/hooks-lifecycle.md)
+- 📄 [Parallel Execution Pattern](../2-patterns/3-parallelization.md)
+- 📄 [Hook Automation Pattern](../3-architecture/hooks-lifecycle.md)
 
 ---
 

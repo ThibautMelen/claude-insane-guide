@@ -35,7 +35,7 @@ Ce document établit les **règles fondamentales** pour orchestrer Commands, Sub
 
 ### Règle 2 : Hiérarchie Plate (Flat Hierarchy)
 
-**Voir** : [Command-Subcommand-Agent Architecture](./architecture/command-coordinator-workers.md) pour détails complets.
+**Voir** : [Command-Subcommand-Agent Architecture](./3-architecture/command-coordinator-workers.md) pour détails complets.
 
 **En bref** : Maximum 3 niveaux (Command → Coordinator Agent → Agent). Agents = feuilles, jamais de délégation.
 
@@ -77,7 +77,7 @@ Output:  Résultat structuré (JSON, Markdown, status)
 
 ### Règle 4 : Hooks pour Validation et Décisions
 
-**Voir** : [Hooks Lifecycle Architecture](./architecture/hooks-lifecycle.md) pour détails complets.
+**Voir** : [Hooks Lifecycle Architecture](./3-architecture/hooks-lifecycle.md) pour détails complets.
 
 **En bref** : 4 types (Validation, Decision, Monitoring, Execution). Codes retour : 0=OK, 1=Warning, 2=Block.
 
@@ -85,7 +85,7 @@ Output:  Résultat structuré (JSON, Markdown, status)
 
 ### Règle 5 : Skills pour Économie de Contexte
 
-**Voir** : [Skills Progressive Disclosure Architecture](./architecture/skills-progressive-disclosure.md) pour détails complets.
+**Voir** : [Skills Progressive Disclosure Architecture](./3-architecture/skills-progressive-disclosure.md) pour détails complets.
 
 **En bref** : Auto-invoquées, 3 niveaux (metadata → full prompt → bundled resources), 10-50x moins de tokens.
 

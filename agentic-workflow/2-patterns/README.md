@@ -372,8 +372,8 @@ Pattern 5: Evaluator-Optimizer (Quality)
 ### Documentation Interne
 
 - 📐 [Orchestration Principles](../orchestration-principles.md) ⭐ - Règles d'or Anthropic
-- 🏗️ [Architecture](../architecture/) - Command/Agent/Skill/Hooks
-- 🚀 [Workflows](../workflows/) - Exemples concrets (RFP, CI-CD, Localization)
+- 🏗️ [Architecture](../3-architecture/) - Command/Agent/Skill/Hooks
+- 🚀 [Workflows](../4-workflows/) - Exemples concrets (RFP, CI-CD, Localization)
 
 ---
 

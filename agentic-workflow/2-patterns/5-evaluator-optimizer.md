@@ -10,6 +10,21 @@
 
 **ROI**: +14% quality improvement (85%→99%), 2.4x cost increase, max 3 iterations optimal
 
+---
+
+## 🧩 Pattern vs Workflow
+
+**Ce fichier documente un PATTERN** (brique technique réutilisable).
+
+| Aspect | Description |
+|--------|-------------|
+| 🔧 **Type** | Pattern architectural (quality loop) |
+| 🎯 **Problème résolu** | Amélioration itérative de la qualité d'output |
+| 🧩 **Combinable avec** | Chaining (étape Test avec loop), Parallelization (evaluate batch) |
+| 🚀 **Utilisé dans workflows** | Enterprise RFP (quality critical), Global Localization (translation) |
+
+**Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
+
 ## 📐 Architecture
 
 ```
@@ -46,6 +61,61 @@ Generator Agent (with feedback):
 
 Loop until score ≥ 8/10 OR max 3 iterations
 ```
+
+## 🎯 Quand Utiliser Ce Pattern
+
+### ✅ Utiliser Evaluator-Optimizer SI :
+
+```
+✅ Quality absolument critique (literary, legal, branding)
+   → Ex: Literary translation, RFP response, marketing copy
+
+✅ Scoring objectif possible (metrics clairs)
+   → Ex: Translation (accuracy, cultural nuance, tone, literary quality)
+
+✅ Feedback actionable identifiable
+   → Ex: "Replace X with Y", "Add cultural context Z"
+
+✅ Coût acceptable vs quality gain
+   → Ex: 2.4x cost pour +14% quality = justified
+
+✅ Iterations limitées (diminishing returns après 3)
+   → Ex: Max 3-5 iterations suffisent
+```
+
+### ❌ NE PAS Utiliser SI :
+
+```
+❌ Quality "good enough" acceptable
+   → Ex: Internal docs, prototypes → One-shot suffit
+
+❌ Scoring subjectif (pas de métriques claires)
+   → Ex: "Make it better" → Vague, pas actionable
+
+❌ Feedback non actionable
+   → Ex: "Improve tone" → Pas spécifique
+
+❌ Budget serré (coût 2-5x inacceptable)
+   → Ex: High volume, low budget → One-shot
+
+❌ Speed critique (latence 2-3x inacceptable)
+   → Ex: Real-time responses → One-shot
+```
+
+---
+
+## ⚖️ Trade-offs
+
+| Avantage ⬆️ | Inconvénient ⬇️ |
+|------------|----------------|
+| **+14% Quality** (85%→99%) | **2.4x Cost** (4 API calls vs 1) |
+| **Iterative refinement** (feedback loop) | **2-3x Latence** (22s vs 8s) |
+| **Actionable feedback** (specific improvements) | **Diminishing returns** (après 3 iterations) |
+| **Best version guarantee** (track improvements) | **Overhead scoring** (evaluation cost) |
+
+**Verdict** : **Must-have pour quality-critical content** où 85%→99% justifie 2.4x cost.
+
+---
 
 ## 💡 Implementation Pattern
 
@@ -106,8 +176,8 @@ Iteration 4+ (diminishing returns):
 ## 🔗 Ressources
 
 - 📄 [Vue d'ensemble 6 Patterns](./README.md)
-- 🚀 [Enterprise RFP (Quality Loops)](../workflows/enterprise-rfp.md)
-- 🚀 [Global Localization (Translation Quality)](../workflows/global-localization.md)
+- 🚀 [Enterprise RFP (Quality Loops)](../4-workflows/enterprise-rfp.md)
+- 🚀 [Global Localization (Translation Quality)](../4-workflows/global-localization.md)
 - 📄 [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)
 
 **Voir** : [Multi-Dialog Patterns](../../themes/8-advanced/multi-dialog-patterns.md) - AskUserQuestion avancé

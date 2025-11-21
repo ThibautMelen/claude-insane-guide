@@ -6,6 +6,42 @@
 
 ---
 
+## 🚀 Workflow Stack vs Pattern
+
+**Ce fichier documente un WORKFLOW STACK** (ensemble de 5 workflows interconnectés).
+
+| Aspect | Description |
+|--------|-------------|
+| 🚀 **Type** | Workflow stack (5 workflows intégrés) |
+| 🏢 **Contexte métier** | Automatisation complète chaîne de contenu startup |
+| 🧩 **Patterns utilisés** | Tous les 6 patterns combinés (selon workflow) |
+| 📊 **ROI Global** | $30-45k/mois → $500-700/mois (43-64x économie) |
+
+### 🧱 Décomposition : 5 Workflows
+
+```
+Content Automation Stack = 5 workflows interconnectés :
+
+1️⃣ Blog Automation (Pattern 1: Chaining + Pattern 5: Evaluator)
+   └─> Research → Outline → Draft → Review → Publish
+
+2️⃣ Social Media (Pattern 3: Parallelization)
+   └─> Generate 10 posts // (Twitter, LinkedIn, etc.)
+
+3️⃣ Multi-Language (Pattern 3: Parallelization + Pattern 5: Evaluator)
+   └─> Translate 20+ languages // avec quality check
+
+4️⃣ Community Management (Pattern 2: Routing)
+   └─> Route messages par type (Support/Sales/Feedback)
+
+5️⃣ Content Repurposing (Pattern 1: Chaining)
+   └─> Blog → Extract → Transform → Multiple formats
+```
+
+**Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
+
+---
+
 ## 📋 Table des Matières
 
 1. [Vue d'Ensemble des 5 Workflows](#vue-densemble)

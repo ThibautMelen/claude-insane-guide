@@ -117,10 +117,10 @@ Hybrid Orchestration (Generate 50 locales + API)
 - [startup-content-stack.md](./startup-content-stack.md) 📦 - 5 workflows interconnectés
 
 **Ressources connexes** :
-- [../6-composable-patterns/4-orchestrator-workers.md](../6-composable-patterns/4-orchestrator-workers.md) - Architecture hiérarchique
-- [../best-practices/error-resilience.md](../best-practices/error-resilience.md) - Fallback chains
-- [../6-composable-patterns/3-parallelization.md](../6-composable-patterns/3-parallelization.md) - Batching strategies
-- [../best-practices/performance.md](../best-practices/performance.md) - Optimisations
+- [../2-patterns/4-orchestrator-workers.md](../2-patterns/4-orchestrator-workers.md) - Architecture hiérarchique
+- [../5-best-practices/error-resilience.md](../5-best-practices/error-resilience.md) - Fallback chains
+- [../2-patterns/3-parallelization.md](../2-patterns/3-parallelization.md) - Batching strategies
+- [../5-best-practices/performance.md](../5-best-practices/performance.md) - Optimisations
 
 ---
 

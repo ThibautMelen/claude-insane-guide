@@ -2,6 +2,38 @@
 
 > **Use Case Professionnel** : Traduction et publication de contenu marketing/produit dans 20+ langues avec adaptation culturelle.
 
+---
+
+## 🚀 Workflow vs Pattern
+
+**Ce fichier documente un WORKFLOW** (cas d'usage métier complet).
+
+| Aspect | Description |
+|--------|-------------|
+| 🚀 **Type** | Workflow large-scale (batch processing) |
+| 🏢 **Contexte métier** | Localisation 20+ langues avec adaptation culturelle |
+| 🧩 **Patterns utilisés** | Pattern 3 (Parallelization), Pattern 4 (Orchestrator), Pattern 5 (Evaluator) |
+| 📊 **ROI** | 2-3 semaines → 4-6h (80-120x speedup), coût -90% ($50k → $5k) |
+
+### 🧱 Décomposition Patterns
+
+```
+Global Localization = Combinaison de 3 patterns :
+
+3️⃣ Pattern 3 : Parallelization (MASSIVE BATCH)
+   └─> 20+ agents // (EMEA, APAC, LATAM batches)
+
+4️⃣ Pattern 4 : Orchestrator-Workers
+   └─> Localization-Orchestrator → Regional Subcommands → Language Agents
+
+5️⃣ Pattern 5 : Evaluator-Optimizer (QUALITY CHECK)
+   └─> Translation → Cultural-Evaluator → Refine
+```
+
+**Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
+
+---
+
 ## 📋 Vue d'Ensemble
 
 **Problème Résolu** :
@@ -685,7 +717,7 @@ Savings: 30-50% time + cost
 ## 📚 Ressources
 
 - 📄 [Orchestration Principles](../orchestration-principles.md)
-- 📄 [Parallel Execution Pattern](../6-composable-patterns/3-parallelization.md)
+- 📄 [Parallel Execution Pattern](../2-patterns/3-parallelization.md)
 - 📄 [CI/CD Pipeline](./ci-cd-pipeline.md) - Pattern parallèle
 - 📄 [Enterprise RFP](./enterprise-rfp.md) - Skills partagés
 

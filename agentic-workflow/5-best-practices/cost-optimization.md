@@ -1111,9 +1111,9 @@ MONTH 5 (Iterate):
 ### Documentation Interne
 
 - 📄 [Orchestration Principles](../orchestration-principles.md)
-- 📄 [Enterprise RFP Workflow](../workflows/enterprise-rfp.md)
-- 📄 [Global Localization Workflow](../workflows/global-localization.md)
-- 📄 [CI/CD Pipeline Workflow](../workflows/ci-cd-pipeline.md)
+- 📄 [Enterprise RFP Workflow](../4-workflows/enterprise-rfp.md)
+- 📄 [Global Localization Workflow](../4-workflows/global-localization.md)
+- 📄 [CI/CD Pipeline Workflow](../4-workflows/ci-cd-pipeline.md)
 
 ### Patterns Connexes
 

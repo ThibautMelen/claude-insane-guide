@@ -2,6 +2,41 @@
 
 > **Use Case Professionnel** : Détection, analyse, mitigation et post-mortem automatisé d'incidents de sécurité (ransomware, breach, DDoS).
 
+---
+
+## 🚀 Workflow vs Pattern
+
+**Ce fichier documente un WORKFLOW** (cas d'usage métier complet).
+
+| Aspect | Description |
+|--------|-------------|
+| 🚀 **Type** | Workflow mission-critical (security) |
+| 🏢 **Contexte métier** | Réponse incident sécurité automatisée (MTTR <30min) |
+| 🧩 **Patterns utilisés** | Pattern 1 (Chaining), Pattern 2 (Routing), Pattern 4 (Orchestrator), Pattern 3 (Parallel) |
+| 📊 **ROI** | 2-6h MTTR → 15-30min (8-24x speedup), coût breach -85% |
+
+### 🧱 Décomposition Patterns
+
+```
+Security Incident Response = Combinaison de 4 patterns :
+
+1️⃣ Pattern 1 : Prompt Chaining (SEQUENTIAL)
+   └─> Triage → Response → Post-Mortem (séquence fixe)
+
+2️⃣ Pattern 2 : Routing (SEVERITY CLASSIFICATION)
+   └─> P1 (critical) / P2 (high) / P3 (medium) routing
+
+3️⃣ Pattern 3 : Parallelization (CONCURRENT RESPONSE)
+   └─> Containment actions en parallèle (Firewall + IAM + Network)
+
+4️⃣ Pattern 4 : Orchestrator-Workers (4-LEVEL HIERARCHY)
+   └─> Incident-Commander → Subcommands → Sub-Subcommands → Agents
+```
+
+**Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
+
+---
+
 ## 📋 Vue d'Ensemble
 
 **Problème Résolu** :
@@ -780,7 +815,7 @@ Command orchestre, pas un agent.
 ## 📚 Ressources
 
 - 📄 [Orchestration Principles](../orchestration-principles.md)
-- 📄 [Error Handling Pattern](../best-practices/error-resilience.md)
+- 📄 [Error Handling Pattern](../5-best-practices/error-resilience.md)
 - 📄 [Enterprise RFP](./enterprise-rfp.md) - Human-in-loop pattern
 - 📄 [CI/CD Pipeline](./ci-cd-pipeline.md) - Sequential + Parallel patterns
 

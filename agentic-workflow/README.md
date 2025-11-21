@@ -16,6 +16,174 @@ Créer des **systèmes agentiques production-ready** en utilisant les 6 patterns
 
 ---
 
+## 🧩 Pattern vs Workflow : Quelle Différence ?
+
+**Avant d'aller plus loin**, clarifions ces deux concepts fondamentaux :
+
+```
+╔═══════════════════════════════════════════════════════════╗
+║  PATTERN = COMMENT (technique/architecture)               ║
+║  WORKFLOW = QUOI + QUAND (cas d'usage complet)           ║
+╚═══════════════════════════════════════════════════════════╝
+```
+
+### 📐 Pattern (Brique Technique)
+
+**Définition** : Une **technique architecturale** ou un **mode d'organisation** réutilisable.
+
+| Caractéristique | Description |
+|----------------|-------------|
+| 🔧 **Nature** | Abstrait et générique |
+| 🧩 **Composabilité** | Se combine avec d'autres patterns |
+| 🎯 **Scope** | Résout UN problème technique spécifique |
+| ⚡ **Réutilisation** | Utilisable dans plusieurs workflows |
+
+**Exemples** : Parallelization, Routing, Evaluator-Optimizer
+
+---
+
+### 🚀 Workflow (Solution Complète)
+
+**Définition** : Un **cas d'usage métier complet** qui combine plusieurs patterns.
+
+| Caractéristique | Description |
+|----------------|-------------|
+| 🎯 **Nature** | Concret et spécifique à un contexte métier |
+| 📦 **Scope** | Bout-en-bout (du problème à la solution) |
+| 🏢 **Usage** | Orienté business/cas d'usage réel |
+| 🔗 **Composition** | Combine plusieurs patterns |
+
+**Exemples** : CI/CD Pipeline, Enterprise RFP, Security Incident Response
+
+---
+
+### 🎨 Analogie : LEGO
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  PATTERNS = Briques LEGO individuelles                  │
+│                                                           │
+│  ┌────┐  ┌────┐  ┌────┐  ┌────┐                        │
+│  │ 🧱 │  │ 🧱 │  │ 🧱 │  │ 🧱 │                        │
+│  └────┘  └────┘  └────┘  └────┘                        │
+│  Routing Para-   Orches- Chain                          │
+│          llel    trator                                  │
+└─────────────────────────────────────────────────────────┘
+                      ▼ Assemblage
+┌─────────────────────────────────────────────────────────┐
+│  WORKFLOW = Construction complète avec les briques      │
+│                                                           │
+│      🏰 CI/CD Pipeline (Workflow complet)               │
+│       ┌─────────────────────┐                           │
+│       │  🧱🧱🧱🧱🧱🧱🧱  │  ← Orchestrator               │
+│       │  🧱  🧱  🧱  🧱  │  ← Parallelization           │
+│       │  🧱🧱🧱🧱🧱🧱🧱  │  ← Routing + Evaluator        │
+│       └─────────────────────┘                           │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 📊 Tableau Comparatif Détaillé
+
+| Critère | Pattern 🧩 | Workflow 🚀 |
+|---------|-----------|------------|
+| **Abstraction** | Générique, réutilisable | Spécifique à un métier/contexte |
+| **Scope** | 1 problème technique | Solution complète bout-en-bout |
+| **Combinable** | Oui (brique de base) | Non (solution finale) |
+| **Documentation** | Voir `2-patterns/` | Voir `4-workflows/` |
+| **Exemples** | Parallelization, Routing | CI/CD Pipeline, RFP Response |
+| **Quand l'utiliser** | Besoin technique précis | Cas d'usage métier complet |
+
+---
+
+### 💡 Exemple Concret : Localization
+
+**Pattern utilisé** : Parallelization (Pattern 3)
+```
+🧱 Technique "Parallelization"
+
+Problème : Exécuter plusieurs tâches indépendantes rapidement
+Solution : Lancer agents en parallèle (batch execution)
+Où : N'importe quel workflow avec tâches parallèles
+```
+
+**Workflow complet** : Global Localization (cas d'usage)
+```
+🚀 Workflow "Global Localization" (200 locales)
+
+Problème métier : Générer 200 locale files avec quality check
+Solution complète :
+  1️⃣ Orchestrator (Pattern 4) → Coordonne le workflow
+  2️⃣ Parallelization (Pattern 3) → Batch (10 waves × 20 agents)
+  3️⃣ Evaluator (Pattern 5) → Vérifie quality de chaque locale
+  4️⃣ Reporting → Agrège métriques et success rate
+
+✅ Résultat : 200 locales en 3min, 99.5% quality, $0.25 cost
+```
+
+---
+
+### 🎯 Résumé Visuel
+
+```
+        📐 PATTERNS (Comment faire ?)
+              │
+              │ Sont combinés dans ▼
+              │
+        🚀 WORKFLOWS (Quoi faire ?)
+
+
+Relation :
+
+Pattern "Routing" (technique générique)
+       ↓ utilisé dans ↓
+Workflow "Security Incident" (cas d'usage métier)
+  → Route incidents selon criticité (Pattern 2)
+  → Coordonne équipes (Pattern 4)
+  → Exécute en parallèle (Pattern 3)
+  → Solution complète de réponse incident
+```
+
+---
+
+## 📖 Avant de Commencer : Fundamentals
+
+**⚡ Nouveau dans les workflows agentiques ?** Commencez par les **fundamentals** pour maîtriser le vocabulaire et les concepts de base :
+
+### 📚 [1. Fundamentals](./1-fundamentals/) - Bases Théoriques
+
+```
+╔═══════════════════════════════════════════════════════════╗
+║         FUNDAMENTALS : COMPRENDRE LES BASES               ║
+╚═══════════════════════════════════════════════════════════╝
+
+📄 TAXONOMIE (15 min) ⭐
+   └─> Workflow vs Agentic Workflow vs Pipeline
+   └─> Orchestration vs Pattern vs Flow
+   └─> Vocabulaire industrie standardisé
+
+📄 NOMENCLATURE (20 min) ⭐
+   └─> Command vs Agent vs Skill vs Hook
+   └─> Hiérarchie Claude Code stricte
+   └─> Règles d'or : Qui orchestre qui ?
+
+📄 DECISION FRAMEWORK (30 min) 🎯
+   └─> Quel composant utiliser ? (Command/Agent/Skill/Hook)
+   └─> Quel pattern utiliser ? (6 patterns Anthropic)
+   └─> Decision trees pratiques
+```
+
+**Pourquoi important ?** :
+- ✅ Comprendre **Agentic Workflow** ≠ **Traditional Workflow**
+- ✅ Maîtriser **nomenclature Claude Code** (Command/Agent/Skill)
+- ✅ **Éviter confusion** : Agent (Claude Code) ≠ Autonomous Agent (Pattern 6)
+- ✅ Appliquer **règle d'or** : Command orchestre toujours, Agent JAMAIS
+
+**📖 Lire d'abord** : [Fundamentals README](./1-fundamentals/README.md)
+
+---
+
 ## 🎨 Les 6 Patterns Composables Anthropic
 
 ```
@@ -48,7 +216,7 @@ Créer des **systèmes agentiques production-ready** en utilisant les 6 patterns
    └─> Autonomous (research) : Agent décide
 ```
 
-**📖 Documentation complète** : [6-composable-patterns/](./6-composable-patterns/)
+**📖 Documentation complète** : [2-patterns/](./2-patterns/)
 
 ---
 
@@ -266,26 +434,37 @@ Prouver l'efficacité avec métriques objectives :
 
 ## 📚 Navigation Documentation
 
+### 📚 Les Fundamentals (Commencer Ici) ⭐
+
+**TOUJOURS commencer par les fundamentals** si vous êtes nouveau :
+
+- **[Vue d'ensemble Fundamentals](./1-fundamentals/README.md)** ⭐ - Bases théoriques
+- **[Taxonomie](./1-fundamentals/taxonomie.md)** - Workflow vs Agentic Workflow vs Pattern
+- **[Nomenclature](./1-fundamentals/nomenclature.md)** - Command vs Agent vs Skill
+- **[Decision Framework](./1-fundamentals/decision-framework.md)** 🎯 - Quel composant/pattern utiliser ?
+
+---
+
 ### 🎯 Les 6 Patterns (Fondamentaux)
 
-**Commencer ici** pour comprendre les building blocks :
+**Après fundamentals**, comprendre les building blocks :
 
-- **[Vue d'ensemble 6 Patterns](./6-composable-patterns/README.md)** ⭐ - Mapping + Decision tree
-- **[1. Prompt Chaining](./6-composable-patterns/1-prompt-chaining.md)** - EPCT Workflow
-- **[2. Routing](./6-composable-patterns/2-routing.md)** - Skills auto-invocation
-- **[3. Parallelization](./6-composable-patterns/3-parallelization.md)** - 9.7x speedup
-- **[4. Orchestrator-Workers](./6-composable-patterns/4-orchestrator-workers.md)** - Command-Agent
-- **[5. Evaluator-Optimizer](./6-composable-patterns/5-evaluator-optimizer.md)** ⭐ - Quality loop
-- **[6. Autonomous Agents](./6-composable-patterns/6-autonomous-agents.md)** - Clarification
+- **[Vue d'ensemble 6 Patterns](./2-patterns/README.md)** ⭐ - Mapping + Decision tree
+- **[1. Prompt Chaining](./2-patterns/1-prompt-chaining.md)** - EPCT Workflow
+- **[2. Routing](./2-patterns/2-routing.md)** - Skills auto-invocation
+- **[3. Parallelization](./2-patterns/3-parallelization.md)** - 9.7x speedup
+- **[4. Orchestrator-Workers](./2-patterns/4-orchestrator-workers.md)** - Command-Agent
+- **[5. Evaluator-Optimizer](./2-patterns/5-evaluator-optimizer.md)** ⭐ - Quality loop
+- **[6. Autonomous Agents](./2-patterns/6-autonomous-agents.md)** - Clarification
 
 ---
 
 ### 🏗️ Architecture (Concepts Structurels)
 
-- **[Command-Subcommand-Agent](./architecture/command-coordinator-workers.md)** - Hiérarchie plate (2-3 levels recommended (4-5 possible))
-- **[Hooks Lifecycle](./architecture/hooks-lifecycle.md)** - Automation déterministe
-- **[Skills Progressive Disclosure](./architecture/skills-progressive-disclosure.md)** - 3-level context
-- **[State Management](./architecture/state-management.md)** - Memory + persistence
+- **[Command-Subcommand-Agent](./3-architecture/command-coordinator-workers.md)** - Hiérarchie plate (2-3 levels recommended (4-5 possible))
+- **[Hooks Lifecycle](./3-architecture/hooks-lifecycle.md)** - Automation déterministe
+- **[Skills Progressive Disclosure](./3-architecture/skills-progressive-disclosure.md)** - 3-level context
+- **[State Management](./3-architecture/state-management.md)** - Memory + persistence
 
 ---
 
@@ -293,19 +472,19 @@ Prouver l'efficacité avec métriques objectives :
 
 Workflows production utilisant les 6 patterns :
 
-- **[Enterprise RFP](./workflows/enterprise-rfp.md)** - Hierarchical pattern (Tesla, JP Morgan)
-- **[CI/CD Pipeline](./workflows/ci-cd-pipeline.md)** - Sequential gates (Build→Test→Deploy)
-- **[Global Localization](./workflows/global-localization.md)** - Parallelization (200 locales)
-- **[Security Incident Response](./workflows/security-incident-response.md)** - Supervisor-Worker
-- **[Content Automation](./workflows/)** - Startup workflows (blog, social-media)
+- **[Enterprise RFP](./4-workflows/enterprise-rfp.md)** - Hierarchical pattern (Tesla, JP Morgan)
+- **[CI/CD Pipeline](./4-workflows/ci-cd-pipeline.md)** - Sequential gates (Build→Test→Deploy)
+- **[Global Localization](./4-workflows/global-localization.md)** - Parallelization (200 locales)
+- **[Security Incident Response](./4-workflows/security-incident-response.md)** - Supervisor-Worker
+- **[Content Automation](./4-workflows/)** - Startup workflows (blog, social-media)
 
 ---
 
 ### 💎 Best Practices (Optimisation)
 
-- **[Performance](./best-practices/performance.md)** - Speed optimization (9.7x speedup)
-- **[Cost Optimization](./best-practices/cost-optimization.md)** - Model selection (haiku/sonnet/opus)
-- **[Error Resilience](./best-practices/error-resilience.md)** - Fallbacks, retry logic
+- **[Performance](./5-best-practices/performance.md)** - Speed optimization (9.7x speedup)
+- **[Cost Optimization](./5-best-practices/cost-optimization.md)** - Model selection (haiku/sonnet/opus)
+- **[Error Resilience](./5-best-practices/error-resilience.md)** - Fallbacks, retry logic
 
 ---
 
@@ -423,16 +602,17 @@ Result: 92% accuracy (vs 70% generalist), 22% improvement
 
 ## 🎓 Parcours d'Apprentissage
 
-### 🟢 Niveau 1 : Débutant (Comprendre les Patterns)
+### 🟢 Niveau 1 : Débutant (Comprendre les Bases)
 
-**Objectif** : Maîtriser les 6 patterns fondamentaux.
+**Objectif** : Maîtriser fundamentals et les 6 patterns fondamentaux.
 
 ```
 📖 Lire dans l'ordre :
-1. 6-composable-patterns/README.md      → Vue d'ensemble + mapping
-2. 6-composable-patterns/1-prompt-chaining.md → EPCT Workflow
-3. 6-composable-patterns/2-routing.md   → Skills auto-invocation
-4. 6-composable-patterns/3-parallelization.md → Speedup 5-20x
+1. 1-fundamentals/README.md             → Taxonomie + Nomenclature ⭐
+2. 2-patterns/README.md                 → Vue d'ensemble + mapping
+3. 2-patterns/1-prompt-chaining.md      → EPCT Workflow
+4. 2-patterns/2-routing.md              → Skills auto-invocation
+5. 2-patterns/3-parallelization.md      → Speedup 5-20x
 
 🛠️ Exercice pratique :
 - Créer /epct command (Pattern 1)
@@ -448,10 +628,10 @@ Result: 92% accuracy (vs 70% generalist), 22% improvement
 
 ```
 📖 Lire dans l'ordre :
-1. 6-composable-patterns/4-orchestrator-workers.md → Command-Agent
-2. 6-composable-patterns/5-evaluator-optimizer.md  → Quality loop
-3. workflows/enterprise-rfp.md                     → Exemple complet
-4. workflows/global-localization.md                → Parallel + Evaluator
+1. 2-patterns/4-orchestrator-workers.md → Command-Agent
+2. 2-patterns/5-evaluator-optimizer.md  → Quality loop
+3. 4-workflows/enterprise-rfp.md        → Exemple complet
+4. 4-workflows/global-localization.md   → Parallel + Evaluator
 
 🛠️ Exercice pratique :
 - Workflow EPCT + Parallel (Pattern 1 + 3)
@@ -468,9 +648,9 @@ Result: 92% accuracy (vs 70% generalist), 22% improvement
 ```
 📖 Lire dans l'ordre :
 1. orchestration-principles.md          → Règles d'or Anthropic ⭐
-2. best-practices/performance.md        → Speed optimization
-3. best-practices/cost-optimization.md  → Model selection
-4. best-practices/error-resilience.md   → Fallbacks, retry
+2. 5-best-practices/performance.md      → Speed optimization
+3. 5-best-practices/cost-optimization.md → Model selection
+4. 5-best-practices/error-resilience.md → Fallbacks, retry
 
 🛠️ Exercice pratique :
 - Benchmarker séquentiel vs parallèle
@@ -486,9 +666,9 @@ Result: 92% accuracy (vs 70% generalist), 22% improvement
 
 ```
 📖 Lire dans l'ordre :
-1. workflows/security-incident-response.md → Supervisor-Worker
-2. workflows/ci-cd-pipeline.md             → Sequential gates
-3. architecture/hooks-lifecycle.md         → Automation
+1. 4-workflows/security-incident-response.md → Supervisor-Worker
+2. 4-workflows/ci-cd-pipeline.md             → Sequential gates
+3. 3-architecture/hooks-lifecycle.md         → Automation
 
 🛠️ Projet final :
 - Workflow hybride : 4+ patterns combinés
@@ -725,8 +905,9 @@ MAPPING PATTERNS → IMPLÉMENTATION:
 **Pour démarrer immédiatement** :
 
 ```bash
-# 1. Lire les fondamentaux (30min)
-├─> 6-composable-patterns/README.md    # Vue d'ensemble
+# 1. Lire les fondamentaux (1h) ⭐
+├─> 1-fundamentals/README.md           # Taxonomie + Nomenclature
+├─> 2-patterns/README.md               # Vue d'ensemble 6 patterns
 ├─> orchestration-principles.md        # Règles d'or ⭐
 └─> quick-reference.md                 # Cheatsheet ⚡
 
@@ -738,9 +919,9 @@ MAPPING PATTERNS → IMPLÉMENTATION:
 └─> Quality critique? → Pattern 5 (Evaluator-Optimizer)
 
 # 3. Étudier un exemple workflow
-├─> workflows/enterprise-rfp.md        # Hierarchical
-├─> workflows/global-localization.md   # Parallelization
-└─> workflows/ci-cd-pipeline.md        # Sequential gates
+├─> 4-workflows/enterprise-rfp.md        # Hierarchical
+├─> 4-workflows/global-localization.md   # Parallelization
+└─> 4-workflows/ci-cd-pipeline.md        # Sequential gates
 
 # 4. Implémenter votre workflow
 └─> Combiner patterns selon decision tree

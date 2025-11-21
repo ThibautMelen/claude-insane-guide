@@ -10,6 +10,21 @@
 
 **ROI**: 22% accuracy improvement vs generalist, 50% cost savings (right model per task)
 
+---
+
+## 🧩 Pattern vs Workflow
+
+**Ce fichier documente un PATTERN** (brique technique réutilisable).
+
+| Aspect | Description |
+|--------|-------------|
+| 🔧 **Type** | Pattern architectural (classification) |
+| 🎯 **Problème résolu** | Diriger vers le bon specialist selon contexte |
+| 🧩 **Combinable avec** | Chaining (après routing), Orchestrator (routing dynamique) |
+| 🚀 **Utilisé dans workflows** | Customer Support, Content Automation, Security Incident |
+
+**Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
+
 ## 📐 Architecture
 
 ```
@@ -39,6 +54,58 @@ description: |
     - Simple text file (use Read)
 ---
 ```
+
+## 🎯 Quand Utiliser Ce Pattern
+
+### ✅ Utiliser Routing SI :
+
+```
+✅ Plusieurs specialists avec expertises distinctes
+   → Ex: Customer support (refund/help/technical/sales)
+
+✅ Classification claire des inputs
+   → Ex: PDF → pdf skill, Image → image skill
+
+✅ Économie contexte (progressive disclosure)
+   → Ex: Load ONLY specialist prompt (not all)
+
+✅ Accuracy > Generalist (spécialisation gagne)
+   → Ex: 95% refund specialist vs 70% generalist
+
+✅ Cost optimization (right model per task)
+   → Ex: Simple tasks → haiku, Complex → sonnet
+```
+
+### ❌ NE PAS Utiliser SI :
+
+```
+❌ Tâche générique (pas de spécialisation)
+   → Ex: "Summarize text" → One-shot generalist suffit
+
+❌ Frontières floues entre specialists
+   → Ex: Overlapping domains → Confusion routing
+
+❌ <3 specialists (overhead pas justifié)
+   → Ex: 2 paths → Simple if/else suffit
+
+❌ Classification coûteuse vs bénéfice
+   → Ex: LLM reasoning slow → Direct specialist call
+```
+
+---
+
+## ⚖️ Trade-offs
+
+| Avantage ⬆️ | Inconvénient ⬇️ |
+|------------|----------------|
+| **+22% Accuracy** vs generalist | **Maintenance** (plusieurs specialists) |
+| **-50% Cost** (right model/task) | **Overhead routing** (classification step) |
+| **Économie contexte** (load specialist only) | **Frontières floues** (ambiguous inputs) |
+| **Spécialisation** (focused expertise) | **Fallback requis** (unknown category) |
+
+**Verdict** : Idéal pour domains avec **specialists clairement définis** (customer support, document types).
+
+---
 
 ## 💡 Skills Auto-Invocation (Notre Implémentation)
 
@@ -86,7 +153,7 @@ Claude analyzes:
 ## 🔗 Ressources
 
 - 📄 [Vue d'ensemble 6 Patterns](./README.md)
-- 📐 [Skills Progressive Disclosure](../architecture/skills-progressive-disclosure.md)
+- 📐 [Skills Progressive Disclosure](../3-architecture/skills-progressive-disclosure.md)
 - 📄 [Orchestration Principles](../orchestration-principles.md)
 - 📄 [Skills Deep Dive (Lee Hanchung)](https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/)
 

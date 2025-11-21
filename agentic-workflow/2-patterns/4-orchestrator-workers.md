@@ -1,3 +1,22 @@
+# Pattern 4 : Orchestrator-Workers (Delegation Dynamique)
+
+> **📚 Vue d'ensemble complète** : Voir [6 Patterns README](./README.md)
+
+## 🧩 Pattern vs Workflow
+
+**Ce fichier documente un PATTERN** (brique technique réutilisable).
+
+| Aspect | Description |
+|--------|-------------|
+| 🔧 **Type** | Pattern architectural (orchestration hiérarchique) |
+| 🎯 **Problème résolu** | Coordination de tâches dynamiques avec workers spécialisés |
+| 🧩 **Combinable avec** | Parallelization (workers en parallèle), Evaluator (quality check workers) |
+| 🚀 **Utilisé dans workflows** | Enterprise RFP, CI/CD Pipeline, Security Incident Response |
+
+**Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
+
+---
+
 # Patterns: Command/Agent/Skill Architecture
 
 **Status**: ✅ VALIDATED - Best practices from Claude Code + LLM orchestration research + Hooks automation + Dan's Philosophy

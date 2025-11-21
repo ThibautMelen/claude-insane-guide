@@ -128,8 +128,8 @@ Week 4: Team Collaboration → Documentation + shared workflows
 ## 📚 Ressources
 
 - 📄 [Orchestration Principles](../orchestration-principles.md)
-- 📄 [Composable Patterns](../6-composable-patterns/README.md)
-- 🎯 [Enterprise Workflows](../workflows/README.md) (RFP, CI/CD, Localization)
+- 📄 [Composable Patterns](../2-patterns/README.md)
+- 🎯 [Enterprise Workflows](../4-workflows/README.md) (RFP, CI/CD, Localization)
 - 📄 [Anthropic Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)
 
 ---

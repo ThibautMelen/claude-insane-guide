@@ -681,16 +681,16 @@ Combine into single hook or use conditions
 - 🎓 [Orchestration Principles](../orchestration-principles.md)
 - 🔗 [Command Coordination](./command-coordination.md)
 - 🔗 [Agent Orchestration](./agent-orchestration.md)
-- 🚀 [Workflows](../workflows/README.md)
+- 🚀 [Workflows](../4-workflows/README.md)
 
 ### Documentation Officielle
 - 📄 [Hooks Guide](https://code.claude.com/docs/en/hooks-guide)
 - 📄 [Lifecycle Events](https://code.claude.com/docs/en/hooks-guide#lifecycle-events)
 
 ### Workflows Utilisant Ce Pattern
-- 🎯 [CI/CD Pipeline](../workflows/ci-cd-pipeline.md) - Quality gates + auto-rollback
-- 🎯 [Security Incident Response](../workflows/security-incident-response.md) - P1 approval + audit
-- 🎯 [Global Localization](../workflows/global-localization.md) - Progress aggregation
+- 🎯 [CI/CD Pipeline](../4-workflows/ci-cd-pipeline.md) - Quality gates + auto-rollback
+- 🎯 [Security Incident Response](../4-workflows/security-incident-response.md) - P1 approval + audit
+- 🎯 [Global Localization](../4-workflows/global-localization.md) - Progress aggregation
 
 ---
 

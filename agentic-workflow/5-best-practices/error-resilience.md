@@ -1289,9 +1289,9 @@ All P1 decisions logged to immutable audit log:
 ### Documentation Interne
 
 - 📄 [Orchestration Principles](../orchestration-principles.md)
-- 📄 [Enterprise RFP Workflow](../workflows/enterprise-rfp.md)
-- 📄 [CI/CD Pipeline Workflow](../workflows/ci-cd-pipeline.md)
-- 📄 [Security Incident Response Workflow](../workflows/security-incident-response.md)
+- 📄 [Enterprise RFP Workflow](../4-workflows/enterprise-rfp.md)
+- 📄 [CI/CD Pipeline Workflow](../4-workflows/ci-cd-pipeline.md)
+- 📄 [Security Incident Response Workflow](../4-workflows/security-incident-response.md)
 
 ### Patterns Connexes
 
@@ -1977,12 +1977,12 @@ LAUNCH agents → COLLECT results
 ## 📚 Ressources
 
 ### Documentation Interne
-- 📄 [Command-Agent-Skill Pattern](../architecture/command-coordinator-workers.md) - Architecture base
-- 📄 [Parallel Execution](../6-composable-patterns/3-parallelization.md) - Patterns concurrents
-- 📄 [State Management](../architecture/state-management.md) - Gestion état & recovery
+- 📄 [Command-Agent-Skill Pattern](../3-architecture/command-coordinator-workers.md) - Architecture base
+- 📄 [Parallel Execution](../2-patterns/3-parallelization.md) - Patterns concurrents
+- 📄 [State Management](../3-architecture/state-management.md) - Gestion état & recovery
 - 📄 [MCP Guide](../../themes/5-mcp/guide.md) - Configuration MCP servers
 - 📄 [Hooks Guide](../../themes/3-hooks/guide.md) - Automation avec hooks
-- 📄 [Interactive UI](../architecture/interactive-ui.md) - AskUserQuestion patterns
+- 📄 [Interactive UI](../3-architecture/interactive-ui.md) - AskUserQuestion patterns
 
 ### Documentation Externe
 - 📄 [Claude Code Hooks](https://code.claude.com/docs/hooks) - Events et automation

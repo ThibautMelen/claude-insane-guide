@@ -10,6 +10,21 @@
 
 **ROI**: 5-10x speedup pour tasks indépendantes (42s vs 136s pour 4 items)
 
+---
+
+## 🧩 Pattern vs Workflow
+
+**Ce fichier documente un PATTERN** (brique technique réutilisable).
+
+| Aspect | Description |
+|--------|-------------|
+| 🔧 **Type** | Pattern architectural (exécution concurrente) |
+| 🎯 **Problème résolu** | Réduire temps d'exécution pour tâches indépendantes |
+| 🧩 **Combinable avec** | Chaining (étape Code parallèle), Evaluator (validation parallèle) |
+| 🚀 **Utilisé dans workflows** | Global Localization (200 locales), Content Automation, CI/CD Tests |
+
+**Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
+
 ## 📐 Architecture
 
 ```
@@ -37,6 +52,61 @@ Launch ALL Task calls in SINGLE message:
 - Task(file2.md)
 - Task(file3.md)
 ```
+
+## 🎯 Quand Utiliser Ce Pattern
+
+### ✅ Utiliser Parallelization SI :
+
+```
+✅ Tâches complètement indépendantes (no shared state)
+   → Ex: Traduire 200 locales, générer 50 images
+
+✅ Speed critique (deadline serrée)
+   → Ex: Livraison 24h → 10x speedup = critical
+
+✅ >5-10 items similaires
+   → Ex: Process batch files, generate reports
+
+✅ Resources disponibles (API limits OK)
+   → Ex: Rate limits permettent 20 concurrent calls
+
+✅ Coût acceptable (multiple API calls)
+   → Ex: Use haiku (cheap) pour 200 locales = $0.25 total
+```
+
+### ❌ NE PAS Utiliser SI :
+
+```
+❌ Tâches dépendantes (A needs result of B)
+   → Ex: Step 2 depends on Step 1 → Use Chaining
+
+❌ Shared state/resources (race conditions)
+   → Ex: Write same file → Corruption risk
+
+❌ <3 items (overhead > gain)
+   → Ex: 2 files → Sequential suffit
+
+❌ Rate limits contraignants
+   → Ex: API allows 5 calls/min → Batch or sequential
+
+❌ Memory/resources limités
+   → Ex: Large processing → OOM crash
+```
+
+---
+
+## ⚖️ Trade-offs
+
+| Avantage ⬆️ | Inconvénient ⬇️ |
+|------------|----------------|
+| **5-10x Speedup** (9.7x pour 200 locales) | **Complexité debugging** (parallel errors) |
+| **Batch processing** (large scale) | **Rate limits risk** (API bans) |
+| **Resource efficient** (max throughput) | **Memory spike** (all agents loaded) |
+| **Cost at scale** ($0.25 vs $2.50 avec haiku) | **Overhead batching** (wave management) |
+
+**Verdict** : **Must-have pour large-scale batch processing** (>10 items indépendants).
+
+---
 
 ## 💡 Patterns Détaillés
 
@@ -116,8 +186,8 @@ IF approaching limit:
 ## 🔗 Ressources
 
 - 📄 [Vue d'ensemble 6 Patterns](./README.md)
-- 📐 [Command-Agent-Skill Pattern](../architecture/command-coordinator-workers.md)
-- 🚀 [Error Handling](../best-practices/error-resilience.md)
+- 📐 [Command-Agent-Skill Pattern](../3-architecture/command-coordinator-workers.md)
+- 🚀 [Error Handling](../5-best-practices/error-resilience.md)
 - 📄 [Claude Code Task Tool](https://code.claude.com/docs/task-tool)
 
 **Voir** : [Agents Guide](../../themes/6-agents/guide.md) - Verdent Deck architecture

@@ -10,6 +10,21 @@
 
 **ROI**: 40% plus rapide end-to-end vs one-shot avec rework (24min vs 38min), 95% success rate
 
+---
+
+## 🧩 Pattern vs Workflow
+
+**Ce fichier documente un PATTERN** (brique technique réutilisable).
+
+| Aspect | Description |
+|--------|-------------|
+| 🔧 **Type** | Pattern architectural (technique) |
+| 🎯 **Problème résolu** | Séquence fixe d'étapes interdépendantes |
+| 🧩 **Combinable avec** | Parallelization (étape Code), Evaluator (étape Test) |
+| 🚀 **Utilisé dans workflows** | EPCT, CI/CD Pipeline, Enterprise RFP |
+
+**Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
+
 ## 📐 Architecture
 
 ```
@@ -34,6 +49,58 @@ Input → [STEP A] → [Gate] → [STEP B] → [Gate] → [STEP C] → Result
 # 3. Code feature → Compilation check
 # 4. Test → Coverage validation
 ```
+
+## 🎯 Quand Utiliser Ce Pattern
+
+### ✅ Utiliser Prompt Chaining SI :
+
+```
+✅ Tâche complexe nécessitant contexte progressif
+   → Ex: Feature développement, migration code, architecture
+
+✅ Séquence logique fixe (ordre immuable)
+   → Ex: Explore AVANT Plan, Plan AVANT Code
+
+✅ Validation humaine requise entre étapes
+   → Ex: Approbation plan avant coding
+
+✅ Contexte s'accumule (chaque step enrichit)
+   → Ex: Explore → insights → Plan utilise insights
+
+✅ Quality > Speed (accepter latence pour accuracy)
+   → Ex: Production features, pas prototypes jetables
+```
+
+### ❌ NE PAS Utiliser SI :
+
+```
+❌ Tâche simple one-shot suffit
+   → Ex: "Write README section" → Pas besoin EPCT
+
+❌ Steps indépendants (pas de dépendances)
+   → Ex: Traduire 10 files → Use Parallelization
+
+❌ Ordre flexible/dynamique
+   → Ex: Depends on runtime conditions → Use Orchestrator
+
+❌ Speed critique (latence inacceptable)
+   → Ex: Real-time responses → One-shot ou Routing
+```
+
+---
+
+## ⚖️ Trade-offs
+
+| Avantage ⬆️ | Inconvénient ⬇️ |
+|------------|----------------|
+| **+35% Accuracy** (95% vs 60% one-shot) | **+Latence** (22min vs 8min one-shot) |
+| **-40% Rework** (2min vs 30min fixes) | **+Coût tokens** (4 appels vs 1 appel) |
+| **Gates validation** (moins hallucinations) | **Rigidité** (séquence fixe) |
+| **Auditabilité** (logs chaque step) | **Overkill** (si tâche simple) |
+
+**Verdict** : Privilégier pour features production-ready où **quality > speed**.
+
+---
 
 ## 💡 EPCT Workflow (Notre Implémentation)
 
@@ -92,6 +159,6 @@ STEP 4: TEST
 ## 🔗 Ressources
 
 - 📄 [Vue d'ensemble 6 Patterns](./README.md)
-- 📐 [Architecture Details EPCT](../architecture/epct-workflow.md)
-- 🚀 [Workflow Example: Enterprise RFP](../workflows/enterprise-rfp.md)
+- 📐 [Architecture Details EPCT](../3-architecture/epct-workflow.md)
+- 🚀 [Workflow Example: Enterprise RFP](../4-workflows/enterprise-rfp.md)
 - 📄 [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)

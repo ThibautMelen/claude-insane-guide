@@ -551,18 +551,18 @@ Approval Gates:
 
 **Documentation Détaillée** :
 - 📄 [Orchestration Principles](./orchestration-principles.md) - Règles fondamentales
-- 📄 [Command/Agent/Skill Patterns]../6-composable-patterns/4-orchestrator-workers.md) - Architecture détaillée
-- 📄 [Skill Invocation Lifecycle]../architecture/skills-progressive-disclosure.md) - isMeta, 2-message pattern
-- 📄 [Performance Optimization](./best-practices/performance.md) - Stratégies 1-7
+- 📄 [Command/Agent/Skill Patterns]../2-patterns/4-orchestrator-workers.md) - Architecture détaillée
+- 📄 [Skill Invocation Lifecycle]../3-architecture/skills-progressive-disclosure.md) - isMeta, 2-message pattern
+- 📄 [Performance Optimization](./5-best-practices/performance.md) - Stratégies 1-7
 
 **Articles Externes** :
 - 📄 [Claude Skills Deep Dive](https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/) - Architecture interne
 - 📄 [Official Claude Code Docs](https://code.claude.com/docs) - Documentation officielle
 
 **Workflows Réels** :
-- 📄 [Enterprise RFP](./workflows/enterprise-rfp.md) - 96x speedup
-- 📄 [Global Localization](./workflows/global-localization.md) - 15x speedup
-- 📄 [CI/CD Pipeline](./workflows/ci-cd-pipeline.md) - 6x speedup
+- 📄 [Enterprise RFP](./4-workflows/enterprise-rfp.md) - 96x speedup
+- 📄 [Global Localization](./4-workflows/global-localization.md) - 15x speedup
+- 📄 [CI/CD Pipeline](./4-workflows/ci-cd-pipeline.md) - 6x speedup
 
 ---
 

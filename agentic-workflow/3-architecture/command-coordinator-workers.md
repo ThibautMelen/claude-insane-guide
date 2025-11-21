@@ -692,16 +692,16 @@ Use AskUserQuestion for dynamic inputs
 - 🎓 [Orchestration Principles](../orchestration-principles.md)
 - 🔗 [Hook Automation](./hook-automation.md)
 - 🔗 [Agent Orchestration](./agent-orchestration.md)
-- 🚀 [Workflows](../workflows/README.md)
+- 🚀 [Workflows](../4-workflows/README.md)
 
 ### Documentation Officielle
 - 📄 [Sub-Agents Coordination](https://code.claude.com/docs/en/sub-agents#coordination)
 - 📄 [Commands Guide](https://code.claude.com/docs/en/slash-commands)
 
 ### Workflows Utilisant Ce Pattern
-- 🎯 [Enterprise RFP](../workflows/enterprise-rfp.md) - 3-level hierarchy
-- 🎯 [CI/CD Pipeline](../workflows/ci-cd-pipeline.md) - Sequential phases
-- 🎯 [Global Localization](../workflows/global-localization.md) - Batch processing
+- 🎯 [Enterprise RFP](../4-workflows/enterprise-rfp.md) - 3-level hierarchy
+- 🎯 [CI/CD Pipeline](../4-workflows/ci-cd-pipeline.md) - Sequential phases
+- 🎯 [Global Localization](../4-workflows/global-localization.md) - Batch processing
 
 ---
 
