@@ -364,54 +364,71 @@ Avec optimisation (mix Haiku/Sonnet/Opus):
 
 ### 🔧 Création de Sub-Agents
 
-#### Méthode 1 : Via Plugins (Recommandé Équipes)
+#### Méthode 1 : Fichiers Markdown (Format Officiel)
 
-```typescript
-// .claude/plugins/my-agents/index.ts
-export default {
-  subAgents: {
-    'code-reviewer': {
-      systemPrompt: `You are an expert code reviewer.
+**Structure** :
 
-      Check for:
-      - Code quality and readability
-      - Performance issues
-      - Security vulnerabilities
-      - Best practices adherence
+```
+.claude/agents/           # Project agents
+├── code-reviewer.md
+├── test-generator.md
+└── security-auditor.md
 
-      Output format:
-      ## Issues Found
-      - [Severity] Description
-      - Fix suggestion
-
-      ## Strengths
-      - What's done well
-      `,
-      description: 'Reviews code quality and security',
-      model: 'opus'  // Premium for code review
-    },
-
-    'test-generator': {
-      systemPrompt: `You are a testing expert.
-
-      Generate:
-      - Unit tests with Jest/Vitest
-      - Edge cases coverage
-      - Mocking when needed
-      - Clear test descriptions
-      `,
-      description: 'Generates comprehensive tests',
-      model: 'sonnet'  // Standard for test generation
-    }
-  }
-};
+~/.claude/agents/         # User agents (tous projets)
+├── my-helper.md
+└── my-analyzer.md
 ```
 
+**Format fichier agent** (.claude/agents/code-reviewer.md) :
+
+```markdown
+---
+name: code-reviewer
+description: Expert code reviewer. Reviews code quality, security, and best practices. Use proactively after code changes.
+tools: Read, Grep, Glob, Bash
+model: opus
+permissionMode: default
+skills: security-check, lint-helper
+---
+
+You are an expert code reviewer.
+
+When invoked:
+1. Run git diff to see recent changes
+2. Focus on modified files
+3. Begin review immediately
+
+Review checklist:
+- Code is simple and readable
+- Functions and variables are well-named
+- No duplicated code
+- Proper error handling
+- No exposed secrets or API keys
+- Input validation implemented
+- Good test coverage
+
+Provide feedback organized by priority:
+- Critical issues (must fix)
+- Warnings (should fix)
+- Suggestions (consider improving)
+```
+
+**Champs frontmatter** :
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `name` | string | ID unique (lowercase-hyphen) |
+| `description` | string | Quand/pourquoi utiliser cet agent |
+| `tools` | string | Tools autorisés (comma-separated) ou omit pour inherit all |
+| `model` | string | `sonnet`, `opus`, `haiku` ou `inherit` |
+| `permissionMode` | string | `default`, `acceptEdits`, `bypassPermissions`, `plan`, `ignore` |
+| `skills` | string | Skills à auto-load (comma-separated) |
+
 **Avantages** :
+- ✅ Format officiel Anthropic
 - ✅ Versionné (Git)
-- ✅ Distribué via marketplace
 - ✅ Partageable équipe
-- ✅ Combinable avec commands/hooks
+- ✅ Éditable avec n'importe quel éditeur
 
 ---
 
@@ -617,195 +634,115 @@ Haiku (fast) + Sonnet (standard) + Opus (complex)
 
 ---
 
-## 🚀 Parallel Agents (Verdent Deck) - Feature 2025
+### 🎮 Gestion Interactive des Agents
 
-### Orchestration Avancée avec Isolation Git
+#### CLI Flag `--agents`
 
-**Verdent Deck** = Nouvelle architecture Claude Code 2.0 permettant l'exécution d'agents **vraiment parallèles** dans des **worktrees Git isolés**.
-
-```
-╔═══════════════════════════════════════════╗
-║     PARALLEL AGENTS - VERDENT DECK        ║
-╚═══════════════════════════════════════════╝
-
-    Main Repository
-         │
-    ┌────┴────┐
-    │ .git/   │
-    └────┬────┘
-         │
-    ┌────┴──────────┬─────────┬──────────┐
-    ▼               ▼         ▼          ▼
-Worktree-1      Worktree-2  Worktree-3  Worktree-4
-[Agent-A]       [Agent-B]    [Agent-C]   [Agent-D]
- Frontend        Backend      Tests       Docs
-    │               │           │          │
-    └───────────────┴───────────┴──────────┘
-                    │
-              [Auto-Merge]
-                    ▼
-              Main Branch
-```
-
-### 🎯 Avantages Verdent Deck
-
-**Isolation Complète** :
-```
-✅ Chaque agent dans son worktree Git
-✅ Pas de conflits entre agents
-✅ Modifications simultanées sans collision
-✅ Contexte 100% isolé par agent
-```
-
-**Performance Maximale** :
-```
-📊 Benchmarks officiels :
-├── 2 agents : 45% gain temps
-├── 4 agents : 70% gain temps
-├── 8 agents : 85% gain temps
-└── 16 agents : 90% gain temps (plateau)
-```
-
-### 💻 Commandes Verdent Deck
+**Définir agents dynamiquement via CLI** :
 
 ```bash
-# Activer Parallel Agents
-export CLAUDE_PARALLEL_AGENTS=true
+# Définir agent au lancement
+claude --agents "my-reviewer: You are a code reviewer. Check security and quality."
 
-# Créer worktrees pour agents
-git worktree add ../project-agent-frontend -b agent-frontend
-git worktree add ../project-agent-backend -b agent-backend
-git worktree add ../project-agent-tests -b agent-tests
+# Définir plusieurs agents
+claude --agents "reviewer: Review code" --agents "tester: Generate tests"
 
-# Lancer agents en parallèle avec isolation
-claude --parallel --worktree ../project-agent-frontend \
-  -p "Agent frontend : refactorer tous les composants React"
-
-claude --parallel --worktree ../project-agent-backend \
-  -p "Agent backend : optimiser toutes les requêtes SQL"
-
-claude --parallel --worktree ../project-agent-tests \
-  -p "Agent tests : ajouter tests manquants (coverage 80%)"
-
-# Monitoring agents parallèles
-claude --monitor-agents
-
-# Merge automatique des worktrees
-claude --merge-agents
+# Agent avec modèle spécifique
+claude --agents "architect: Design system architecture" --model opus
 ```
 
-### 📊 Configuration settings.json
+**Use case** : Tester rapidement un agent sans créer de fichier.
 
-```json
+---
+
+#### Commande `/agents`
+
+**Gérer agents interactivement pendant la session** :
+
+```bash
+# Lister agents disponibles
+> /agents
+
+# Voir détails d'un agent
+> /agents show code-reviewer
+
+# Activer/désactiver agent
+> /agents enable code-reviewer
+> /agents disable test-generator
+
+# Créer agent temporaire
+> /agents create quick-helper "You help with quick tasks" --tools Read,Write
+```
+
+**Résultat `/agents`** :
+```
+Available Sub-Agents:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ code-reviewer (opus) - Expert code reviewer
+✅ test-generator (sonnet) - Generates unit tests
+❌ security-auditor (opus) - Security analysis [DISABLED]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+---
+
+#### Resumable Agents (Reprise de Session)
+
+**Feature `resume`** : Reprendre agent précédent avec son contexte.
+
+**Syntaxe** :
+```typescript
+// Dans Task tool
 {
-  "parallelAgents": {
-    "enabled": true,
-    "maxConcurrent": 8,
-    "autoMerge": true,
-    "conflictResolution": "interactive",
-    "worktreePrefix": "agent-",
-    "cleanupOnComplete": true,
-    "monitoring": {
-      "dashboard": true,
-      "webhooks": "http://monitoring.local/agents"
-    }
-  }
+  subagent_type: "code-reviewer",
+  resume: "agent_id_123",  // ID de l'agent précédent
+  prompt: "Continue la review avec les nouvelles modifs"
 }
 ```
 
-### 💡 Patterns Verdent Deck
+**Use case pratique** :
+```
+Session 1:
+> "Lance code-reviewer pour analyser auth.ts"
+→ Agent ID: agent_abc123
 
-**Pattern 1 : Feature Split**
-```
-Feature complexe → Split par domaine
-├── Agent UI : Refonte interface
-├── Agent API : Nouveaux endpoints
-├── Agent DB : Migration schema
-└── Agent Tests : Coverage complet
-```
-
-**Pattern 2 : Refactoring Massif**
-```
-Refactoring global → Split par module
-├── Agent Auth : Module authentication
-├── Agent Payment : Module paiement
-├── Agent Notification : Module notifs
-└── Agent Analytics : Module metrics
+Session 2 (plus tard):
+> "Reprends l'agent code-reviewer (agent_abc123) et check mes corrections"
+→ Agent reprend exactement où il s'était arrêté
 ```
 
-**Pattern 3 : Bug Hunting**
-```
-Bugs multiples → Split par type
-├── Agent Security : Vulnérabilités
-├── Agent Performance : Bottlenecks
-├── Agent Memory : Leaks
-└── Agent UX : Problèmes interface
-```
+**Avantages** :
+- ✅ Conservation du contexte complet
+- ✅ Pas besoin re-expliquer ce qui a été fait
+- ✅ Économie de tokens (pas de re-analyse)
+- ✅ Continuité logique entre sessions
 
-### ⚡ Best Practices Verdent Deck
+**Exemple complet** :
+```bash
+# Session 1
+claude
+> "Lance agent security-auditor pour analyser /src"
+→ [Agent travaille...]
+→ Agent ID: sec_audit_456
+→ Trouve 12 vulnérabilités
 
-**DO ✅** :
-```
-✅ Limiter à 8 agents max (diminishing returns après)
-✅ Définir scope précis par agent
-✅ Utiliser auto-merge pour gains temps
-✅ Monitor en temps réel (dashboard)
-✅ Cleanup worktrees après usage
-```
-
-**DON'T ❌** :
-```
-❌ Agents avec scopes qui se chevauchent
-❌ Plus de 16 agents (overhead système)
-❌ Oublier de merge les branches agents
-❌ Laisser worktrees orphelins
-❌ Agents sans tests associés
+# Session 2 (après corrections)
+claude
+> "Reprends sec_audit_456 et vérifie si j'ai bien corrigé les 12 vulns"
+→ [Agent reprend contexte session 1]
+→ Vérifie uniquement les 12 points identifiés
+→ Confirme corrections appliquées ✅
 ```
 
-### 🔄 Workflow Type Verdent Deck
-
-```
-1. ANALYSE
-   └─> Identifier tâches parallélisables
-
-2. SETUP WORKTREES
-   └─> git worktree add pour chaque agent
-
-3. DÉFINIR AGENTS
-   └─> Scope précis, pas de chevauchement
-
-4. LANCER PARALLEL
-   └─> claude --parallel avec isolation
-
-5. MONITORING
-   └─> Dashboard temps réel progression
-
-6. AUTO-MERGE
-   └─> Résolution conflits si nécessaire
-
-7. CLEANUP
-   └─> git worktree remove après succès
-```
-
-### 📈 Métriques Production
-
-**Projet E-commerce (1M+ lignes)** :
-```
-Sans Verdent : 8h refactoring
-Avec Verdent : 1h45 (8 agents)
-Gain : 78% temps
-
-Qualité : Tests passent 100%
-Conflits : 3 (auto-resolved)
-```
-
-**Migration Microservices** :
-```
-12 services → 12 agents parallèles
-Temps total : 2h30 (vs 18h séquentiel)
-Gain : 86% temps
-
-Zero downtime achieved ✅
+**Configuration** (.claude/settings.json) :
+```json
+{
+  "agents": {
+    "resumable": true,
+    "maxSessionAge": 86400,  // 24h max
+    "persistContext": true
+  }
+}
 ```
 
 ---
@@ -869,11 +806,11 @@ Zero downtime achieved ✅
 
 ### 📚 Ressources Internes
 - 📋 [Cheatsheet Agents](./cheatsheet.md) - Référence rapide
-- 🎓 [Exercices Agents](../exercises/agents/) - Créer vos agents
-- 🔗 [Plugins](../6-plugins/guide.md) - Packaging agents dans plugins
-- 🔗 [MCP](../7-mcp/guide.md) - Agents avec intégrations MCP
+- 🎓 [Exercices Agents](./examples/) - Exemples d'agents production-ready
+- 🔗 [Plugins](../7-plugins/guide.md) - Packaging agents dans plugins
+- 🔗 [MCP](../5-mcp/guide.md) - Agents avec intégrations MCP
 - 🔗 [Skills](../4-skills/guide.md) - Skills vs Agents (comparaison)
-- 🔗 [Workflows](../8-workflows/guide.md) - Agents dans workflows EPCT
+- 🔗 [Commands](../2-commands/guide.md) - Commands vs Agents (comparaison)
 
 ---
 

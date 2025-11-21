@@ -140,9 +140,9 @@ Orchestrator synthesizes
 - Flexibilité > prédictibilité
 
 **Notre implémentation** :
-- ✅ **Command-Subcommand-Agent** (flat hierarchy)
-- ✅ **Command orchestre, Agent exécute** (règle d'or)
-- ✅ **2-3 niveaux recommandés (4-5 possibles)** (Command → Coordinator Agent → Agent)
+- ✅ **Command-Subcommand-Subagent** (hiérarchie recommandée)
+- ✅ **Command orchestre, Subagent exécute** (règle officielle)
+- ✅ **2-3 niveaux recommandés** (Command → Coordinator Subagent → Worker Subagent)
 
 **Fichier** : [4-orchestrator-workers.md](./4-orchestrator-workers.md)
 

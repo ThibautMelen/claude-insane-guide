@@ -4,12 +4,23 @@
 
 ---
 
+## ⚠️ **Note Importante**
+
+Ce guide utilise des **conventions proposées** pour organiser Claude Code. La terminologie officielle est :
+- **Subagents** (`.claude/agents/*.md`)
+- **Custom slash commands** (`.claude/commands/*.md`)
+- **Skills** (`.claude/skills/*/SKILL.md`)
+
+Les concepts comme "COMMAND", "COORDINATOR SUBAGENT" sont des patterns proposés, pas des types officiels.
+
+---
+
 ## 🎯 Objectif de ce Dossier
 
 Avant de plonger dans les **patterns** et les **workflows**, il est essentiel de comprendre :
 
 1. **Taxonomie** : Qu'est-ce qu'un Workflow vs Agentic Workflow vs Pattern ?
-2. **Nomenclature** : Command vs Agent vs Skill - définitions précises
+2. **Nomenclature** : Custom Command vs Subagent vs Skill - définitions précises
 3. **Decision Framework** : Quel composant et pattern utiliser pour mon use case ?
 
 **Ce dossier établit le vocabulaire commun** pour tout le reste de la documentation.
@@ -47,32 +58,38 @@ Avant de plonger dans les **patterns** et les **workflows**, il est essentiel de
 
 ### 📄 [Nomenclature](./nomenclature.md) ⭐
 
-**Termes spécifiques à Claude Code** : Command, Agent, Skill, Hook, MCP.
+**Termes officiels Claude Code + Conventions proposées**
 
 ```
 ╔═══════════════════════════════════════════════════════════╗
 ║           CE QUE VOUS APPRENDREZ                          ║
 ╚═══════════════════════════════════════════════════════════╝
 
-✅ COMMAND : Orchestrateur principal (user-triggered)
-✅ AGENT : Worker exécutant tâche atomique
-✅ SKILL : Base connaissances (auto-invoquée)
-✅ HOOK : Automation déterministe (event-driven)
+TERMINOLOGIE OFFICIELLE :
+✅ SUBAGENT : Worker exécutant tâche atomique (.claude/agents/)
+✅ CUSTOM SLASH COMMAND : Orchestrateur (.claude/commands/)
+✅ SKILL : Base connaissances auto-invoquée (.claude/skills/)
+✅ HOOK : Automation bash/LLM (settings.json)
 ✅ MCP : Interface outils externes
-✅ Hiérarchie stricte (3 niveaux max)
+
+CONVENTIONS CE GUIDE (patterns proposés) :
+• COMMAND = Custom slash command orchestrateur
+• COORDINATOR SUBAGENT = Pattern avancé coordination
+• Hiérarchie recommandée : 2-3 niveaux
 ```
 
 **Concepts clés** :
-- **Command** : Décide stratégie, orchestre agents
-- **Agent** : Exécute tâche unique, retourne résultat
+- **Custom Command** : Décide stratégie, orchestre subagents
+- **Subagent** : Exécute tâche unique, retourne résultat
 - **Skill** : Auto-invoquée par LLM, économie contexte
-- **Hook** : Validation gates, monitoring automatique
-- **Coordinator Agent** : Sous-orchestration (optionnel)
+- **Hook** : Bash (déterministe) ou Prompt (LLM), validation gates
+- **Coordinator Subagent** : Pattern proposé pour sous-orchestration
 
 **⚠️ CLARIFICATION CRITIQUE** :
 ```
-Claude Code "Agent" (Worker)
+Claude Code "Subagent" (Worker)
 ├─ Suit instructions Command
+├─ Règle officielle : "cannot spawn other subagents"
 └─ Production-ready ✅
 
 ≠
@@ -82,7 +99,7 @@ Anthropic "Autonomous Agent" (Pattern 6)
 └─ Research only ⚠️
 ```
 
-**Pourquoi important ?** : Comprendre **qui orchestre qui** est crucial pour respecter les règles d'or Anthropic (Command orchestre toujours, Agent n'orchestre JAMAIS).
+**Pourquoi important ?** : Comprendre **qui orchestre qui** et respecter la règle officielle "subagents cannot spawn other subagents".
 
 ---
 
@@ -223,10 +240,10 @@ RÈGLE D'OR :
  Ajouter complexité SEULEMENT si benchmarks prouvent nécessité."
  — Anthropic, Building Effective Agents 2025
 
-HIÉRARCHIE STRICTE :
-USER → COMMAND → [COORDINATOR] → AGENT
-❌ JAMAIS Agent → Agent
-❌ JAMAIS Agent → Command
+HIÉRARCHIE RECOMMANDÉE :
+USER → COMMAND → [COORDINATOR SUBAGENT] → WORKER SUBAGENT
+❌ JAMAIS Subagent → Subagent (règle officielle)
+❌ JAMAIS Subagent → Command
 
 PATTERNS COMPOSABLES :
 1. Prompt Chaining (séquentiel fixe)

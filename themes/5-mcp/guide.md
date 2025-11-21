@@ -2,6 +2,38 @@
 
 > 📄 **Documentation Officielle** : https://modelcontextprotocol.io/
 
+---
+
+## ⚠️ Note Importante sur les Approches MCP
+
+**Ce guide présente DEUX approches** :
+
+```
+╔═══════════════════════════════════════════════════════════╗
+║  📊 DEUX ÉCOLES DE PENSÉE SUR MCP                         ║
+╚═══════════════════════════════════════════════════════════╝
+
+🔵 APPROCHE OFFICIELLE ANTHROPIC
+   ├─> MCP = Feature légitime et utile
+   ├─> Cas d'usage valides : Databases, GitHub, APIs
+   ├─> Documentation complète et support officiel
+   └─> Utilisé en production par beaucoup d'entreprises
+
+🟠 APPROCHE MELVYNX (Opinion basée sur expérience)
+   ├─> Éviter MCP (sauf Context7)
+   ├─> Préférer CLI natives (gh, psql, curl)
+   ├─> Raison : Pollution contexte (10-20K tokens)
+   └─> Optimisation contexte pour code important
+```
+
+**Ce guide documente les DEUX approches** pour que tu puisses choisir selon tes besoins :
+- ✅ Sections techniques MCP = Doc officielle Anthropic
+- 💡 Sections "Recommandation Melvynx" = Opinion basée expérience 500h
+
+**Tu choisis** : Utilise MCP si bénéfices > coût contexte pour ton cas d'usage.
+
+---
+
 ## 📚 Théorie
 
 ### Qu'est-ce que MCP ?
@@ -142,10 +174,20 @@ Avec 5 MCP:
 ```bash
 # 1. Créer compte sur context7.co
 # 2. Obtenir API key
-# 3. Installer MCP
+# 3. Installer MCP HTTP server
 
-claude mcp transport https://mcp.context7.co \
-  --api-key YOUR_CONTEXT7_API_KEY
+claude mcp add --transport http context7 https://mcp.context7.co \
+  --header "Authorization: Bearer YOUR_CONTEXT7_API_KEY"
+
+# Ou avec variable d'environnement
+export CONTEXT7_API_KEY="your-key"
+claude mcp add --transport http context7 https://mcp.context7.co \
+  --header "Authorization: Bearer ${CONTEXT7_API_KEY}"
+
+# Ou avec scope (user = tous projets)
+claude mcp add --transport http context7 https://mcp.context7.co \
+  --scope user \
+  --header "Authorization: Bearer ${CONTEXT7_API_KEY}"
 
 # 4. Redémarrer Claude Code
 Ctrl+C
@@ -282,7 +324,8 @@ claude
 
 ```bash
 # Installation
-claude mcp transport https://mcp.context7.co --api-key KEY
+claude mcp add --transport http context7 https://mcp.context7.co \
+  --header "Authorization: Bearer YOUR_KEY"
 
 # Utilisation
 claude
@@ -315,17 +358,38 @@ claude
 ### Installation MCP (Si Vraiment Nécessaire)
 
 ```bash
-# Lister MCP disponibles
+# Lister MCP configurés
 claude mcp list
 
-# Installer MCP
-claude mcp transport <url> --api-key <key>
+# Ajouter MCP HTTP server
+claude mcp add --transport http <name> <url> \
+  --header "Authorization: Bearer <token>"
+
+# Ajouter MCP SSE server (deprecated)
+claude mcp add --transport sse <name> <url>
+
+# Ajouter MCP stdio server (local)
+claude mcp add --transport stdio <name> -- <command> [args]
+
+# Avec scope spécifique
+claude mcp add --transport http <name> <url> --scope user    # tous projets
+claude mcp add --transport http <name> <url> --scope project  # .mcp.json versioned
+claude mcp add --transport http <name> <url> --scope local    # défaut, ce projet
+
+# Obtenir détails d'un server
+claude mcp get <name>
 
 # Supprimer MCP
 claude mcp remove <name>
 
-# Vérifier MCP actifs
-claude mcp status
+# Ajouter depuis JSON
+claude mcp add-json <name> '<json-config>'
+
+# Importer depuis Claude Desktop
+claude mcp add-from-claude-desktop
+
+# Check server status (dans Claude Code)
+/mcp
 ```
 
 ### CLI Recommandés
@@ -364,8 +428,14 @@ cat data.json | jq '.users'
 ### Context7 (Seul MCP Recommandé)
 
 ```bash
-# Installation
-claude mcp transport https://mcp.context7.co --api-key YOUR_KEY
+# Installation HTTP server
+claude mcp add --transport http context7 https://mcp.context7.co \
+  --header "Authorization: Bearer YOUR_KEY"
+
+# Ou avec scope user (tous projets)
+claude mcp add --transport http context7 https://mcp.context7.co \
+  --scope user \
+  --header "Authorization: Bearer YOUR_KEY"
 
 # Utilisation dans Claude
 "Utilise Context7 pour la doc de <framework>"
@@ -420,47 +490,50 @@ claude mcp transport https://mcp.context7.co --api-key YOUR_KEY
 
 ---
 
-### 🎯 Différence Clé: LOCAL vs PROJECT
+### 🎯 Différence Clé: Les 3 Scopes MCP
 
-**Comprendre les 3 scopes MCP** : USER → PROJECT → LOCAL
+**Comprendre les 3 scopes MCP** : user → project → local
 
 ```
 ╔════════════════════════════════════════════════════╗
 ║           MCP SCOPES - HIÉRARCHIE                  ║
 ╚════════════════════════════════════════════════════╝
 
-🌍 USER scope (Global)
+🌍 user scope (Tous tes projets)
    ~/.claude/settings.json
-   ~/.claude/mcp.json (ou similaire)
+   ~/.config/claude-code/config.json
    └─> Disponible partout sur ton PC
        ✅ Tous tes projets
        ✅ Persiste entre projets
+       ✅ --scope user
 
-🔵 PROJECT scope (Équipe)
+🔵 project scope (Équipe, versioned)
    ~/my-project/.mcp.json
-   ~/my-project/.claude/settings.json
    └─> Config versionée (git ✅)
        ✅ Partagée avec l'équipe
        ✅ Standard du projet
-       ✅ Override USER scope
+       ✅ Override user scope
+       ✅ --scope project
 
-🔴 LOCAL scope (Toi uniquement)
-   ~/my-project/.claude/settings.local.json
+🔴 local scope (Toi, ce projet) - DÉFAUT
+   ~/my-project/.claude/settings.json (local)
    ~/my-project/.env
    └─> Config personnelle (git ❌)
-       ✅ Override temporaire
+       ✅ Toi uniquement, ce projet
        ✅ Juste sur ton PC
-       ✅ Override PROJECT scope
+       ✅ Override project scope
+       ✅ --scope local (défaut)
 ```
 
 **Tableau Comparatif** :
 
-| Aspect  | PROJECT                | LOCAL                     |
-|---------|------------------------|---------------------------|
-| Fichier | `.mcp.json` (racine)   | `.claude/...local...`     |
-| Git     | ✅ Committé             | ❌ Pas committé            |
-| Équipe  | ✅ Tout le monde        | ❌ Juste toi               |
-| Usage   | Config standard équipe | Override perso temporaire |
+| Aspect  | user                   | project                | local (défaut)         |
+|---------|------------------------|------------------------|------------------------|
+| Fichier | `~/.config/...`        | `.mcp.json` (racine)   | `.claude/settings.json`|
+| Portée  | Tous tes projets       | Ce projet (équipe)     | Ce projet (toi)        |
+| Git     | ❌ Pas committé         | ✅ Committé             | ❌ Pas committé         |
+| Équipe  | ❌ Juste toi            | ✅ Tout le monde        | ❌ Juste toi            |
+| Flag    | `--scope user`         | `--scope project`      | `--scope local` (défaut)|
 
 ---
 
@@ -1063,6 +1136,127 @@ Add to `~/.config/claude-code/config.json`:
 - 🔗 [Plugins](../6-plugins/guide.md) - Packaging MCP dans plugins
 - 🔗 [Best Practices](../9-best-practices/guide.md) - CLI > MCP (règle)
 - 🔗 [Commands](../2-commands/guide.md) - Commands avec CLI natifs
+
+---
+
+## 🆕 Features MCP Avancées
+
+### 🔐 OAuth Authentication
+
+Beaucoup de MCP servers cloud nécessitent authentication. Claude Code supporte OAuth 2.0.
+
+**Workflow** :
+
+```bash
+# 1. Ajouter le server
+claude mcp add --transport http sentry https://mcp.sentry.dev/mcp
+
+# 2. Dans Claude Code, authentifier
+/mcp
+# Sélectionner "Authenticate" pour le server
+# → Browser s'ouvre pour OAuth flow
+
+# 3. Utiliser le server authentifié
+> "Check Sentry errors from last 24h"
+```
+
+**Features** :
+- Tokens stockés sécurisement et refresh automatique
+- "Clear authentication" dans `/mcp` menu pour révoquer
+- Fonctionne avec HTTP servers
+
+---
+
+### 📎 MCP Resources (@mentions)
+
+MCP servers peuvent exposer **resources** référençables avec `@mentions`.
+
+**Utilisation** :
+
+```bash
+# Lister resources disponibles
+> @  # Autocomplete montre resources de tous MCP servers
+
+# Référencer une resource
+> "Analyze @github:issue://123 and suggest a fix"
+> "Review @docs:file://api/authentication"
+> "Compare @postgres:schema://users with @docs:file://database/user-model"
+```
+
+**Features** :
+- Resources auto-fetchées et incluses comme attachments
+- Fuzzy search dans autocomplete
+- Contenu text, JSON, structured data
+
+---
+
+### ⚡ MCP Prompts (Slash Commands)
+
+MCP servers peuvent exposer **prompts** qui deviennent slash commands.
+
+**Format** : `/mcp__servername__promptname [args]`
+
+**Exemple** :
+
+```bash
+# Lister tous les prompts MCP
+> /  # Autocomplete montre /mcp__* commands
+
+# Utiliser un prompt MCP
+> /mcp__github__create_pr "Add new feature" main
+> /mcp__database__query_users --active=true --limit=10
+```
+
+**Features** :
+- Découverte automatique depuis MCP servers
+- Arguments passés space-separated
+- Permissions configurables par prompt
+
+---
+
+### 🔧 Autres Features MCP
+
+**Environment Variable Expansion** :
+
+```json
+{
+  "mcpServers": {
+    "api-server": {
+      "type": "http",
+      "url": "${API_BASE_URL:-https://api.example.com}/mcp",
+      "headers": {
+        "Authorization": "Bearer ${API_KEY}"
+      }
+    }
+  }
+}
+```
+
+**Claude as MCP Server** :
+
+```bash
+# Utiliser Claude Code comme MCP server
+claude mcp serve
+
+# Dans Claude Desktop config
+{
+  "mcpServers": {
+    "claude-code": {
+      "type": "stdio",
+      "command": "/full/path/to/claude",
+      "args": ["mcp", "serve"]
+    }
+  }
+}
+```
+
+**Output Limits** :
+
+```bash
+# Augmenter limite output MCP (défaut: 25K tokens)
+export MAX_MCP_OUTPUT_TOKENS=50000
+claude
+```
 
 ---
 

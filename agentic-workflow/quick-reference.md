@@ -1,6 +1,18 @@
 # Guide de Référence Rapide - Orchestration Claude Code
 
-> **Quick access** aux patterns, syntaxes et best practices d'orchestration Commands/Skills/Agents
+> **Quick access** aux patterns, syntaxes et best practices d'orchestration avec Claude Code
+
+---
+
+## ⚠️ **Note Rapide**
+
+**Terminologie officielle** :
+- Subagents (`.claude/agents/*.md`)
+- Custom slash commands (`.claude/commands/*.md`)
+- Skills (`.claude/skills/*/SKILL.md`)
+- Hooks (`settings.json`, bash ou LLM)
+
+**Ce guide** utilise "COMMAND", "AGENT/SUBAGENT" comme conventions. Voir [nomenclature.md](./1-fundamentals/nomenclature.md) pour détails.
 
 ## 🎯 Decision Tree : Quel composant utiliser ?
 
@@ -387,13 +399,12 @@ Real Benefit:
 
 ```
 ✅ VALID:
-  Command → Agent
-  Command → Coordinator Agent → Agent
+  Command → Subagent
+  Command → Coordinator Subagent → Worker Subagent
 
-❌ FORBIDDEN:
-  Agent → Agent
-  Agent → Command
-  Agent → Subagent
+❌ FORBIDDEN (règle officielle):
+  Subagent → Subagent
+  Subagent → Command
 ```
 
 **Why**: Auditability, control, clarity

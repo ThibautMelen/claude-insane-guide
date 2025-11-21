@@ -2,11 +2,27 @@
 
 > **Source Anthropic** : Basé sur l'analyse de l'article "Disrupting the First AI-Orchestrated Cyber Espionage Campaign" et les best practices officielles.
 
+---
+
+## ⚠️ **Disclaimer Important**
+
+Ce document présente un **framework opinionné** pour orchestrer des workflows agentiques avec Claude Code. Les concepts et conventions présentés ici sont des **patterns proposés**, pas des spécifications officielles Claude Code.
+
+**Terminologie officielle Claude Code** :
+- **Subagents** (`.claude/agents/*.md`)
+- **Custom slash commands** (`.claude/commands/*.md`)
+- **Skills** (`.claude/skills/*/SKILL.md`)
+- **Hooks** (`settings.json`, bash ou LLM)
+
+📖 **Documentation officielle** : [https://docs.anthropic.com/en/docs/claude-code](https://docs.anthropic.com/en/docs/claude-code)
+
+---
+
 ## 📚 Vue d'Ensemble
 
-Ce document établit les **règles fondamentales** pour orchestrer Commands, Subcommands, Agents, Skills, Hooks et MCP selon les standards Anthropic 2025.
+Ce document établit les **règles recommandées** pour orchestrer Custom Commands, Subagents, Skills, Hooks et MCP selon les patterns Anthropic 2025 et best practices.
 
-**Objectif** : Créer des workflows auditables, scalables et sécurisés en respectant une hiérarchie stricte.
+**Objectif** : Créer des workflows auditables, scalables et sécurisés en respectant une hiérarchie claire.
 
 ---
 
@@ -14,39 +30,45 @@ Ce document établit les **règles fondamentales** pour orchestrer Commands, Sub
 
 ### Règle 1 : COMMAND Orchestre Toujours
 
+> ⚠️ **Règle Officielle Claude Code** : "Subagents cannot spawn other subagents" - Documentation officielle
+
 ```
-✅ CORRECT : Command → Agent
-✅ CORRECT : Command → Coordinator Agent → Agent
-❌ INTERDIT : Agent → Agent
-❌ INTERDIT : Agent → Command
-❌ INTERDIT : Agent → Subagent
+✅ CORRECT : Command → Subagent
+✅ CORRECT : Command → Coordinator Subagent → Worker Subagent (via command)
+❌ INTERDIT : Subagent → Subagent (violation règle officielle)
+❌ INTERDIT : Subagent → Command
 ```
 
 **Pourquoi** :
 - **Auditabilité** : Tous les flux partent d'un point central identifiable
 - **Monitoring** : Supervision centralisée des exécutions
 - **Contrôle** : Décisions stratégiques au niveau Command uniquement
-- **Clarté** : Pas de logique cachée dans les agents
+- **Clarté** : Pas de logique cachée dans les subagents
+- **Règle officielle** : Empêche nesting infini de subagents
 
-**Citation Anthropic** :
+**Citation Documentation Officielle** :
 > "Subagents cannot spawn other subagents; prevents infinite nesting of agents"
 
----
-
-### Règle 2 : Hiérarchie Plate (Flat Hierarchy)
-
-**Voir** : [Command-Subcommand-Agent Architecture](./3-architecture/command-coordinator-workers.md) pour détails complets.
-
-**En bref** : Maximum 3 niveaux (Command → Coordinator Agent → Agent). Agents = feuilles, jamais de délégation.
+**Note** : "COMMAND" et "COORDINATOR SUBAGENT" sont des conventions de ce guide. Les types officiels sont "custom slash commands" et "subagents".
 
 ---
 
-### Règle 3 : Agents = Tâches Atomiques
+### Règle 2 : Hiérarchie Recommandée (2-3 niveaux)
 
-**Définition Agent** :
+**Voir** : [Command-Subcommand-Subagent Architecture](./3-architecture/command-coordinator-workers.md) pour détails complets.
+
+**Recommandation** : 2-3 niveaux (Command → [Coordinator Subagent] → Worker Subagent). Subagents workers = feuilles, jamais de délégation.
+
+> 📖 Note : Il n'y a pas de limite officielle "3 niveaux max". C'est une recommandation basée sur la complexité et maintenabilité.
+
+---
+
+### Règle 3 : Subagents = Tâches Atomiques
+
+**Définition Subagent Worker** (terme officiel : "subagent") :
 - Exécute **UNE seule tâche** bien définie
 - Ne prend **AUCUNE décision stratégique**
-- Ne lance **JAMAIS** d'autres agents ou commands
+- Ne lance **JAMAIS** d'autres subagents (règle officielle)
 - Renvoie un résultat simple et structuré
 
 ```
@@ -79,7 +101,11 @@ Output:  Résultat structuré (JSON, Markdown, status)
 
 **Voir** : [Hooks Lifecycle Architecture](./3-architecture/hooks-lifecycle.md) pour détails complets.
 
-**En bref** : 4 types (Validation, Decision, Monitoring, Execution). Codes retour : 0=OK, 1=Warning, 2=Block.
+**En bref** :
+- **Deux types** : Bash hooks (déterministes) + Prompt hooks (LLM evaluation)
+- **10 events** : PreToolUse, PermissionRequest, PostToolUse, Notification, UserPromptSubmit, Stop, SubagentStop, PreCompact, SessionStart, SessionEnd
+- **Exit codes** (bash) : `0`=Success, `2`=Blocking error, autres=Non-blocking
+- **JSON output** : Pour contrôle avancé (decision, reason, continue)
 
 ---
 
@@ -87,7 +113,13 @@ Output:  Résultat structuré (JSON, Markdown, status)
 
 **Voir** : [Skills Progressive Disclosure Architecture](./3-architecture/skills-progressive-disclosure.md) pour détails complets.
 
-**En bref** : Auto-invoquées, 3 niveaux (metadata → full prompt → bundled resources), 10-50x moins de tokens.
+**En bref** :
+- **Auto-invoquées** par LLM reasoning
+- **Progressive disclosure** : Fichiers chargés "only when needed" (doc officielle)
+- **Structure** : SKILL.md (requis) + fichiers additionnels optionnels
+- **Économie** : 10-50x moins de tokens vs memory
+
+> 📖 Note : Le modèle "3 niveaux" est une simplification didactique. Claude charge les fichiers de manière flexible selon besoin.
 
 ---
 
@@ -183,7 +215,9 @@ Question 1 : Y a-t-il orchestration de plusieurs tâches ?
 
 ## 🚫 Anti-Patterns (JAMAIS FAIRE)
 
-### ❌ Anti-Pattern 1 : Agent Lance Agent
+### ❌ Anti-Pattern 1 : Subagent Lance Subagent
+
+> ⚠️ **Violation règle officielle** : "Subagents cannot spawn other subagents"
 
 ```
 ❌ INTERDIT
@@ -191,11 +225,12 @@ Question 1 : Y a-t-il orchestration de plusieurs tâches ?
 .claude/agents/orchestrator-agent.md
 
 Execute these tasks:
-1. Launch Legal-Agent
-2. Launch Tech-Agent
+1. Launch Legal-Subagent
+2. Launch Tech-Subagent
 3. Aggregate results
 
-→ PROBLÈME : Agent fait de l'orchestration = rôle Command !
+→ PROBLÈME : Subagent fait de l'orchestration = rôle Command !
+→ VIOLATION : Subagents ne peuvent pas spawner d'autres subagents
 ```
 
 **Solution** :
@@ -542,14 +577,14 @@ Résultats:
 
 ### Architecture
 
-✅ **COMMAND orchestre, AGENT exécute**
-- Jamais agent → agent ou agent → command
+✅ **COMMAND orchestre, SUBAGENT exécute**
+- Jamais subagent → subagent (règle officielle) ou subagent → command
 
-✅ **Hiérarchie recommandée : 2-3 niveaux (4-5 possibles selon complexité)**
-- Main Command → Coordinator Agent → Agent
+✅ **Hiérarchie recommandée : 2-3 niveaux**
+- Main Command → Coordinator Subagent → Worker Subagent
 
-✅ **Agents atomiques**
-- 1 agent = 1 tâche unique et bien définie
+✅ **Subagents atomiques**
+- 1 subagent = 1 tâche unique et bien définie
 
 ---
 

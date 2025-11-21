@@ -53,7 +53,7 @@ QUESTION 3 : Complexité de l'orchestration ?
 │   └─> COMMAND (2 niveaux)
 │
 ├─ Complexe (10+ agents, multi-domaines)
-│   └─> COMMAND + COORDINATOR AGENTS (3 niveaux)
+│   └─> COMMAND + COORDINATOR SUBAGENTS (3 niveaux)
 │
 └─> Très complexe (100+ agents, multi-phases)
     └─> COMMAND + SUBCOMMANDS + AGENTS
@@ -230,7 +230,7 @@ QUESTION : Besoin de sous-orchestration ?
 └─> OUI (chaque domaine a 3-5 agents)
 
 DÉCISION :
-├─ Composant : COMMAND + COORDINATOR AGENTS + AGENTS
+├─ Composant : COMMAND + COORDINATOR SUBAGENTS + AGENTS
 ├─ Pattern : Pattern 4 (Orchestrator-Workers)
 └─ Hiérarchie : 3 niveaux
 ```
@@ -246,7 +246,7 @@ COMMAND (Level 1) :
 ├─ 2. @technical-coordinator
 └─ 3. @financial-coordinator
 
-COORDINATOR AGENTS (Level 2) :
+COORDINATOR SUBAGENTS (Level 2) :
 ├─ Legal Coordinator
 │   ├─ @contract-analyzer
 │   ├─ @compliance-checker

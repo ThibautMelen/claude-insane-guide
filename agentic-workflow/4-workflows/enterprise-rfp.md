@@ -1295,7 +1295,7 @@ T+160min : ✅ HUMAN-IN-LOOP REQUIS
 
 ### Architecture
 
-✅ **3-level hierarchy** : Main Command → Coordinator Agents (Analysis, Writing, Review) → Agents
+✅ **3-level hierarchy** : Main Command → Coordinator Subagents (Analysis, Writing, Review) → Agents
 ✅ **9 specialized agents** : Legal, Tech, Finance, Writer, Pricing, Compliance, QA, Legal-Review, Exec
 ✅ **Flat structure** : Aucun agent ne lance d'autres agents, tout orchestré par Command
 

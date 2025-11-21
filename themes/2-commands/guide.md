@@ -181,10 +181,24 @@ Prompt complet exécuté par Claude quand /nom est appelé.
 Tu peux :
 - Donner des instructions détaillées
 - Définir un workflow en étapes
-- Utiliser des variables : {argument}
+- Utiliser des **variables d'arguments** : `$ARGUMENTS`, `$1`, `$2`, `$3`
 - Référencer documentation externe (WebFetch)
 - Invoquer des agents (Task tool)
 - Combiner avec Memory (CLAUDE.md)
+
+**Variables d'Arguments** :
+
+```bash
+# $ARGUMENTS → Tous les arguments passés
+/review-pr 456 high alice
+# $ARGUMENTS = "456 high alice"
+
+# $1, $2, $3 → Arguments positionnels spécifiques
+/review-pr 456 high alice
+# $1 = "456"
+# $2 = "high"
+# $3 = "alice"
+```
 
 Exemple : "Explore le code, propose un plan, implémente, teste"
 ```
@@ -225,6 +239,166 @@ Quand l'utilisateur demande une nouvelle feature avec /epct "description", suis 
 
 Résultat attendu : Feature complète, testée, fonctionnelle.
 ```
+
+---
+
+### 📋 Frontmatter YAML (Configuration Avancée)
+
+Les commands peuvent inclure un **frontmatter YAML** pour contrôler leur comportement.
+
+**Format** :
+
+```markdown
+---
+description: Brief description shown in /help
+argument-hint: [pr-number] [priority] [assignee]
+disable-model-invocation: false
+allowed-tools: Bash(git add:*), Bash(git commit:*), Read, Write
+model: claude-3-5-haiku-20241022
+---
+
+# Command prompt content here
+```
+
+**Champs Disponibles** :
+
+| Champ | Type | Description | Exemple |
+|-------|------|-------------|---------|
+| `description` | string | Description courte (affiché dans `/help`) | `"Review PR and suggest fixes"` |
+| `argument-hint` | string | Hint pour les arguments attendus | `"[pr-number] [priority]"` |
+| `disable-model-invocation` | boolean | Empêcher Claude d'invoquer cette command automatiquement | `true` ou `false` |
+| `allowed-tools` | string | Tools autorisés (syntax précise) | `Bash(git add:*), Read, Write` |
+| `model` | string | Model ID complet (voir [Models](https://docs.claude.com/en/docs/about-claude/models/overview)) | `claude-3-5-haiku-20241022` |
+
+**⚠️ IMPORTANT : Syntaxe Model**
+
+Le champ `model` requiert le **model ID complet**, pas l'alias :
+
+```markdown
+# ❌ INCORRECT (alias)
+model: haiku
+model: sonnet
+model: opus
+
+# ✅ CORRECT (model ID complet)
+model: claude-3-5-haiku-20241022
+model: claude-3-5-sonnet-20241022
+model: claude-3-opus-20240229
+```
+
+**Exemples** :
+
+```markdown
+---
+description: Create PR from current branch with AI-generated description
+argument-hint: [base-branch]
+disable-model-invocation: false
+allowed-tools: Bash(git:*), Bash(gh:*), Read, Grep
+model: claude-3-5-sonnet-20241022
+---
+
+# /create-pr
+
+When user runs /create-pr [base-branch]:
+
+1. Check current branch and git status
+2. Analyze recent commits with git log
+3. Generate comprehensive PR description
+4. Create PR using gh cli
+```
+
+**Use Cases** :
+
+```markdown
+// ✅ Command avec argument hints
+---
+description: Deploy to specified environment
+argument-hint: [env] [version]
+---
+
+// ✅ Command rapide avec Haiku (model ID complet)
+---
+description: Quick lint check
+model: claude-3-5-haiku-20241022
+allowed-tools: Bash(npm run lint:*)
+---
+
+// ✅ Command manuelle uniquement
+---
+description: Dangerous database migration
+disable-model-invocation: true
+---
+```
+
+---
+
+### 🌐 Commands Spéciaux : MCP & Plugins
+
+#### 🔌 MCP Commands
+
+Les **MCP servers** exposent automatiquement des commands avec le format `/mcp__servername__promptname`.
+
+**Format** : `/mcp__<server>__<prompt> [args]`
+
+**Exemples** :
+
+```bash
+# GitHub MCP server
+/mcp__github__list_prs
+/mcp__github__pr_review 456
+
+# Jira MCP server
+/mcp__jira__create_issue "Bug in login" high
+
+# Custom MCP server
+/mcp__myserver__custom_action arg1 arg2
+```
+
+**Caractéristiques** :
+- **Découverte automatique** : Commands disponibles dès que MCP server connecté
+- **Arguments** : Passés space-separated après la command
+- **Pas de wildcards** : Permissions MCP ne supportent PAS wildcards (`*`)
+- **Normalization** : Espaces → underscores dans noms
+
+#### 📦 Plugin Commands
+
+Les **plugins** peuvent fournir des commands avec deux formats :
+
+**Format 1** : `/plugin-name:command-name` (namespaced)
+**Format 2** : `/command-name` (si pas de conflit)
+
+**Exemple** :
+
+```
+Plugin "my-tools" avec command "format"
+  → /my-tools:format
+  → /format (si aucun conflit)
+```
+
+**Distribution** : Via marketplaces, installation automatique avec plugin
+
+#### 🤖 SlashCommand Tool
+
+Claude peut **exécuter des commands programmatically** via le **SlashCommand tool**.
+
+**Limites** :
+- **Character budget** : 15,000 chars par défaut
+- **Configurable** : Via `slashCommandCharacterBudget` setting
+- **Permissions** : Configurables comme autres tools
+
+**Permissions** :
+
+```json
+{
+  "toolPermissions": {
+    "SlashCommand:/commit": "allow",
+    "SlashCommand:/review-pr:*": "ask",
+    "SlashCommand:*": "deny"
+  }
+}
+```
+
+**Use Case** : Claude décide automatiquement quand utiliser une command selon le contexte.
 
 ---
 
@@ -706,6 +880,389 @@ Claude : "Que doit-elle faire ?"
 
 ---
 
+## 🔧 Fonctionnalités Avancées
+
+### Bash Execution avec Préfixe `!`
+
+**Description** : Exécuter des commandes bash directement dans le prompt d'une commande et injecter automatiquement le résultat.
+
+**Syntaxe** :
+```markdown
+Use the output below to complete the task:
+
+!git log --oneline -10
+
+Now analyze these commits and generate a changelog.
+```
+
+**Comment ça marche** :
+
+```mermaid
+%%{init: {'theme':'base'}}%%
+flowchart LR
+    A([User invoque /changelog]):::process --> B{Claude lit prompt}:::process
+    B --> C[Détecte préfixe !]:::warning
+    C --> D[Exécute bash command]:::success
+    D --> E[Capture output]:::info
+    E --> F[Remplace !command par output]:::success
+    F --> G[Traite prompt enrichi]:::process
+    G --> H([Génère changelog]):::success
+
+    classDef success fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    classDef process fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    classDef warning fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    classDef info fill:#e2e3e5,stroke:#6c757d,stroke-width:2px,color:#000
+```
+
+**Exemple concret** :
+
+```markdown
+---
+description: Generate changelog from recent commits
+allowed-tools: Bash(git log:*)
+---
+
+# Changelog Generator
+
+Analyze the following git commits:
+
+!git log --oneline --no-merges -20
+
+Generate a user-friendly changelog in markdown format with sections:
+- ✨ Features
+- 🐛 Bug Fixes
+- 📚 Documentation
+- ♻️ Refactoring
+```
+
+**⚠️ Permissions requises** :
+
+Le frontmatter **doit inclure** `allowed-tools` correspondant :
+
+```yaml
+allowed-tools: Bash(git log:*)
+```
+
+**Use Cases** :
+- `/changelog` : Injecter `git log` pour générer release notes
+- `/analyze-logs` : Injecter logs d'erreur pour debugging
+- `/security-audit` : Injecter `npm audit` pour rapport sécurité
+
+---
+
+### File References avec Syntaxe `@`
+
+**Description** : Référencer des fichiers dans les prompts de commandes pour que Claude les lise automatiquement.
+
+**Syntaxe** :
+```markdown
+Review the following files:
+
+@src/components/AuthForm.tsx
+@src/lib/auth.ts
+
+Check for security vulnerabilities.
+```
+
+**Comment ça marche** :
+
+```mermaid
+%%{init: {'theme':'base'}}%%
+flowchart LR
+    A([User invoque /security-review]):::process --> B{Claude lit prompt}:::process
+    B --> C[Détecte @file references]:::warning
+    C --> D[Lit fichier via Read tool]:::success
+    D --> E[Injecte contenu dans prompt]:::info
+    E --> F[Traite prompt enrichi]:::process
+    F --> G([Analyse sécurité]):::success
+
+    classDef success fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000
+    classDef process fill:#cce5ff,stroke:#0066cc,stroke-width:2px,color:#000
+    classDef warning fill:#fff3cd,stroke:#cc8800,stroke-width:2px,color:#000
+    classDef info fill:#e2e3e5,stroke:#6c757d,stroke-width:2px,color:#000
+```
+
+**Exemple concret** :
+
+```markdown
+---
+description: Review code for security issues
+---
+
+# Security Review
+
+Analyze the following files for common vulnerabilities:
+- SQL injection
+- XSS attacks
+- Authentication bypasses
+- Hardcoded secrets
+
+Files to review:
+
+@$1
+
+Provide a detailed security report with severity levels.
+```
+
+**Usage** :
+```bash
+/security-review src/api/users.ts
+# → Claude lit automatiquement src/api/users.ts
+```
+
+**⚠️ Limitations** :
+- Fonctionne uniquement avec Read tool (pas d'auto-expansion pour Bash)
+- Chemins relatifs au working directory
+- Fichiers doivent exister (sinon erreur)
+
+**Use Cases** :
+- `/review` : Lire fichiers pour code review
+- `/explain` : Lire code complexe pour documentation
+- `/refactor` : Lire code existant avant refactoring
+
+---
+
+### Extended Thinking Keywords
+
+**Description** : Mots-clés spéciaux pour contrôler le mode de réflexion approfondie de Claude dans les commandes.
+
+**Keywords disponibles** :
+
+| Keyword | Description | Quand l'utiliser |
+|---------|-------------|------------------|
+| `<extended_thinking>` | Force Claude à penser plus profondément | Tâches complexes nécessitant analyse |
+| `<ultrathink>` | Mode réflexion maximale | Architecture, refactoring majeur |
+| `<think_carefully>` | Réflexion modérée | Review code, debugging |
+
+**Syntaxe dans prompt** :
+
+```markdown
+---
+description: Design complex system architecture
+model: claude-3-5-sonnet-20241022
+---
+
+# System Architecture Design
+
+<ultrathink>
+
+Design a scalable microservices architecture for $1 with:
+- High availability requirements
+- Multi-region deployment
+- Event-driven communication
+- Data consistency patterns
+
+Provide:
+1. System diagram (Mermaid)
+2. Service boundaries
+3. Data flow
+4. Trade-offs analysis
+```
+
+**Exemple comparatif** :
+
+```markdown
+# ❌ Sans extended thinking (rapide mais superficiel)
+/design "API authentication"
+# → Solution générique en 30 secondes
+
+# ✅ Avec extended thinking (approfondi)
+/design "API authentication"
+# Prompt contient <ultrathink>
+# → Analyse OAuth vs JWT vs Session-based
+# → Security considerations (XSS, CSRF, token rotation)
+# → Scalability implications
+# → 2-3 minutes de réflexion approfondie
+```
+
+**⚠️ Performance** :
+- `<extended_thinking>` : +30-60s latence
+- `<ultrathink>` : +60-120s latence
+- À utiliser **uniquement pour tâches complexes**
+
+**Best Practices** :
+- ✅ Architecture design
+- ✅ Refactoring large codebase
+- ✅ Security-critical features
+- ❌ Simple bug fixes
+- ❌ Formatting changes
+- ❌ Documentation updates
+
+---
+
+### Built-In Commands
+
+**Description** : Claude Code inclut 30+ commandes built-in disponibles par défaut.
+
+**Commandes principales** :
+
+| Commande | Description | Exemple |
+|----------|-------------|---------|
+| `/help` | Liste toutes les commandes disponibles | `/help` |
+| `/init` | Initialise projet Claude Code | `/init` |
+| `/clear` | Efface historique conversation | `/clear` |
+| `/memory` | Affiche fichiers mémoire chargés | `/memory` |
+| `/tasks` | Liste tâches en cours (agents, shells) | `/tasks` |
+| `/cancel` | Annule opération en cours | `/cancel` |
+| `/undo` | Annule dernière modification fichier | `/undo` |
+| `/diff` | Affiche différences entre versions | `/diff` |
+
+**Commandes Git** :
+
+| Commande | Description | Exemple |
+|----------|-------------|---------|
+| `/commit` | Commit conventionnel automatique | `/commit` |
+| `/branch` | Créer/changer de branche | `/branch feature/auth` |
+| `/pr` | Créer pull request | `/pr` |
+| `/merge` | Merge branch | `/merge develop` |
+
+**Commandes MCP** :
+
+| Commande | Description | Exemple |
+|----------|-------------|---------|
+| `/mcp__servername__command` | Invoque prompt MCP | `/mcp__firecrawl__search` |
+
+**Voir la liste complète** :
+```bash
+claude
+> /help
+# → Affiche TOUTES les built-in commands + custom commands
+```
+
+**⚠️ Priorité** :
+- Custom commands **override** built-in commands si même nom
+- Si `.claude/commands/help.md` existe → `/help` lance custom command
+
+**Source** : [Built-in Commands Documentation](https://code.claude.com/docs/en/slash-commands#built-in-commands)
+
+---
+
+### Namespacing avec Sous-Dossiers
+
+**Description** : Organiser commandes en catégories via sous-dossiers.
+
+**Structure recommandée** :
+
+```
+📦 .claude/commands/
+┣━━ 📁 git/
+┃   ┣━━ 📄 commit.md
+┃   ┣━━ 📄 pr.md
+┃   ┗━━ 📄 changelog.md
+┣━━ 📁 deploy/
+┃   ┣━━ 📄 staging.md
+┃   ┣━━ 📄 prod.md
+┃   ┗━━ 📄 rollback.md
+┣━━ 📁 test/
+┃   ┣━━ 📄 unit.md
+┃   ┣━━ 📄 e2e.md
+┃   ┗━━ 📄 coverage.md
+┗━━ 📄 init.md
+```
+
+**Syntaxe d'invocation** :
+
+```bash
+# Commande à la racine
+/init
+
+# Commande dans sous-dossier
+/git/commit
+/git/pr
+/deploy/staging
+/test/e2e
+```
+
+**Autocomplétion** :
+
+```bash
+claude
+> /git/<TAB>
+# → commit  pr  changelog
+
+> /deploy/<TAB>
+# → staging  prod  rollback
+```
+
+**⚠️ Limites** :
+- Un seul niveau de profondeur (pas de nested subfolders)
+- Pas de `/git/feature/commit` ❌
+
+**Use Cases** :
+- **Projets large codebase** : 20+ commandes organisées
+- **Équipes** : Responsabilités par namespace
+- **Workflows complexes** : Git, CI/CD, Testing séparés
+
+---
+
+### SlashCommand Tool Permissions
+
+**Description** : Contrôler quels tools une commande peut utiliser via frontmatter.
+
+**Syntaxe** :
+
+```yaml
+---
+allowed-tools: Bash(git add:*), Bash(git commit:*), Read, Write
+---
+```
+
+**Patterns disponibles** :
+
+| Pattern | Description | Exemple |
+|---------|-------------|---------|
+| `Bash(command:*)` | Bash command avec wildcards | `Bash(git add:*)` |
+| `Bash(*)` | Tous les bash commands | ⚠️ Risque sécurité |
+| `Read` | Lecture fichiers | `Read` |
+| `Write` | Écriture fichiers | `Write` |
+| `Edit` | Édition fichiers | `Edit` |
+| `Glob` | Pattern matching fichiers | `Glob` |
+| `Grep` | Recherche dans fichiers | `Grep` |
+| `Task` | Invocation sous-agents | `Task` |
+| `SlashCommand` | Invocation autres commands | ❌ Non supporté dans allowed-tools |
+
+**Exemple concret** :
+
+```yaml
+---
+description: Deploy to production with safety checks
+allowed-tools: Bash(npm run build:*), Bash(npm run test:*), Bash(git push:*), Read
+---
+
+# Production Deployment
+
+Safety checks before deploy:
+1. Run tests: !npm run test
+2. Build production: !npm run build
+3. Check git status
+4. Push to production
+
+⚠️ This command can only use:
+- npm build/test commands
+- git push
+- Read files
+
+Cannot use Write/Edit for safety.
+```
+
+**⚠️ Sécurité** :
+
+```yaml
+# ❌ DANGEREUX (trop permissif)
+allowed-tools: Bash(*)
+
+# ✅ SÉCURISÉ (spécifique)
+allowed-tools: Bash(git status:*), Bash(git diff:*)
+```
+
+**Best Practices** :
+- ✅ **Principe du moindre privilège** : Minimum de tools nécessaires
+- ✅ **Wildcards spécifiques** : `git add:*`, pas `git:*`
+- ✅ **Review régulier** : Auditer permissions des commandes
+- ❌ **Éviter Bash(*)** : Trop large, risque sécurité
+
+---
+
 ## 📋 Cheatsheet
 
 ### Commandes Essentielles
@@ -758,11 +1315,25 @@ Prompt principal qui sera exécuté.
 
 ## Variables
 
-{argument} : Remplacé par argument passé à /commande
+**Syntaxe officielle** :
+- `$ARGUMENTS` : Tous les arguments passés à la command
+- `$1`, `$2`, `$3` : Arguments positionnels individuels
+
+**Exemple** :
+
+```markdown
+Review PR #$1 with priority $2 and assign to $3.
+```
+
+**Usage** :
+```bash
+/review-pr 456 high alice
+# $1 = "456", $2 = "high", $3 = "alice"
+```
 
 ## Exemples
 
-Donner exemples d'utilisation attendue.
+Donner exemples d'utilisation attendue avec variables.
 ```
 
 ### Workflow Typique
@@ -797,7 +1368,7 @@ claude
 ✅ **Prompts Réutilisables** : Transformer prompt complexe en `/commande`
 ✅ **Deux Scopes** : Projet (.claude/) vs Personnel (~/.claude/)
 ✅ **Partageable** : Commitez commands/ pour workflow équipe
-✅ **Arguments** : Utiliser {variable} dans prompt
+✅ **Arguments** : Utiliser `$ARGUMENTS`, `$1`, `$2`, `$3` dans prompt
 ✅ **Redémarrage** : Obligatoire après création/modification
 ✅ **Autocomplétion** : Terminal suggère commandes disponibles
 

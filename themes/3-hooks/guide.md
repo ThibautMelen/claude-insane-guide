@@ -91,6 +91,128 @@ Claude Code supporte **deux façons** de configurer des hooks :
 
 ---
 
+### 🤖 Hooks Prompt-Based (LLM-Powered)
+
+En plus des hooks bash (`type: "command"`), Claude Code supporte des **hooks prompt-based** (`type: "prompt"`) qui utilisent un LLM pour prendre des décisions intelligentes et contextuelles.
+
+**Principe** : Au lieu d'exécuter un script bash, Claude Code envoie le contexte à un LLM rapide (Haiku) qui décide automatiquement.
+
+```
+╔══════════════════════════════════════════════════════════╗
+║  BASH HOOKS vs PROMPT-BASED HOOKS                       ║
+╚══════════════════════════════════════════════════════════╝
+
+🔧 BASH HOOKS (type: "command")
+   ├─> Exécute script bash
+   ├─> Logique déterministe
+   ├─> Rapide (local)
+   └─> Use case: Règles simples, validations fixes
+
+🤖 PROMPT-BASED HOOKS (type: "prompt")
+   ├─> Query LLM (Haiku)
+   ├─> Décisions contextuelles
+   ├─> Plus lent (API call)
+   └─> Use case: Décisions intelligentes, analyse complexe
+```
+
+#### Configuration Prompt-Based Hook
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Evaluate if Claude should stop: $ARGUMENTS. Check if all tasks are complete and no errors need fixing.",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Champs** :
+- `type`: `"prompt"` (obligatoire)
+- `prompt`: Texte envoyé au LLM
+  - Utiliser `$ARGUMENTS` comme placeholder pour l'input JSON
+  - Si absent, input JSON est ajouté automatiquement
+- `timeout`: Timeout en secondes (défaut: 30s)
+
+#### Response Schema LLM
+
+Le LLM répond avec JSON structuré :
+
+```json
+{
+  "decision": "approve" | "block",
+  "reason": "Explication de la décision",
+  "continue": false,           // Optionnel: stoppe Claude
+  "stopReason": "Message user", // Optionnel: message custom
+  "systemMessage": "Warning"    // Optionnel: contexte additionnel
+}
+```
+
+#### Hooks Supportés
+
+Prompt-based hooks fonctionnent avec **tous les événements**, mais sont particulièrement utiles pour :
+
+- **Stop** : Décider intelligemment si Claude doit continuer
+- **SubagentStop** : Évaluer si sub-agent a terminé
+- **UserPromptSubmit** : Validation contextuelle des prompts
+- **PreToolUse** : Décisions de permissions context-aware
+- **PermissionRequest** : Allow/deny intelligent
+
+#### Exemple : Stop Hook Intelligent
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Analyze the conversation context: $ARGUMENTS\n\nDetermine if:\n1. All user-requested tasks are complete\n2. Any errors need to be addressed\n3. Follow-up work is needed\n\nRespond with JSON: {\"decision\": \"approve\" or \"block\", \"reason\": \"explanation\"}",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Workflow** :
+
+```
+Claude termine une tâche
+  └─> Stop Hook (prompt-based) déclenché
+      └─> LLM analyse le contexte
+          ├─> Tous les tests passent ✅
+          ├─> Aucune erreur ✅
+          ├─> Feature complète ✅
+          └─> {"decision": "approve"}
+              └─> Claude s'arrête ✅
+```
+
+#### Comparaison des Approches
+
+| Feature | Bash Hooks | Prompt-Based Hooks |
+|---------|------------|-------------------|
+| **Exécution** | Script local | API LLM |
+| **Logique** | Déterministe | Context-aware |
+| **Performance** | Rapide | Plus lent |
+| **Complexité** | Script requis | Prompt seulement |
+| **Use Case** | Règles fixes | Décisions intelligentes |
+
+**💡 Best Practice** : Utilisez bash hooks pour règles simples, prompt-based pour décisions complexes nécessitant compréhension du contexte.
+
+---
+
 ### 🎭 Before Tool vs After Tool (Melvynx 500h)
 
 Selon **Melvynx**, les deux hooks les plus utilisés sont **PreToolUse** et **PostToolUse**. Voici leurs **cas d'usage distincts** :
@@ -437,20 +559,24 @@ claude
 Voici **tous les événements** que vous pouvez hooker :
 
 ```
-╔═══════════════════════════════════════════════════════════════╗
-║  ÉVÉNEMENT         │  QUAND IL SE DÉCLENCHE                   ║
-╠════════════════════╪══════════════════════════════════════════╣
-║  SessionStart      │  Au démarrage d'une session Claude       ║
-║  SessionEnd        │  À la fin d'une session                  ║
-║  PreToolUse        │  AVANT l'exécution d'un outil            ║
-║  PostToolUse       │  APRÈS l'exécution d'un outil            ║
-║  UserPromptSubmit  │  Quand l'utilisateur envoie un prompt    ║
-║  Notification      │  Lors d'une notification système         ║
-║  Stop              │  Quand Claude s'arrête                   ║
-║  SubagentStop      │  Quand un sub-agent termine              ║
-║  PreCompact        │  Avant compaction du contexte            ║
-╚═══════════════════════════════════════════════════════════════╝
+╔════════════════════════╦════════════════════════════════════════════╗
+║  ÉVÉNEMENT            ║  QUAND IL SE DÉCLENCHE                     ║
+╠════════════════════════╬════════════════════════════════════════════╣
+║  SessionStart          ║  Au démarrage d'une session Claude         ║
+║  SessionEnd            ║  À la fin d'une session                    ║
+║  PreToolUse            ║  AVANT l'exécution d'un outil              ║
+║  PermissionRequest     ║  Quand Claude demande une permission       ║
+║  PostToolUse           ║  APRÈS l'exécution d'un outil              ║
+║  UserPromptSubmit      ║  Quand l'utilisateur envoie un prompt      ║
+║  Notification          ║  Lors d'une notification système           ║
+║  Stop                  ║  Quand Claude s'arrête                     ║
+║  SubagentStop          ║  Quand un sub-agent termine                ║
+║  PreCompact            ║  Avant compaction du contexte              ║
+╚════════════════════════╩════════════════════════════════════════════╝
 ```
+
+**Events avec Matchers** : `PreToolUse`, `PermissionRequest`, `PostToolUse`
+**Events sans Matchers** : `SessionStart`, `SessionEnd`, `UserPromptSubmit`, `Notification`, `Stop`, `SubagentStop`, `PreCompact`
 
 ### 🔄 Cycle de Vie d'une Interaction
 
@@ -534,63 +660,160 @@ Les hooks peuvent être **bloquants** ou **non-bloquants** :
 - Global : `~/.claude/settings.json`
 - Projet : `.claude/settings.json` (dans votre projet)
 
-**Format** :
+**Format Général** :
 
 ```json
 {
-  "hooks": [
-    {
-      "event": "SessionStart",
-      "script": "echo '🚀 Session démarrée !'"
-    },
-    {
-      "event": "PostToolUse",
-      "tool": "Edit",
-      "script": "npm run lint"
-    }
-  ]
+  "hooks": {
+    "EventName": [
+      {
+        "matcher": "ToolPattern",  // Pour PreToolUse, PermissionRequest, PostToolUse
+        "hooks": [
+          {
+            "type": "command" | "prompt",
+            "command": "your-command-here",  // Si type: "command"
+            "prompt": "your-prompt-here",    // Si type: "prompt"
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 
-**Propriétés disponibles** :
-
-| Propriété | Type | Description | Exemple |
-|-----------|------|-------------|---------|
-| `event` | string | ⭐ **REQUIS** - Type d'événement | `"PostToolUse"` |
-| `script` | string | ⭐ **REQUIS** - Commande à exécuter | `"bash lint.sh"` |
-| `tool` | string | Filtrer par outil spécifique | `"Edit"`, `"Bash"` |
-| `pattern` | string | Regex pour filtrer fichiers | `"\\.(tsx\|jsx)$"` |
-| `blocking` | boolean | Hook bloquant si `true` | `true` ou `false` |
-
-**Exemples** :
+**Structure avec Matchers** (PreToolUse, PermissionRequest, PostToolUse) :
 
 ```json
 {
-  "hooks": [
-    // 🟢 Simple : Message au démarrage
-    {
-      "event": "SessionStart",
-      "script": "echo '👋 Bienvenue !'"
-    },
-
-    // 🟡 Filtré : Lint seulement fichiers React
-    {
-      "event": "PostToolUse",
-      "tool": "Edit",
-      "pattern": "\\.(tsx|jsx)$",
-      "script": "eslint $FILE"
-    },
-
-    // 🔴 Bloquant : Empêcher commit de secrets
-    {
-      "event": "PreToolUse",
-      "tool": "Bash",
-      "script": "bash scripts/detect-secrets.sh",
-      "blocking": true
-    }
-  ]
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",  // Filtre par tool
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/validate-bash.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",  // Regex: Edit OU Write
+        "hooks": [
+          {
+            "type": "command",
+            "command": "prettier --check $FILE"
+          }
+        ]
+      },
+      {
+        "matcher": "*",  // Tous les tools
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Tool used: $TOOL_NAME'"
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
+
+**Matchers disponibles** :
+- **Simple** : `"Write"` → Matche exactement le tool Write
+- **Regex** : `"Edit|Write"` → Matche Edit OU Write
+- **Wildcard** : `"*"` ou `""` → Matche TOUS les tools
+- **Case-sensitive** : Les matchers respectent la casse
+
+**Structure sans Matchers** (SessionStart, Stop, UserPromptSubmit, etc.) :
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/prompt-validator.py"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup",  // Matchers spécifiques disponibles
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '🚀 Session started'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Exemples Complets** :
+
+```json
+{
+  "hooks": {
+    // 🟢 PostToolUse avec matcher
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "eslint --fix $FILE && prettier --write $FILE"
+          }
+        ]
+      }
+    ],
+
+    // 🟡 PreToolUse avec prompt-based
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Evaluate if this bash command is safe: $ARGUMENTS",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+
+    // 🔴 Stop hook (pas de matcher)
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Check if all tasks are complete: $ARGUMENTS"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Variables d'environnement disponibles** :
+
+| Variable | Description | Disponibilité | Exemple |
+|----------|-------------|---------------|---------|
+| `$TOOL_NAME` | Nom du tool invoqué | PreToolUse, PostToolUse | `Edit`, `Bash`, `Read` |
+| `$FILE` | Chemin du fichier modifié | PostToolUse (si applicable) | `src/App.tsx` |
+| `$ARGUMENTS` | Arguments du hook | Prompt-based hooks | User input |
+| `$CLAUDE_PROJECT_DIR` | Répertoire racine du projet | Tous les hooks | `/Users/user/project` |
+| `$CLAUDE_PLUGIN_ROOT` | Racine du plugin (si hook dans plugin) | Hooks de plugins | `/path/to/plugin` |
+| `$CLAUDE_CODE_REMOTE` | URL du remote git (si configuré) | Tous les hooks | `github.com/user/repo` |
+| `$CLAUDE_ENV_FILE` | Fichier pour persister env vars | SessionStart uniquement | `/tmp/claude-env` |
 
 ### 📦 Option 2 : Plugin hooks.json
 
@@ -632,6 +855,238 @@ my-plugin/
 ```
 
 **💡 Astuce** : Utilisez `${CLAUDE_PLUGIN_ROOT}` pour chemins relatifs !
+
+---
+
+### 📊 Hook Input & Output Schemas
+
+#### 🔄 Exit Codes (Simple)
+
+Méthode simple pour communiquer le résultat :
+
+```
+╔══════════════════════════════════════════════════════════╗
+║  EXIT CODE  │  COMPORTEMENT                              ║
+╠═════════════╪════════════════════════════════════════════╣
+║  0          │  Succès - stdout visible (verbose mode)   ║
+║             │  Exception: UserPromptSubmit et            ║
+║             │  SessionStart où stdout → contexte Claude  ║
+╠═════════════╪════════════════════════════════════════════╣
+║  2          │  BLOQUE - stderr shown to Claude          ║
+║             │  Comportement varie selon event (voir doc) ║
+╠═════════════╪════════════════════════════════════════════╣
+║  Autre      │  Warning non-bloquant - stderr visible    ║
+║             │  Exécution continue                        ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+**Exit Code 2 - Comportement par Event** :
+
+| Event | Comportement |
+|-------|-------------|
+| `PreToolUse` | Bloque le tool, stderr → Claude |
+| `PermissionRequest` | Deny permission, stderr → Claude |
+| `PostToolUse` | Stderr → Claude (tool déjà exécuté) |
+| `UserPromptSubmit` | Bloque prompt, efface, stderr → user |
+| `Stop` | Bloque stoppage, stderr → Claude |
+| `SubagentStop` | Bloque stoppage, stderr → subagent |
+
+#### 📤 JSON Output (Avancé)
+
+Hooks peuvent retourner JSON structuré dans `stdout` pour contrôle fin.
+
+**⚠️ Important** : JSON seulement traité si **exit code 0**. Exit code 2 utilise `stderr` uniquement.
+
+**Champs Communs** :
+
+```json
+{
+  "continue": true,              // Claude continue ? (défaut: true)
+  "stopReason": "string",         // Message si continue=false
+  "suppressOutput": true,         // Cache stdout du transcript
+  "systemMessage": "string"       // Warning optionnel user
+}
+```
+
+#### 🔒 PreToolUse Decision Control
+
+Contrôle si le tool peut s'exécuter :
+
+```json
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "allow" | "deny" | "ask",
+    "permissionDecisionReason": "Explication",
+    "updatedInput": {
+      "field_to_modify": "new value"  // Modifier input tool
+    }
+  }
+}
+```
+
+**Décisions** :
+- `"allow"` : Bypass permission system (reason → user)
+- `"deny"` : Bloque exécution (reason → Claude)
+- `"ask"` : Demande confirmation user (reason → user)
+
+**Exemple** :
+
+```json
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "allow",
+    "permissionDecisionReason": "Documentation file auto-approved",
+    "updatedInput": {
+      "command": "npm run lint"  // Modifie la commande
+    }
+  }
+}
+```
+
+#### 🔐 PermissionRequest Decision Control
+
+Allow/deny permissions automatiquement :
+
+```json
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PermissionRequest",
+    "decision": {
+      "behavior": "allow" | "deny",
+      "updatedInput": { ... },      // Si allow
+      "message": "Why denied",      // Si deny
+      "interrupt": false            // Si deny, stopper Claude ?
+    }
+  }
+}
+```
+
+#### ✨ PostToolUse Decision Control
+
+Feedback après exécution :
+
+```json
+{
+  "decision": "block" | undefined,
+  "reason": "Explanation",
+  "hookSpecificOutput": {
+    "hookEventName": "PostToolUse",
+    "additionalContext": "Info pour Claude"
+  }
+}
+```
+
+**Use case** : Ajouter résultats tests, warnings, ou bloquer si erreur détectée.
+
+#### 📝 UserPromptSubmit Decision Control
+
+Contrôle des prompts utilisateur :
+
+**Méthode 1 - Plain Text** (simple) :
+```bash
+#!/bin/bash
+echo "Current time: $(date)"  # Ajouté au contexte
+exit 0
+```
+
+**Méthode 2 - JSON** (structuré) :
+```json
+{
+  "decision": "block" | undefined,
+  "reason": "Explanation",
+  "hookSpecificOutput": {
+    "hookEventName": "UserPromptSubmit",
+    "additionalContext": "Additional info for Claude"
+  }
+}
+```
+
+#### 🛑 Stop/SubagentStop Decision Control
+
+Forcer Claude à continuer :
+
+```json
+{
+  "decision": "block" | undefined,
+  "reason": "Why Claude must continue"  // Obligatoire si block
+}
+```
+
+**Exemple** :
+
+```json
+{
+  "decision": "block",
+  "reason": "Tests failed. Please fix the following errors:\n- Test 1 failed\n- Test 2 failed"
+}
+```
+
+#### 🚀 SessionStart Decision Control
+
+Injecter contexte au démarrage :
+
+```json
+{
+  "hookSpecificOutput": {
+    "hookEventName": "SessionStart",
+    "additionalContext": "Project info: Next.js 14, Supabase auth"
+  }
+}
+```
+
+**Variables d'environnement persistantes** :
+
+SessionStart a accès à `$CLAUDE_ENV_FILE` pour persister env vars :
+
+```bash
+#!/bin/bash
+if [ -n "$CLAUDE_ENV_FILE" ]; then
+  echo 'export NODE_ENV=production' >> "$CLAUDE_ENV_FILE"
+  echo 'export API_KEY=your-key' >> "$CLAUDE_ENV_FILE"
+fi
+```
+
+#### 📥 Hook Input Examples
+
+**PreToolUse** :
+
+```json
+{
+  "session_id": "abc123",
+  "transcript_path": "/path/to/transcript.jsonl",
+  "cwd": "/Users/project",
+  "permission_mode": "default",
+  "hook_event_name": "PreToolUse",
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "/path/to/file.txt",
+    "content": "file content"
+  },
+  "tool_use_id": "toolu_01ABC123"
+}
+```
+
+**UserPromptSubmit** :
+
+```json
+{
+  "session_id": "abc123",
+  "hook_event_name": "UserPromptSubmit",
+  "prompt": "Write a function to calculate factorial"
+}
+```
+
+**Stop** :
+
+```json
+{
+  "session_id": "abc123",
+  "hook_event_name": "Stop",
+  "stop_hook_active": true  // true si déjà dans stop hook
+}
+```
 
 ---
 
@@ -1089,6 +1544,250 @@ chmod +x scripts/my-hook.sh  # Si nécessaire
   "pattern": "\\.(tsx|jsx)$"  // Double backslash pour JSON
 }
 ```
+
+---
+
+## 🔧 Fonctionnalités Avancées
+
+### MCP Tools Hooks
+
+**Description** : Déclencher hooks sur invocations de **MCP tools** (serveurs MCP externes).
+
+**Principe** : Les hooks peuvent filtrer sur tools MCP via pattern `mcp__servername__toolname`.
+
+**Exemple - Notification sur Firecrawl** :
+
+```json
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "tool": "mcp__firecrawl__firecrawl_scrape",
+      "script": "echo '🔥 Firecrawl scrape starting...'",
+      "blocking": false
+    },
+    {
+      "event": "PostToolUse",
+      "tool": "mcp__firecrawl__firecrawl_scrape",
+      "script": "bash .claude/hooks/log-scrape.sh"
+    }
+  ]
+}
+```
+
+**Script de logging** (`log-scrape.sh`) :
+
+```bash
+#!/bin/bash
+# Log toutes les opérations Firecrawl pour audit
+
+TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+echo "[$TIMESTAMP] Firecrawl scrape completed" >> firecrawl-audit.log
+echo "  Tool: $TOOL_NAME" >> firecrawl-audit.log
+echo "  Project: $CLAUDE_PROJECT_DIR" >> firecrawl-audit.log
+```
+
+**Use Cases** :
+- **Audit logging** : Tracer utilisation MCP servers coûteux (Firecrawl, Context7)
+- **Rate limiting** : Bloquer si quota dépassé
+- **Cost tracking** : Logger calls pour facturation
+- **Security** : Valider inputs avant envoi à API externe
+
+**Pattern matching** :
+
+```json
+{
+  "tool": "mcp__firecrawl__*",  // Tous les tools Firecrawl
+  "tool": "mcp__*__search",     // Tous les tools search de tous MCP
+  "tool": "mcp__*",             // TOUS les MCP tools
+}
+```
+
+**⚠️ Performance** :
+- Hooks sur MCP tools ajoutent latence (I/O externe)
+- Privilégier hooks non-bloquants (`blocking: false`)
+- Éviter pattern `mcp__*` trop large
+
+---
+
+### 🔒 Security Considerations
+
+**Description** : Précautions de sécurité lors de l'utilisation des hooks.
+
+#### 🚨 Risques de Sécurité
+
+```
+╔══════════════════════════════════════════════════════════╗
+║  RISQUE             │  IMPACT             │  MITIGATION  ║
+╠═════════════════════╪═════════════════════╪══════════════╣
+║  Command Injection  │  Code arbitraire    │  Validation  ║
+║  Path Traversal     │  Accès fichiers     │  Sanitize    ║
+║  Secrets Exposure   │  Leak credentials   │  Env vars    ║
+║  Infinite Loops     │  DOS Claude Code    │  Timeout     ║
+║  Plugin Malveillant │  Backdoor système   │  Review code ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+#### ✅ Best Practices Sécurité
+
+**1. Validation des inputs** :
+
+```bash
+#!/bin/bash
+# ❌ DANGEREUX : Injection possible
+eval "$ARGUMENTS"
+
+# ✅ SÉCURISÉ : Validation avant exécution
+if [[ "$FILE" =~ ^[a-zA-Z0-9/_.-]+$ ]]; then
+  eslint "$FILE"
+else
+  echo "Invalid file path" >&2
+  exit 2
+fi
+```
+
+**2. Principe du moindre privilège** :
+
+```json
+{
+  "hooks": [
+    {
+      "event": "PostToolUse",
+      "tool": "Edit",
+      "pattern": "\\.tsx$",
+      // ✅ Script read-only (pas de Write/Delete)
+      "script": "eslint --format json $FILE | jq '.[] | select(.errorCount > 0)'"
+    }
+  ]
+}
+```
+
+**3. Jamais de secrets hardcodés** :
+
+```bash
+#!/bin/bash
+# ❌ DANGEREUX
+WEBHOOK_URL="https://hooks.slack.com/services/T00/B00/SECRET123"
+
+# ✅ SÉCURISÉ
+if [ -z "$SLACK_WEBHOOK_URL" ]; then
+  echo "SLACK_WEBHOOK_URL not set" >&2
+  exit 1
+fi
+curl -X POST "$SLACK_WEBHOOK_URL" -d "$payload"
+```
+
+**4. Timeout pour éviter hang** :
+
+```bash
+#!/bin/bash
+# ✅ Timeout 5 secondes max
+timeout 5s npm run lint || {
+  echo "Linting timeout exceeded" >&2
+  exit 1
+}
+```
+
+**5. Review plugins avant installation** :
+
+```bash
+# Avant d'installer un plugin avec hooks
+cat my-plugin/.claude-plugin/hooks/hooks.json
+cat my-plugin/scripts/*.sh
+
+# Vérifier :
+# - Pas de `rm -rf`, `eval`, `curl` vers domaines inconnus
+# - Scripts lisibles et compréhensibles
+# - Permissions appropriées
+```
+
+#### ⚠️ Hooks à Risque Élevé
+
+**SessionStart** :
+- Exécuté au démarrage → peut modifier env persistant
+- Utiliser uniquement pour setup légitime (pas de side effects)
+
+**PreToolUse (blocking)** :
+- Peut bloquer TOUTES les opérations Claude
+- Bug dans hook → Claude inutilisable
+- Tester extensively avant déploiement
+
+**UserPromptSubmit** :
+- Accès à TOUS les prompts utilisateur (data sensible)
+- Ne jamais logger prompts sans consentement
+- Respecter GDPR/privacy
+
+#### 📋 Security Checklist
+
+Avant de déployer des hooks en production :
+
+- [ ] ✅ Aucun secret hardcodé (utiliser env vars)
+- [ ] ✅ Validation des inputs (`$FILE`, `$ARGUMENTS`)
+- [ ] ✅ Timeouts configurés (5-10s max)
+- [ ] ✅ Scripts en read-only si possible
+- [ ] ✅ Patterns regex spécifiques (pas de wildcards larges)
+- [ ] ✅ Exit codes appropriés (0, 2, autres)
+- [ ] ✅ Logs d'erreur informatifs (stderr)
+- [ ] ✅ Hooks testés en isolation
+- [ ] ✅ Review code plugins tiers
+- [ ] ✅ Backup `.claude/settings.json` avant modifications
+
+---
+
+### 📋 Commande `/hooks`
+
+**Description** : Slash command built-in pour inspecter hooks chargés.
+
+**Usage** :
+
+```bash
+claude
+> /hooks
+```
+
+**Output** :
+
+```
+📋 Hooks Chargés (5 total)
+
+🔧 Hooks Projet (.claude/settings.json):
+  1. PreToolUse → Edit (*.tsx) [blocking]
+     Script: bash .claude/hooks/lint-tsx.sh
+
+  2. PostToolUse → Bash (git commit*)
+     Script: echo 'Committed!' | notify
+
+🔌 Hooks Plugins:
+  3. SessionStart → @react-dev-plugin
+     Script: echo '⚛️ React Dev Mode'
+
+  4. PostToolUse → Edit (*.tsx) [@react-dev-plugin]
+     Script: bash ${CLAUDE_PLUGIN_ROOT}/scripts/format-react.sh
+
+🌐 Hooks Globaux (~/.claude/settings.json):
+  5. Stop → Tous
+     Script: echo 'Goodbye!'
+
+⚠️ Conflits Détectés: Aucun
+✅ Tous les hooks valides
+```
+
+**Informations fournies** :
+- **Nombre total** de hooks chargés
+- **Source** de chaque hook (Projet / Plugin / Global)
+- **Event type** et **tool filter**
+- **Pattern** regex si applicable
+- **Blocking status** pour PreToolUse/PermissionRequest
+- **Script path** ou commande
+- **Conflits** : Hooks qui se chevauchent sur même event+tool
+
+**Cas d'usage** :
+- **Debug** : Comprendre pourquoi hook ne trigger pas
+- **Audit** : Voir tous les hooks actifs dans projet
+- **Conflits** : Identifier doublons (projet + plugin sur même event)
+- **Documentation** : Générer doc des hooks projet
+
+**⚠️ Note** : `/hooks` montre hooks **chargés au démarrage**. Si vous modifiez `settings.json` ou installez plugin après démarrage, **redémarrer Claude** pour voir changements.
 
 ---
 

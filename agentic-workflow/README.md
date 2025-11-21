@@ -1,12 +1,35 @@
 # Agentic Workflow - Orchestration Claude Code
 
-> Maîtriser l'orchestration multi-agents avec les **6 patterns composables d'Anthropic**.
+> Maîtriser l'orchestration multi-subagents avec les **6 patterns composables d'Anthropic**.
+
+---
+
+## ⚠️ **Disclaimer Important**
+
+Ce guide présente un **framework opinionné** pour implémenter les patterns agentiques d'Anthropic avec Claude Code.
+
+**Ce que ce guide propose** :
+- ✅ Patterns d'orchestration d'Anthropic (officiels, research)
+- ✅ Implémentation avec composants Claude Code
+- ✅ Conventions nommage (COMMAND, COORDINATOR SUBAGENT, etc.)
+- ✅ Best practices basées sur expérience et benchmarks
+
+**Ce que ce guide n'est PAS** :
+- ❌ Documentation officielle Claude Code (voir [docs.anthropic.com](https://docs.anthropic.com/en/docs/claude-code))
+- ❌ Spécifications Claude Code (les "règles" sont des recommandations)
+- ❌ Seule façon d'utiliser Claude Code
+
+**Terminologie officielle Claude Code** :
+- **Subagents** (`.claude/agents/*.md`)
+- **Custom slash commands** (`.claude/commands/*.md`)
+- **Skills** (`.claude/skills/*/SKILL.md`)
+- **Hooks** (`settings.json`)
 
 ---
 
 ## 🎯 Mission
 
-Créer des **systèmes agentiques production-ready** en utilisant les 6 patterns composables officiels d'Anthropic pour orchestrer Commands, Agents, Skills, Hooks et MCP.
+Créer des **systèmes agentiques production-ready** en utilisant les 6 patterns composables officiels d'Anthropic pour orchestrer Custom Commands, Subagents, Skills, Hooks et MCP.
 
 **Résultat** :
 - ✅ **10x productivité** vs code manuel
@@ -164,21 +187,21 @@ Workflow "Security Incident" (cas d'usage métier)
    └─> Vocabulaire industrie standardisé
 
 📄 NOMENCLATURE (20 min) ⭐
-   └─> Command vs Agent vs Skill vs Hook
-   └─> Hiérarchie Claude Code stricte
+   └─> Command vs Subagent vs Skill vs Hook
+   └─> Hiérarchie recommandée (pattern proposé)
    └─> Règles d'or : Qui orchestre qui ?
 
 📄 DECISION FRAMEWORK (30 min) 🎯
-   └─> Quel composant utiliser ? (Command/Agent/Skill/Hook)
+   └─> Quel composant utiliser ? (Command/Subagent/Skill/Hook)
    └─> Quel pattern utiliser ? (6 patterns Anthropic)
    └─> Decision trees pratiques
 ```
 
 **Pourquoi important ?** :
 - ✅ Comprendre **Agentic Workflow** ≠ **Traditional Workflow**
-- ✅ Maîtriser **nomenclature Claude Code** (Command/Agent/Skill)
-- ✅ **Éviter confusion** : Agent (Claude Code) ≠ Autonomous Agent (Pattern 6)
-- ✅ Appliquer **règle d'or** : Command orchestre toujours, Agent JAMAIS
+- ✅ Maîtriser **terminologie officielle** (Subagent, Custom Commands, Skills)
+- ✅ **Éviter confusion** : Subagent (Worker) ≠ Autonomous Agent (Pattern 6)
+- ✅ Appliquer **règle officielle** : "Subagents cannot spawn other subagents"
 
 **📖 Lire d'abord** : [Fundamentals README](./1-fundamentals/README.md)
 
@@ -461,9 +484,9 @@ Prouver l'efficacité avec métriques objectives :
 
 ### 🏗️ Architecture (Concepts Structurels)
 
-- **[Command-Subcommand-Agent](./3-architecture/command-coordinator-workers.md)** - Hiérarchie plate (2-3 levels recommended (4-5 possible))
-- **[Hooks Lifecycle](./3-architecture/hooks-lifecycle.md)** - Automation déterministe
-- **[Skills Progressive Disclosure](./3-architecture/skills-progressive-disclosure.md)** - 3-level context
+- **[Command-Subcommand-Subagent](./3-architecture/command-coordinator-workers.md)** - Hiérarchie recommandée (2-3 niveaux)
+- **[Hooks Lifecycle](./3-architecture/hooks-lifecycle.md)** - Automation bash/LLM
+- **[Skills Progressive Disclosure](./3-architecture/skills-progressive-disclosure.md)** - Context flexible
 - **[State Management](./3-architecture/state-management.md)** - Memory + persistence
 
 ---
@@ -769,83 +792,99 @@ RESULT:
 
 ## 🏗️ Architecture de Référence
 
-### Nomenclature du Projet
+### Nomenclature du Projet (Pattern Proposé)
 
 ```
 ╔═══════════════════════════════════════════════════════════╗
-║           NOTRE NOMENCLATURE (IMPORTANT)                  ║
+║      NOTRE NOMENCLATURE (PATTERN PROPOSÉ - NON-OFFICIEL)  ║
 ╚═══════════════════════════════════════════════════════════╝
 
-COMMAND (orchestrateur principal)
-  ├─> Décide strategy (which agents, when, how many)
+TERMINOLOGIE OFFICIELLE CLAUDE CODE :
+• Subagents (.claude/agents/*.md)
+• Custom slash commands (.claude/commands/*.md)
+• Skills (.claude/skills/*/SKILL.md)
+• Hooks (settings.json, bash ou LLM)
+
+NOTRE CONVENTION (pattern proposé) :
+
+COMMAND (custom slash command orchestrateur)
+  ├─> Décide strategy (which subagents, when, how many)
   ├─> Agrège résultats
   ├─> Gère erreurs
   └─> JAMAIS exécute directement
 
-SUBCOMMAND (sous-orchestrateur)
+SUBCOMMAND (custom command spécialisé - pattern proposé)
   ├─> Phase d'un workflow (Build, Test, Deploy)
-  ├─> Orchestre agents pour sa phase
+  ├─> Orchestre subagents pour sa phase
   └─> Retourne résultat à Command parent
 
-AGENT (worker)
+SUBAGENT/AGENT (worker subagent)
   ├─> Tâche atomique (single responsibility)
   ├─> Lancé par Command via Task tool
   ├─> Retourne résultat structuré
-  └─> JAMAIS lance d'autres agents
+  └─> JAMAIS lance d'autres subagents (règle officielle)
 
 SKILL (connaissances partagées)
   ├─> Auto-invoquée par LLM reasoning
-  ├─> Progressive disclosure (3 levels)
+  ├─> Progressive disclosure (fichiers chargés "when needed")
   └─> Économie contexte (prompt injection on-demand)
 
-HOOK (automation déterministe)
-  ├─> PreToolUse, PostToolUse, SubagentStop, Stop
+HOOK (automation bash/LLM)
+  ├─> 10 events : PreToolUse, PermissionRequest, PostToolUse,
+  │   Notification, UserPromptSubmit, Stop, SubagentStop,
+  │   PreCompact, SessionStart, SessionEnd
   ├─> Validation, audit, triggers
-  └─> Exit codes: 0=ok, 1=warn, 2=block
+  └─> Exit codes: 0=success, 2=blocking error, autres=non-blocking
 ```
 
 **⚠️ Clarification** :
-- **Nos "Agents"** = **Workers** (Anthropic terminology)
-- **Ce que d'autres appellent "Agent Orchestrator"** = Notre **"Command"**
-- **Autonomous Agents** (Anthropic Pattern 6) ≠ Nos Workers
+- **"Agent"** dans ce guide = **"Subagent"** (terme officiel Claude Code)
+- **Nos "Subagents"** = **"Workers"** (Anthropic terminology)
+- **"Agent Orchestrator"** (industrie) = **"Command"** (notre convention)
+- **Autonomous Agents** (Anthropic Pattern 6) ≠ Nos Worker Subagents
 
 ---
 
-## 💎 Règles d'Or Anthropic
+## 💎 Règles d'Or (Pattern Proposé + Règles Officielles)
 
 ```
 ╔═══════════════════════════════════════════════════════════╗
-║              RÈGLES D'OR (ORCHESTRATION)                  ║
+║         RÈGLES D'OR (PATTERN PROPOSÉ + OFFICIELLES)       ║
 ╚═══════════════════════════════════════════════════════════╝
 
-1. COMMAND ORCHESTRE TOUJOURS
-   ✅ Command → Agent (correct)
-   ✅ Command → Coordinator Agent → Agent (correct)
-   ❌ Agent → Agent (INTERDIT)
-   ❌ Agent → Command (INTERDIT)
+1. RÈGLE OFFICIELLE CLAUDE CODE ⚠️
+   ⚠️ "Subagents cannot spawn other subagents"
+   ✅ Command → Subagent (correct)
+   ✅ Command → Coordinator Subagent → Worker Subagent (via command)
+   ❌ Subagent → Subagent (VIOLATION règle officielle)
+   ❌ Subagent → Command (JAMAIS)
 
-2. HIÉRARCHIE PLATE (3 LEVELS MAX)
-   ✅ Main Command → Coordinator Agent → Agent
-   ❌ Profondeur excessive (5+ levels)
+2. HIÉRARCHIE RECOMMANDÉE (2-3 NIVEAUX)
+   ✅ Command → Worker Subagent (simple, recommended)
+   ✅ Command → Coordinator Subagent → Worker Subagent (advanced)
+   ⚠️ Plus de 3 niveaux déconseillé (complexité)
 
-3. AGENTS = TÂCHES ATOMIQUES
-   ✅ 1 agent = 1 tâche unique
+3. SUBAGENTS = TÂCHES ATOMIQUES
+   ✅ 1 subagent = 1 tâche unique
    ✅ Return structured result
    ❌ Multi-responsabilité (too broad)
 
 4. HOOKS POUR VALIDATION
-   ✅ Quality gates (PostToolUse)
-   ✅ Health checks (PreToolUse)
-   ✅ Aggregation (SubagentStop)
+   ✅ Bash hooks : Logic déterministe
+   ✅ Prompt hooks : LLM evaluation (context-aware)
+   ✅ 10 events disponibles (PreToolUse, PostToolUse, etc.)
+   ✅ Quality gates, health checks, aggregation
 
 5. SKILLS POUR ÉCONOMIE CONTEXTE
-   ✅ Progressive disclosure (3 levels)
+   ✅ Progressive disclosure (fichiers chargés "when needed")
    ✅ Auto-invocation (LLM reasoning)
    ✅ WHEN/WHEN NOT pattern
+   ✅ SKILL.md + fichiers additionnels optionnels
 
 6. MCP POUR INTÉGRATIONS EXTERNES
    ✅ Abstraction layer (tools)
    ✅ Changement sans refactoring
+   ✅ Configuration settings.json
 ```
 
 **📖 Documentation complète** : [orchestration-principles.md](./orchestration-principles.md)
@@ -880,22 +919,32 @@ HOOK (automation déterministe)
 ║              AGENTIC WORKFLOW ESSENTIALS                  ║
 ╚═══════════════════════════════════════════════════════════╝
 
-✅ 6 patterns composables (Anthropic 2025)
+PATTERNS ANTHROPIC (officiels) :
+✅ 6 patterns composables (Anthropic 2025 research)
 ✅ Combinables pour workflows complexes
-✅ Nomenclature: Command > Subcommand > Agent
-✅ 5/6 patterns implémentés (Pattern 5 nouveau)
-✅ Workers (production) ≠ Autonomous Agents (research)
-✅ Hiérarchie plate (2-3 levels recommended (4-5 possible))
-✅ Auditabilité totale (Command logs tout)
-✅ 10x productivité, 95%+ success rate
+✅ Base théorique solide avec benchmarks
 
-MAPPING PATTERNS → IMPLÉMENTATION:
-1. Prompt Chaining → EPCT Workflow ✅
+IMPLÉMENTATION CLAUDE CODE (ce guide) :
+✅ Framework opinionné (patterns proposés)
+✅ Terminologie : Subagents, Custom Commands, Skills, Hooks
+✅ Règle officielle : "Subagents cannot spawn other subagents"
+✅ Hiérarchie recommandée : 2-3 niveaux
+✅ Auditabilité totale (Command logs tout)
+✅ 10x productivité, 95%+ success rate (benchmarks)
+
+CLARIFICATIONS IMPORTANTES :
+• "Agent" dans ce guide = "Subagent" (terme officiel)
+• Worker Subagents (production) ≠ Autonomous Agents (research)
+• COMMAND/SUBCOMMAND = Conventions proposées, pas types officiels
+• COORDINATOR SUBAGENT = Pattern avancé (avec disclaimers)
+
+MAPPING PATTERNS → IMPLÉMENTATION CLAUDE CODE :
+1. Prompt Chaining → EPCT Workflow (custom commands) ✅
 2. Routing → Skills auto-invocation ✅
-3. Parallelization → Parallel Execution ✅
-4. Orchestrator-Workers → Command-Agent ✅
-5. Evaluator-Optimizer → Quality Loop ⭐ (nouveau)
-6. Autonomous Agents → Workers (clarified) ⚠️
+3. Parallelization → Parallel Execution (Task tool) ✅
+4. Orchestrator-Workers → Command-Subagent ✅
+5. Evaluator-Optimizer → Quality Loop ⭐
+6. Autonomous Agents → Clarification Worker vs Autonomous ⚠️
 ```
 
 ---

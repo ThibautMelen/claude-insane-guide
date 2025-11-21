@@ -1,6 +1,7 @@
 # Workflow CI/CD : Software Release Pipeline
 
-> **Use Case Professionnel** : Pipeline complet automatisé de build, test et déploiement avec quality gates et rollback automatique.
+> **Use Case Professionnel** : Pipeline complet automatisé de build, test
+> et déploiement avec quality gates et rollback automatique.
 
 ---
 
@@ -17,17 +18,35 @@
 
 ### 🧱 Décomposition Patterns
 
-```
-Pipeline CI/CD = Combinaison de 3 patterns :
+```mermaid
+%%{init: {'theme':'dark', 'themeVariables': {'primaryColor':'#1f2937','primaryTextColor':'#e5e7eb','primaryBorderColor':'#60a5fa','lineColor':'#9ca3af','secondaryColor':'#374151','tertiaryColor':'#111827','background':'#0d1117','mainBkg':'#1f2937','secondaryBkg':'#374151','tertiaryBkg':'#111827','textColor':'#e5e7eb','border1':'#60a5fa','border2':'#9ca3af','arrowheadColor':'#9ca3af','fontFamily':'ui-monospace, monospace','fontSize':'14px','nodeBorder':'#60a5fa','clusterBkg':'#1f2937','clusterBorder':'#60a5fa','titleColor':'#e5e7eb','edgeLabelBackground':'#374151','nodeTextColor':'#e5e7eb'}}}%%
+flowchart TD
+    title[Pipeline CI/CD = Combinaison de 3 patterns]
 
-1️⃣ Pattern 1 : Prompt Chaining (SEQUENTIAL)
-   └─> Build → Test → Deploy (séquence fixe)
+    pattern1["🔗 Pattern 1: Prompt Chaining<br/>(SEQUENTIAL)"]
+    pattern1_detail["Build → Test → Deploy<br/>(séquence fixe)"]
 
-3️⃣ Pattern 3 : Parallelization (CONCURRENT)
-   └─> Build (3 agents //), Test (3 agents //)
+    pattern3["⚡ Pattern 3: Parallelization<br/>(CONCURRENT)"]
+    pattern3_detail["Build: 3 agents //<br/>Test: 3 agents //"]
 
-4️⃣ Pattern 4 : Orchestrator-Workers
-   └─> Release-Manager (Command) → Subcommands → Agents
+    pattern4["🎯 Pattern 4: Orchestrator-Workers"]
+    pattern4_detail["Release-Manager (Command)<br/>→ Subcommands → Agents"]
+
+    title --> pattern1
+    title --> pattern3
+    title --> pattern4
+
+    pattern1 -.-> pattern1_detail
+    pattern3 -.-> pattern3_detail
+    pattern4 -.-> pattern4_detail
+
+    style title fill:#374151,stroke:#60a5fa,stroke-width:3px,color:#e5e7eb
+    style pattern1 fill:#1e40af,stroke:#60a5fa,stroke-width:2px,color:#e5e7eb
+    style pattern3 fill:#1e40af,stroke:#60a5fa,stroke-width:2px,color:#e5e7eb
+    style pattern4 fill:#1e40af,stroke:#60a5fa,stroke-width:2px,color:#e5e7eb
+    style pattern1_detail fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#d1d5db
+    style pattern3_detail fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#d1d5db
+    style pattern4_detail fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#d1d5db
 ```
 
 **Voir** : [Pattern vs Workflow Définition](../README.md#-pattern-vs-workflow--quelle-différence-)
@@ -37,10 +56,12 @@ Pipeline CI/CD = Combinaison de 3 patterns :
 ## 📋 Vue d'Ensemble
 
 **Problème Résolu** :
-Les releases manuelles prennent 4-8 heures, sont sujettes aux erreurs humaines, et manquent de quality gates systématiques. Taux d'échec : 15-20%.
+Les releases manuelles prennent 4-8 heures, sont sujettes aux erreurs humaines, et
+manquent de quality gates systématiques. Taux d'échec : 15-20%.
 
 **Solution Anthropic-Style** :
-Pipeline automatisé avec orchestration parallèle (build/test) et séquentielle (deploy), quality gates à chaque étape, rollback automatique en cas d'erreur.
+Pipeline automatisé avec orchestration parallèle (build/test) et séquentielle (deploy),
+quality gates à chaque étape, rollback automatique en cas d'erreur.
 
 ---
 
@@ -48,98 +69,143 @@ Pipeline automatisé avec orchestration parallèle (build/test) et séquentielle
 
 ### Vue Hiérarchique
 
-```
-╔═══════════════════════════════════════════════════════════════════════╗
-║                    CI/CD PIPELINE ORCHESTRATION                       ║
-╚═══════════════════════════════════════════════════════════════════════╝
+```mermaid
+%%{init: {'theme':'dark', 'themeVariables': {'primaryColor':'#1f2937','primaryTextColor':'#e5e7eb','primaryBorderColor':'#60a5fa','lineColor':'#9ca3af','secondaryColor':'#374151','tertiaryColor':'#111827','background':'#0d1117','mainBkg':'#1f2937','secondaryBkg':'#374151','tertiaryBkg':'#111827','textColor':'#e5e7eb','border1':'#60a5fa','border2':'#9ca3af','arrowheadColor':'#9ca3af','fontFamily':'ui-monospace, monospace','fontSize':'14px','nodeBorder':'#60a5fa','clusterBkg':'#1f2937','clusterBorder':'#60a5fa','titleColor':'#e5e7eb','edgeLabelBackground':'#374151','nodeTextColor':'#e5e7eb'}}}%%
+flowchart TD
+    RM["🎯 Release-Manager<br/><small>LEVEL 1: MAIN COMMAND</small><br/><small>Coordination globale</small>"]
 
-LEVEL 1: MAIN COMMAND
-         Release-Manager (Coordination globale)
-              │
-              ├─────────────────────────────────────┐
-              │                                     │
-LEVEL 2:      ├─> SUBCOMMAND: Build (Parallel)      │
-              │   ├─> AGENT: Compiler               │
-              │   ├─> AGENT: Linter                 │
-              │   └─> AGENT: Security-Scanner       │
-              │        │                             │
-              │        └──> MCP: Git, SonarQube, Snyk │
-              │                                     │
-              ├─> HOOK: Build-Success              │
-              │   (Exit 0 → Continue, Exit 2 → Stop) │
-              │                                     │
-              ├─> SUBCOMMAND: Test (Parallel)       │
-              │   ├─> HOOK: Parallel-Execution      │
-              │   ├─> AGENT: Unit-Tester            │
-              │   ├─> AGENT: Integration-Tester     │
-              │   └─> AGENT: E2E-Tester             │
-              │        │                             │
-              │        └──> MCP: Jest, Pytest, Playwright │
-              │                                     │
-              ├─> HOOK: Quality-Gate               │
-              │   (Coverage >80%, No critical bugs) │
-              │                                     │
-              ├─> SUBCOMMAND: Deploy (Sequential)   │
-              │   ├─> AGENT: Staging-Deployer       │
-              │   ├─> HOOK: Health-Check            │
-              │   ├─> AGENT: Canary-Deployer        │
-              │   ├─> HOOK: Health-Check            │
-              │   └─> AGENT: Production-Deployer    │
-              │        │                             │
-              │        └──> MCP: K8s, Terraform, Prometheus │
-              │                                     │
-              └─> HOOK: Rollback-on-Error           │
-                  (Auto-rollback si échec détecté)  │
+    subgraph BUILD["📦 BUILD PHASE (Parallel)"]
+        direction TB
+        BuildCmd["⚙️ SUBCOMMAND: Build"]
+        Compiler["🔧 AGENT: Compiler"]
+        Linter["🎨 AGENT: Linter"]
+        SecScanner["🔒 AGENT: Security-Scanner"]
+        MCPBuild["💾 MCP: Git, SonarQube, Snyk"]
+
+        BuildCmd --> Compiler
+        BuildCmd --> Linter
+        BuildCmd --> SecScanner
+        Compiler & Linter & SecScanner --> MCPBuild
+    end
+
+    HookBuildSuccess{"✅ HOOK: Build-Success<br/><small>Exit 0 → Continue</small><br/><small>Exit 2 → Stop</small>"}
+
+    subgraph TEST["🧪 TEST PHASE (Parallel)"]
+        direction TB
+        TestCmd["⚙️ SUBCOMMAND: Test"]
+        HookParallel["⚡ HOOK: Parallel-Execution"]
+        UnitTester["🔬 AGENT: Unit-Tester"]
+        IntegTester["🔗 AGENT: Integration-Tester"]
+        E2ETester["🎭 AGENT: E2E-Tester"]
+        MCPTest["💾 MCP: Jest, Pytest, Playwright"]
+
+        TestCmd --> HookParallel
+        HookParallel --> UnitTester
+        HookParallel --> IntegTester
+        HookParallel --> E2ETester
+        UnitTester & IntegTester & E2ETester --> MCPTest
+    end
+
+    HookQualityGate{"✅ HOOK: Quality-Gate<br/><small>Coverage >80%</small><br/><small>No critical bugs</small>"}
+
+    subgraph DEPLOY["🚀 DEPLOY PHASE (Sequential)"]
+        direction TB
+        DeployCmd["⚙️ SUBCOMMAND: Deploy"]
+        StagingDep["🔧 AGENT: Staging-Deployer"]
+        HookHealth1["✅ HOOK: Health-Check"]
+        CanaryDep["🐤 AGENT: Canary-Deployer"]
+        HookHealth2["✅ HOOK: Health-Check"]
+        ProdDep["🚢 AGENT: Production-Deployer"]
+        MCPDeploy["💾 MCP: K8s, Terraform, Prometheus"]
+
+        DeployCmd --> StagingDep
+        StagingDep --> HookHealth1
+        HookHealth1 --> CanaryDep
+        CanaryDep --> HookHealth2
+        HookHealth2 --> ProdDep
+        ProdDep --> MCPDeploy
+    end
+
+    HookRollback["🔄 HOOK: Rollback-on-Error<br/><small>Auto-rollback si échec</small>"]
+
+    RM --> BUILD
+    BUILD --> HookBuildSuccess
+    HookBuildSuccess -->|Success| TEST
+    HookBuildSuccess -.->|Failure| HookRollback
+    TEST --> HookQualityGate
+    HookQualityGate -->|Pass| DEPLOY
+    HookQualityGate -.->|Fail| HookRollback
+    DEPLOY -.->|Error| HookRollback
+
+    style RM fill:#7c3aed,stroke:#a78bfa,stroke-width:4px,color:#e5e7eb
+    style HookBuildSuccess fill:#059669,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style HookQualityGate fill:#059669,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style HookRollback fill:#dc2626,stroke:#ef4444,stroke-width:2px,color:#e5e7eb
+
+    style BuildCmd fill:#1e40af,stroke:#60a5fa,stroke-width:2px,color:#e5e7eb
+    style TestCmd fill:#1e40af,stroke:#60a5fa,stroke-width:2px,color:#e5e7eb
+    style DeployCmd fill:#1e40af,stroke:#60a5fa,stroke-width:2px,color:#e5e7eb
+
+    style Compiler fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#e5e7eb
+    style Linter fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#e5e7eb
+    style SecScanner fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#e5e7eb
+    style UnitTester fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#e5e7eb
+    style IntegTester fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#e5e7eb
+    style E2ETester fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#e5e7eb
+    style StagingDep fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#e5e7eb
+    style CanaryDep fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#e5e7eb
+    style ProdDep fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#e5e7eb
+
+    style MCPBuild fill:#1f2937,stroke:#60a5fa,stroke-width:1px,color:#9ca3af
+    style MCPTest fill:#1f2937,stroke:#60a5fa,stroke-width:1px,color:#9ca3af
+    style MCPDeploy fill:#1f2937,stroke:#60a5fa,stroke-width:1px,color:#9ca3af
+
+    style HookParallel fill:#ea580c,stroke:#fb923c,stroke-width:2px,color:#e5e7eb
+    style HookHealth1 fill:#059669,stroke:#10b981,stroke-width:1px,color:#e5e7eb
+    style HookHealth2 fill:#059669,stroke:#10b981,stroke-width:1px,color:#e5e7eb
 ```
 
 ---
 
 ### Flow Détaillé avec Timeline
 
-```
-┌───────────────────────────────────────────────────────────────────────┐
-│                      CI/CD PIPELINE TIMELINE                          │
-├───────────────────────────────────────────────────────────────────────┤
-│                                                                       │
-│  T+0min   : Git Push (trigger pipeline)                              │
-│             └─> HOOK: PreBuild (checkout code, install deps)         │
-│                                                                       │
-│  T+2min   : SUBCOMMAND: Build (3 agents parallel)                    │
-│             ┌─> Compiler         (5min, compile TS/Go/etc)           │
-│             ├─> Linter           (3min, ESLint/Prettier)             │
-│             └─> Security-Scanner (4min, Snyk/Trivy)                  │
-│                                                                       │
-│  T+7min   : HOOK: Build-Success                                      │
-│             └─> Exit 0 if all green, Exit 2 if failures              │
-│                                                                       │
-│  T+8min   : SUBCOMMAND: Test (3 agents parallel via Hook)            │
-│             └─> HOOK: Parallel-Execution (launch all tests)          │
-│                 ┌─> Unit-Tester        (8min, Jest/Vitest)           │
-│                 ├─> Integration-Tester (12min, API tests)            │
-│                 └─> E2E-Tester         (15min, Playwright)           │
-│                                                                       │
-│  T+23min  : HOOK: Quality-Gate                                       │
-│             ├─> Coverage check (>80%)                                │
-│             ├─> No critical/high bugs                                │
-│             └─> Performance benchmarks (<200ms p95)                  │
-│                                                                       │
-│  T+25min  : SUBCOMMAND: Deploy (sequential rollout)                  │
-│             ├─> Staging-Deployer   (5min, deploy to staging)         │
-│             ├─> HOOK: Health-Check (2min, verify staging health)     │
-│             ├─> Canary-Deployer    (3min, deploy to 5% prod)         │
-│             ├─> HOOK: Health-Check (5min, monitor error rate)        │
-│             └─> Production-Deployer (10min, deploy to 100% prod)     │
-│                                                                       │
-│  T+50min  : HOOK: Post-Deploy Validation                             │
-│             └─> Monitor logs, metrics, alerts (10min window)         │
-│                                                                       │
-│  T+60min  : ✅ RELEASE COMPLETE                                       │
-│             └─> Notify team, update changelog, close tickets         │
-│                                                                       │
-│  ⚠️ ANY ERROR → HOOK: Rollback-on-Error                              │
-│                 └─> Auto-revert to previous version (<5min)          │
-│                                                                       │
-└───────────────────────────────────────────────────────────────────────┘
+```mermaid
+%%{init: {'theme':'dark', 'themeVariables': {'primaryColor':'#1f2937','primaryTextColor':'#e5e7eb','primaryBorderColor':'#60a5fa','lineColor':'#9ca3af','secondaryColor':'#374151','tertiaryColor':'#111827','background':'#0d1117','mainBkg':'#1f2937','secondaryBkg':'#374151','tertiaryBkg':'#111827','textColor':'#e5e7eb','border1':'#60a5fa','border2':'#9ca3af','arrowheadColor':'#9ca3af','fontFamily':'ui-monospace, monospace','fontSize':'14px','gridColor':'#374151','todayLineColor':'#60a5fa'}}}%%
+gantt
+    title CI/CD Pipeline Timeline (Total: 60 minutes)
+    dateFormat mm
+    axisFormat %M min
+
+    section 🚀 Trigger
+    Git Push                    :trigger, 00, 2m
+    HOOK: PreBuild             :hook, after trigger, 2m
+
+    section 📦 Build (Parallel)
+    Compiler (5min)            :active, build1, 02, 5m
+    Linter (3min)              :active, build2, 02, 3m
+    Security-Scanner (4min)    :active, build3, 02, 4m
+    HOOK: Build-Success        :crit, hook-build, 07, 1m
+
+    section 🧪 Test (Parallel)
+    HOOK: Parallel-Execution   :milestone, 08, 0m
+    Unit-Tester (8min)         :active, test1, 08, 8m
+    Integration-Tester (12min) :active, test2, 08, 12m
+    E2E-Tester (15min)         :active, test3, 08, 15m
+    HOOK: Quality-Gate         :crit, hook-quality, 23, 2m
+
+    section 🚀 Deploy (Sequential)
+    Staging-Deployer (5min)    :deploy1, 25, 5m
+    HOOK: Health-Check (2min)  :crit, health1, 30, 2m
+    Canary-Deployer (3min)     :deploy2, 32, 3m
+    HOOK: Health-Check (5min)  :crit, health2, 35, 5m
+    Production-Deployer (10min):deploy3, 40, 10m
+    HOOK: Post-Deploy (10min)  :done, hook-post, 50, 10m
+
+    section ✅ Complete
+    Release Complete           :milestone, 60, 0m
+
+    section ⚠️ Rollback
+    Rollback (if error <5min)  :crit, 00, 0m
 ```
 
 ---
@@ -489,7 +555,7 @@ exit_code: 0  # Rollback succeeded
 
 ### Avant Automatisation
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │             DEPLOYMENT MANUEL TRADITIONNEL              │
 ├─────────────────────────────────────────────────────────┤
@@ -520,7 +586,7 @@ exit_code: 0  # Rollback succeeded
 
 ### Après Automatisation
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │          CI/CD AUTOMATISÉ (Release-Manager)             │
 ├─────────────────────────────────────────────────────────┤
@@ -568,76 +634,138 @@ exit_code: 0  # Rollback succeeded
 
 ### ❌ Anti-Pattern 1 : Tests Séquentiels
 
-```markdown
-<!-- MAUVAIS -->
-Test Phase:
-1. Run Unit tests (8min)
-2. Wait...
-3. Run Integration tests (12min)
-4. Wait...
-5. Run E2E tests (15min)
+#### ❌ Mauvaise Approche (Séquentiel)
 
-Total: 35 minutes
+```mermaid
+%%{init: {'theme':'dark', 'themeVariables': {'primaryColor':'#1f2937','primaryTextColor':'#e5e7eb','primaryBorderColor':'#60a5fa','lineColor':'#9ca3af','secondaryColor':'#374151','tertiaryColor':'#111827','background':'#0d1117','mainBkg':'#1f2937','secondaryBkg':'#374151','tertiaryBkg':'#111827','textColor':'#e5e7eb','border1':'#60a5fa','border2':'#9ca3af','arrowheadColor':'#9ca3af','fontFamily':'ui-monospace, monospace','fontSize':'14px','nodeBorder':'#60a5fa','clusterBkg':'#1f2937','clusterBorder':'#60a5fa','titleColor':'#e5e7eb','edgeLabelBackground':'#374151','nodeTextColor':'#e5e7eb'}}}%%
+flowchart LR
+    Start["Test Phase"] --> Unit["1. Unit tests<br/>(8min)"]
+    Unit --> Wait1["Wait..."]
+    Wait1 --> Integration["2. Integration tests<br/>(12min)"]
+    Integration --> Wait2["Wait..."]
+    Wait2 --> E2E["3. E2E tests<br/>(15min)"]
+    E2E --> Total["⏱️ Total: 35 minutes"]
+
+    style Start fill:#dc2626,stroke:#ef4444,stroke-width:2px,color:#e5e7eb
+    style Unit fill:#7f1d1d,stroke:#dc2626,stroke-width:2px,color:#e5e7eb
+    style Integration fill:#7f1d1d,stroke:#dc2626,stroke-width:2px,color:#e5e7eb
+    style E2E fill:#7f1d1d,stroke:#dc2626,stroke-width:2px,color:#e5e7eb
+    style Wait1 fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#9ca3af
+    style Wait2 fill:#374151,stroke:#9ca3af,stroke-width:1px,color:#9ca3af
+    style Total fill:#dc2626,stroke:#ef4444,stroke-width:3px,color:#e5e7eb
 ```
 
-**Solution Correcte** :
+#### ✅ Solution Correcte (Parallèle)
 
-```markdown
-<!-- BON -->
-Test Phase:
-HOOK: Parallel-Execution
-  ├─> Unit tests (8min)
-  ├─> Integration tests (12min)
-  └─> E2E tests (15min)
+```mermaid
+%%{init: {'theme':'dark', 'themeVariables': {'primaryColor':'#1f2937','primaryTextColor':'#e5e7eb','primaryBorderColor':'#60a5fa','lineColor':'#9ca3af','secondaryColor':'#374151','tertiaryColor':'#111827','background':'#0d1117','mainBkg':'#1f2937','secondaryBkg':'#374151','tertiaryBkg':'#111827','textColor':'#e5e7eb','border1':'#60a5fa','border2':'#9ca3af','arrowheadColor':'#9ca3af','fontFamily':'ui-monospace, monospace','fontSize':'14px','nodeBorder':'#60a5fa','clusterBkg':'#1f2937','clusterBorder':'#60a5fa','titleColor':'#e5e7eb','edgeLabelBackground':'#374151','nodeTextColor':'#e5e7eb'}}}%%
+flowchart TD
+    Start["Test Phase"] --> Hook["HOOK: Parallel-Execution"]
+    Hook --> Unit["Unit tests<br/>(8min)"]
+    Hook --> Integration["Integration tests<br/>(12min)"]
+    Hook --> E2E["E2E tests<br/>(15min)"]
+    Unit & Integration & E2E --> Total["✅ Total: 15 minutes<br/><small>Speedup: 2.3x</small>"]
 
-Total: 15 minutes (longest test)
-Speedup: 2.3x
+    style Start fill:#059669,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Hook fill:#ea580c,stroke:#fb923c,stroke-width:2px,color:#e5e7eb
+    style Unit fill:#065f46,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Integration fill:#065f46,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style E2E fill:#065f46,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Total fill:#059669,stroke:#10b981,stroke-width:3px,color:#e5e7eb
 ```
 
 ---
 
 ### ❌ Anti-Pattern 2 : Pas de Quality Gate
 
-```markdown
-<!-- MAUVAIS -->
-Build → Test → Deploy directement
-(Même si tests échouent ou coverage faible)
+#### ❌ Mauvaise Approche (Sans Quality Gate)
+
+```mermaid
+%%{init: {'theme':'dark', 'themeVariables': {'primaryColor':'#1f2937','primaryTextColor':'#e5e7eb','primaryBorderColor':'#60a5fa','lineColor':'#9ca3af','secondaryColor':'#374151','tertiaryColor':'#111827','background':'#0d1117','mainBkg':'#1f2937','secondaryBkg':'#374151','tertiaryBkg':'#111827','textColor':'#e5e7eb','border1':'#60a5fa','border2':'#9ca3af','arrowheadColor':'#9ca3af','fontFamily':'ui-monospace, monospace','fontSize':'14px','nodeBorder':'#60a5fa','clusterBkg':'#1f2937','clusterBorder':'#60a5fa','titleColor':'#e5e7eb','edgeLabelBackground':'#374151','nodeTextColor':'#e5e7eb'}}}%%
+flowchart LR
+    Build["📦 Build"] --> Test["🧪 Test"]
+    Test --> Deploy["🚀 Deploy"]
+    Deploy --> Prod["⚠️ Production<br/><small>Même si tests échouent</small><br/><small>Même si coverage faible</small>"]
+
+    style Build fill:#dc2626,stroke:#ef4444,stroke-width:2px,color:#e5e7eb
+    style Test fill:#dc2626,stroke:#ef4444,stroke-width:2px,color:#e5e7eb
+    style Deploy fill:#dc2626,stroke:#ef4444,stroke-width:2px,color:#e5e7eb
+    style Prod fill:#7f1d1d,stroke:#dc2626,stroke-width:3px,color:#e5e7eb
 ```
 
-**Conséquences** : Bugs en production, rollbacks fréquents
+**Conséquences** : 🐛 Bugs en production, 🔄 rollbacks fréquents, 📉 qualité dégradée
 
-**Solution** :
+#### ✅ Solution Correcte (Avec Quality Gate)
 
-```markdown
-<!-- BON -->
-Build → Test → HOOK: Quality-Gate → Deploy
+```mermaid
+%%{init: {'theme':'dark', 'themeVariables': {'primaryColor':'#1f2937','primaryTextColor':'#e5e7eb','primaryBorderColor':'#60a5fa','lineColor':'#9ca3af','secondaryColor':'#374151','tertiaryColor':'#111827','background':'#0d1117','mainBkg':'#1f2937','secondaryBkg':'#374151','tertiaryBkg':'#111827','textColor':'#e5e7eb','border1':'#60a5fa','border2':'#9ca3af','arrowheadColor':'#9ca3af','fontFamily':'ui-monospace, monospace','fontSize':'14px','nodeBorder':'#60a5fa','clusterBkg':'#1f2937','clusterBorder':'#60a5fa','titleColor':'#e5e7eb','edgeLabelBackground':'#374151','nodeTextColor':'#e5e7eb'}}}%%
+flowchart LR
+    Build["📦 Build"] --> Test["🧪 Test"]
+    Test --> Gate{"✅ HOOK:<br/>Quality-Gate"}
+    Gate -->|Pass| Deploy["🚀 Deploy"]
+    Gate -.->|Fail<br/>Exit 2| Stop["🛑 STOP Pipeline"]
+    Deploy --> Prod["✅ Production<br/><small>Qualité garantie</small>"]
 
-Quality Gate:
+    style Build fill:#059669,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Test fill:#059669,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Gate fill:#ea580c,stroke:#fb923c,stroke-width:3px,color:#e5e7eb
+    style Deploy fill:#059669,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Prod fill:#065f46,stroke:#10b981,stroke-width:3px,color:#e5e7eb
+    style Stop fill:#dc2626,stroke:#ef4444,stroke-width:2px,color:#e5e7eb
+```
+
+**Quality Gate Checks**:
 - Coverage ≥ 80%
 - Zero critical bugs
-- Performance OK
-→ Exit 2 si échec = STOP pipeline
-```
+- Performance OK (p95 <200ms)
+- → Exit 2 si échec = STOP pipeline
 
 ---
 
 ### ❌ Anti-Pattern 3 : Big Bang Deployment
 
-```markdown
-<!-- MAUVAIS -->
-Deploy to 100% production immediately
-(Si bug, 100% users impactés)
+#### ❌ Mauvaise Approche (Big Bang)
+
+```mermaid
+%%{init: {'theme':'dark', 'themeVariables': {'primaryColor':'#1f2937','primaryTextColor':'#e5e7eb','primaryBorderColor':'#60a5fa','lineColor':'#9ca3af','secondaryColor':'#374151','tertiaryColor':'#111827','background':'#0d1117','mainBkg':'#1f2937','secondaryBkg':'#374151','tertiaryBkg':'#111827','textColor':'#e5e7eb','border1':'#60a5fa','border2':'#9ca3af','arrowheadColor':'#9ca3af','fontFamily':'ui-monospace, monospace','fontSize':'14px','nodeBorder':'#60a5fa','clusterBkg':'#1f2937','clusterBorder':'#60a5fa','titleColor':'#e5e7eb','edgeLabelBackground':'#374151','nodeTextColor':'#e5e7eb'}}}%%
+flowchart LR
+    Deploy["🚀 Deploy"] --> Prod100["⚠️ 100% Production<br/><small>Immediately</small>"]
+    Prod100 --> Impact["💥 Si bug:<br/><small>100% users impactés</small><br/><small>Rollback lent</small>"]
+
+    style Deploy fill:#dc2626,stroke:#ef4444,stroke-width:2px,color:#e5e7eb
+    style Prod100 fill:#7f1d1d,stroke:#dc2626,stroke-width:3px,color:#e5e7eb
+    style Impact fill:#450a0a,stroke:#7f1d1d,stroke-width:2px,color:#e5e7eb
 ```
 
-**Solution (Canary)** :
+#### ✅ Solution Correcte (Canary Deployment)
 
-```markdown
-<!-- BON -->
-1. Deploy to Staging → Health-Check
-2. Deploy to 5% Canary → Health-Check (5min monitoring)
-3. Deploy to 100% Production
-→ Error detected in canary = auto-rollback before full deploy
+```mermaid
+%%{init: {'theme':'dark', 'themeVariables': {'primaryColor':'#1f2937','primaryTextColor':'#e5e7eb','primaryBorderColor':'#60a5fa','lineColor':'#9ca3af','secondaryColor':'#374151','tertiaryColor':'#111827','background':'#0d1117','mainBkg':'#1f2937','secondaryBkg':'#374151','tertiaryBkg':'#111827','textColor':'#e5e7eb','border1':'#60a5fa','border2':'#9ca3af','arrowheadColor':'#9ca3af','fontFamily':'ui-monospace, monospace','fontSize':'14px','nodeBorder':'#60a5fa','clusterBkg':'#1f2937','clusterBorder':'#60a5fa','titleColor':'#e5e7eb','edgeLabelBackground':'#374151','nodeTextColor':'#e5e7eb'}}}%%
+flowchart TD
+    Deploy["🚀 Deploy"] --> Staging["1. Staging<br/>(test env)"]
+    Staging --> Health1{"✅ Health-Check"}
+    Health1 -->|Healthy| Canary["2. Canary<br/>(5% prod traffic)"]
+    Canary --> Monitor["⏱️ Monitor 5min<br/><small>error rate, latency</small>"]
+    Monitor --> Health2{"✅ Health-Check"}
+    Health2 -->|Healthy| Prod100["3. Production<br/>(100% traffic)"]
+    Health2 -.->|Error >1%| Rollback["🔄 Auto-Rollback<br/><small>Before full deploy</small>"]
+    Prod100 --> Success["✅ Release Complete<br/><small>Minimal risk</small>"]
+
+    style Deploy fill:#059669,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Staging fill:#065f46,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Canary fill:#ea580c,stroke:#fb923c,stroke-width:2px,color:#e5e7eb
+    style Monitor fill:#1e40af,stroke:#60a5fa,stroke-width:2px,color:#e5e7eb
+    style Prod100 fill:#065f46,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Success fill:#059669,stroke:#10b981,stroke-width:3px,color:#e5e7eb
+    style Health1 fill:#059669,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Health2 fill:#059669,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Rollback fill:#dc2626,stroke:#ef4444,stroke-width:2px,color:#e5e7eb
 ```
+
+**Avantages Canary**:
+- 🛡️ Erreurs détectées sur 5% users seulement
+- ⚡ Rollback automatique <5min
+- 📊 Validation progressive (staging → canary → production)
 
 ---
 

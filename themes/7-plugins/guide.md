@@ -90,7 +90,7 @@ Un plugin peut contenir **jusqu'à 5 types de composants** :
 2️⃣ AGENTS (Sub-agents spécialisés)
    ┌────────────────────────────────────────────┐
    │ 📍 Location : agents/                      │
-   │ 📄 Format   : Markdown avec capabilities   │
+   │ 📄 Format   : Markdown avec YAML frontmatter│
    │ ⚡ Usage    : Auto ou via Task tool        │
    │ 💡 Exemple  : code-reviewer, test-runner   │
    └────────────────────────────────────────────┘
@@ -553,38 +553,46 @@ Ajoutons un agent de revue de code React.
 mkdir agents
 
 cat > agents/react-reviewer.md << 'EOF'
-# React Code Reviewer
+---
+name: react-reviewer
+description: Expert React/Next.js reviewer. Reviews code for performance, best practices, and TypeScript quality. Use proactively after React code changes.
+tools: Read, Grep, Edit, Bash
+model: sonnet
+permissionMode: default
+---
 
-Tu es un expert React/Next.js. Tu effectues des revues de code focalisées sur :
+You are an expert React/Next.js code reviewer.
 
-## 🎯 Points de Contrôle
+When invoked:
+1. Run git diff to see recent React/Next.js changes
+2. Focus on modified components and hooks
+3. Begin review immediately
+
+## 🎯 Review Checklist
 
 ### Performance
-- Utilisation correcte de useMemo/useCallback
-- Éviter re-renders inutiles
-- Code splitting approprié
-- Lazy loading des composants
+- Correct usage of useMemo/useCallback
+- Avoid unnecessary re-renders
+- Appropriate code splitting
+- Lazy loading of components
 
 ### Best Practices
-- Hooks rules respectées
-- Props drilling évité (Context si nécessaire)
-- Composants purement fonctionnels
-- Accessibilité (a11y)
+- Hooks rules respected
+- Avoid props drilling (use Context if necessary)
+- Purely functional components
+- Accessibility (a11y)
 
 ### TypeScript
-- Types stricts (no any)
-- Props interfaces complètes
-- Generics si pertinent
-
-## 🛠️ Tools Available
-Read, Grep, Edit, Bash
+- Strict types (no any)
+- Complete props interfaces
+- Generics when relevant
 
 ## 📋 Output Format
 
-Retourne rapport markdown :
+Provide feedback organized by priority:
 
 ```markdown
-# Revue React - [Nom Composant]
+# React Review - [Component Name]
 
 ## ✅ Points Positifs
 - ...
@@ -592,7 +600,7 @@ Retourne rapport markdown :
 ## ⚠️ À Améliorer
 - ...
 
-## 🔧 Suggestions Code
+## 🔧 Code Suggestions
 ...
 ```
 EOF
@@ -2850,14 +2858,13 @@ Préfixes spéciaux :
 ### 📚 Ressources Internes
 
 - 📋 [Cheatsheet Plugins](./cheatsheet.md) - Référence rapide API
-- 🎓 [Exercices Plugins](../exercises/plugins/) - Créer votre plugin
+- 🎓 [Exemples Plugins](./cas-usage.md) - Cas d'usage pratiques
 - 🔗 [Commands](../2-commands/guide.md) - Packaging commands
-- 🔗 [Agents](../5-agents/guide.md) - Packaging agents
+- 🔗 [Agents](../6-agents/guide.md) - Packaging agents
 - 🔗 [Skills](../4-skills/guide.md) - Packaging skills
 - 🔗 [Hooks](../3-hooks/guide.md) - Packaging hooks
-- 🔗 [MCP](../7-mcp/guide.md) - Intégration MCP dans plugins
+- 🔗 [MCP](../5-mcp/guide.md) - Intégration MCP dans plugins
 - 🔗 [Memory](../1-memory/guide.md) - Memory vs Plugins
-- 🔗 [Best Practices](../9-best-practices/guide.md) - Workflow plugins avancés
 
 ### 🛠️ Outils Validation
 

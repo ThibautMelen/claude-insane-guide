@@ -1220,9 +1220,9 @@ Goals:
 
 ### Architecture Unifiée
 
-✅ **Hiérarchie 3 niveaux** : Command → Coordinator Agent → Agent (jamais agent → agent)
+✅ **Hiérarchie recommandée** : Command → Coordinator Subagent → Worker Subagent (règle: jamais subagent → subagent)
 
-✅ **Parallélisation maximale** : Agents indépendants lancés simultanément
+✅ **Parallélisation maximale** : Subagents indépendants lancés simultanément
 
 ✅ **Hooks de validation** : Quality gates à chaque phase critique
 
@@ -1318,10 +1318,10 @@ BAD: Translate FR → wait → DE → wait → ES
 GOOD: Launch 13 translation agents in parallel
 ```
 
-❌ **Agent → Agent Communication**
+❌ **Subagent → Subagent Communication**
 ```
-BAD: Draft-Writer agent calls SEO-Optimizer agent
-GOOD: Subcommand launches both agents in parallel
+BAD: Draft-Writer subagent calls SEO-Optimizer subagent (violation règle officielle)
+GOOD: Command/Subcommand launches both subagents in parallel
 ```
 
 ❌ **Over-Engineering**
