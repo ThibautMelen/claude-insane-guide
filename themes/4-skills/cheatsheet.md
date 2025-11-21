@@ -29,6 +29,124 @@ Process PDF files and extract content.
 
 ---
 
+## 📝 Description de Skills
+
+### 🎯 Rôle de la Description
+
+Un bon skill Claude a une **description ultra-claire, actionnable, et bornée** qui dit à la fois *ce qu'il fait* et *quand l'utiliser*… mais aussi *quand ne pas l'utiliser*.
+
+```
+╔═══════════════════════════════════════════════════╗
+║  LA DESCRIPTION = PRINCIPAL SIGNAL D'ACTIVATION  ║
+╚═══════════════════════════════════════════════════╝
+                      ▼
+        ┌─────────────────────────────┐
+        │ Description claire & bornée │
+        └─────────────────────────────┘
+                      ▼
+        ┌─────────────────────────────┐
+        │ Claude décide d'activer ou  │
+        │ non parmi dizaines de skills│
+        └─────────────────────────────┘
+```
+
+**Structure mentale** :
+> "Ce skill sert à … lorsqu'un utilisateur … dans le contexte de …"
+
+### 🔀 Pattern WHEN / WHEN NOT
+
+Pour éviter la suractivation, pense ta description comme un **mini contrat** :
+
+```
+┌─────────────────────────────────────────────────┐
+│  ✅ WHEN (quand l'utiliser)                     │
+├─────────────────────────────────────────────────┤
+│  • Triggers explicites                          │
+│  • Mots-clés spécifiques                        │
+│  • Format/type de demande attendu               │
+│  • Contexte précis                              │
+└─────────────────────────────────────────────────┘
+                      ▼
+┌─────────────────────────────────────────────────┐
+│  ❌ WHEN NOT (quand ne pas l'utiliser)          │
+├─────────────────────────────────────────────────┤
+│  • Cas voisins à exclure                        │
+│  • Questions hors scope                         │
+│  • Contextes non appropriés                     │
+│  • Réduit faux positifs                         │
+└─────────────────────────────────────────────────┘
+```
+
+**Template recommandé** :
+```markdown
+Utiliser ce skill pour … quand l'utilisateur …
+Ne pas l'utiliser si … ou si la demande concerne …
+```
+
+**Exemple concret** :
+```markdown
+Utiliser ce skill quand l'utilisateur veut créer un nouveau
+skill Claude ou améliorer un skill existant.
+
+Ne pas utiliser pour les questions générales sur Claude
+ou sur l'IA en dehors des skills.
+```
+
+### 🆚 Skill vs Prompt Simple
+
+```
+        Créer un SKILL quand :
+        ════════════════════════
+              ┌───────────────────────────┐
+              │ ✅ Workflow réutilisable  │
+              │ ✅ Consignes répétitives  │
+              │ ✅ Checklist qualité      │
+              │ ✅ Procédure MCP/outil    │
+              └───────────────────────────┘
+                        VS
+        Rester en PROMPT quand :
+        ════════════════════════
+              ┌───────────────────────────┐
+              │ ❌ Question ponctuelle    │
+              │ ❌ One-shot task          │
+              │ ❌ Logique floue/changeante│
+              └───────────────────────────┘
+```
+
+**Exemples de skills pertinents** :
+- ✅ Review de PR TypeScript
+- ✅ Génération de commits conventionnels
+- ✅ Pipeline de traduction
+- ✅ Charte éditoriale
+- ✅ Workflow création feature SaaS
+
+### ✅ Checklist Bonne Description
+
+```
+┌──────────────────────────────────────────────────┐
+│ 🎯 Ciblée                                        │
+│    └─> Un skill = une capacité délimitée        │
+│                                                  │
+│ ⚡ Langage d'action                              │
+│    └─> "Utiliser ce skill pour…"                │
+│                                                  │
+│ 📋 Contexte explicite                            │
+│    └─> Personne, tâches, formats, outils        │
+│                                                  │
+│ 🚫 Bornes négatives                              │
+│    └─> "Ne pas utiliser si…"                    │
+└──────────────────────────────────────────────────┘
+```
+
+**Formule gagnante** :
+```
+[ACTION] + [CONTEXTE] + [TRIGGERS] + [EXCLUSIONS]
+    ↓          ↓            ↓             ↓
+  Quoi?    Pour qui?    Quand?    Pas quand?
+```
+
+---
+
 📖 [Guide](./guide.md)
 
 ---

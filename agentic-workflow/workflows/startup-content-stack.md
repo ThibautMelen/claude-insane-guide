@@ -114,7 +114,7 @@ Niveau 1: COMMAND (Orchestrateur principal)
    └─ Niveau 2: SUBCOMMAND (Phase suivante)
        └─ ...
 
-🔥 Règle Anthropic respectée : 3 niveaux max, jamais agent → agent
+🔥 Règle Anthropic respectée : 2-3 niveaux recommandés (4-5 possibles), jamais agent → agent
 ```
 
 ---
@@ -1184,7 +1184,7 @@ Goals:
 
 ### Architecture Unifiée
 
-✅ **Hiérarchie 3 niveaux** : Command → Subcommand → Agent (jamais agent → agent)
+✅ **Hiérarchie 3 niveaux** : Command → Coordinator Agent → Agent (jamais agent → agent)
 
 ✅ **Parallélisation maximale** : Agents indépendants lancés simultanément
 

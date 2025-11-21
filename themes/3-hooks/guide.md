@@ -16,6 +16,9 @@
 6. [Points Clés](#-points-clés)
 7. [Ressources](#-ressources)
 
+**📚 Pattern Anthropic** :
+- [Pattern 5: Evaluator-Optimizer](../../agentic-workflow/6-composable-patterns/5-evaluator-optimizer.md) - Hooks pour quality gates et validation loops
+
 ---
 
 ## 📚 Théorie Fondamentale

@@ -15,6 +15,9 @@
 7. [Points Clés](#-points-clés)
 8. [Ressources](#-ressources)
 
+**📚 Pattern Anthropic** :
+- [Pattern 4: Orchestrator-Workers](../../agentic-workflow/6-composable-patterns/4-orchestrator-workers.md) - Plugins pour distribuer Commands/Agents/Skills
+
 ---
 
 ## 📚 Théorie Fondamentale

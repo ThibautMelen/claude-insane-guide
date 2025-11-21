@@ -120,5 +120,5 @@ NOTRE CHOIX ✅
 
 - 📄 [Vue d'ensemble 6 Patterns](./README.md)
 - 📐 [Pattern 4: Orchestrator-Workers](./4-orchestrator-workers.md) (notre implémentation)
-- 📐 [Command-Subcommand-Agent](../architecture/command-subcommand-agent.md)
+- 📐 [Command-Subcommand-Agent](../architecture/command-coordinator-workers.md)
 - 📄 [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)

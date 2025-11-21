@@ -55,6 +55,11 @@
 - 📋 Decision trees par feature
 - 🔄 Scenarios réels et anti-patterns
 
+**Guides Fondamentaux** :
+- 📄 [Commands Guide](../../themes/2-commands/guide.md) - Orchestrateur principal (Command pattern)
+- 🤖 [Agents Guide](../../themes/6-agents/guide.md) - Executeurs parallèles (Worker pattern)
+- 💡 [Skills Guide](../../themes/4-skills/guide.md) - Knowledge base partagée (Routing pattern)
+
 ### 🔑 Spécificités Orchestration
 
 **Pourquoi ce pattern** :

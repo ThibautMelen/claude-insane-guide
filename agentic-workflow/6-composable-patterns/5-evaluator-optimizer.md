@@ -110,4 +110,4 @@ Iteration 4+ (diminishing returns):
 - 🚀 [Global Localization (Translation Quality)](../workflows/global-localization.md)
 - 📄 [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)
 
-**Voir** : [Multi-Dialog Patterns](../../../themes/8-advanced/multi-dialog-patterns.md) - AskUserQuestion avancé
+**Voir** : [Multi-Dialog Patterns](../../themes/8-advanced/multi-dialog-patterns.md) - AskUserQuestion avancé

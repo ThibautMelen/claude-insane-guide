@@ -388,7 +388,7 @@ Real Benefit:
 ```
 ✅ VALID:
   Command → Agent
-  Command → Subcommand → Agent
+  Command → Coordinator Agent → Agent
 
 ❌ FORBIDDEN:
   Agent → Agent
@@ -572,7 +572,7 @@ Approval Gates:
 
 ```
 ✅ COMMAND orchestre, AGENT exécute
-✅ Hiérarchie plate (3 niveaux max)
+✅ Hiérarchie recommandée : 2-3 niveaux (4-5 possibles selon complexité)
 ✅ Agents atomiques (1 task/agent)
 ✅ Skills pour shared knowledge
 ```

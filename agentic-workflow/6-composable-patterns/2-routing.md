@@ -90,4 +90,4 @@ Claude analyzes:
 - 📄 [Orchestration Principles](../orchestration-principles.md)
 - 📄 [Skills Deep Dive (Lee Hanchung)](https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/)
 
-**Voir** : [Skills Guide Complet](../../../themes/4-skills/guide.md) - Implémentation technique détaillée
+**Voir** : [Skills Guide Complet](../../themes/4-skills/guide.md) - Implémentation technique détaillée

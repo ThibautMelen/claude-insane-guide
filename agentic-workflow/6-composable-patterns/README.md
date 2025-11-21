@@ -142,7 +142,7 @@ Orchestrator synthesizes
 **Notre implémentation** :
 - ✅ **Command-Subcommand-Agent** (flat hierarchy)
 - ✅ **Command orchestre, Agent exécute** (règle d'or)
-- ✅ **3 niveaux max** (Command → Subcommand → Agent)
+- ✅ **2-3 niveaux recommandés (4-5 possibles)** (Command → Coordinator Agent → Agent)
 
 **Fichier** : [4-orchestrator-workers.md](./4-orchestrator-workers.md)
 

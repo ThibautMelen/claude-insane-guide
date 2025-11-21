@@ -97,6 +97,9 @@ Tâche complexe = orchestration agents
 | **Sub-Agent** | Via Plugin ou Task tool | Isolé | Tâche spécialisée |
 | **Task Agent** | Task tool | Isolé | Workflow complexe multi-étapes |
 
+**📚 Pattern Anthropic** :
+- [Pattern 4: Orchestrator-Workers](../../agentic-workflow/6-composable-patterns/4-orchestrator-workers.md) - Command orchestre, Agents exécutent
+
 ---
 
 ### 🌟 Parallélisation : Révolution Performance

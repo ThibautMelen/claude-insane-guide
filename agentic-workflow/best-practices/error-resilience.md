@@ -1977,7 +1977,7 @@ LAUNCH agents → COLLECT results
 ## 📚 Ressources
 
 ### Documentation Interne
-- 📄 [Command-Agent-Skill Pattern](../architecture/command-subcommand-agent.md) - Architecture base
+- 📄 [Command-Agent-Skill Pattern](../architecture/command-coordinator-workers.md) - Architecture base
 - 📄 [Parallel Execution](../6-composable-patterns/3-parallelization.md) - Patterns concurrents
 - 📄 [State Management](../architecture/state-management.md) - Gestion état & recovery
 - 📄 [MCP Guide](../../themes/5-mcp/guide.md) - Configuration MCP servers

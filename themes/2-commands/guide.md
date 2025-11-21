@@ -608,7 +608,33 @@ Pour améliorer du code existant :
 ❌ Pas d'éditeur visuel → Edition manuelle fichiers markdown
 ❌ Debug complexe       → Si prompt mal formulé, résultats imprévisibles
 ❌ Pas de versioning    → Pas d'historique des commandes (utiliser Git)
+❌ Command → Command    → Invocation indirecte uniquement (via Main Agent)
 ```
+
+#### 🔗 Command → Command : Limitation Technique
+
+**Depuis v1.0.123 (Sept 2024)** : Le Main Agent peut invoquer des commands via le **SlashCommand tool**, mais les commands eux-mêmes **ne peuvent pas directement appeler d'autres commands**.
+
+```
+╔══════════════════════════════════════════════════════╗
+║  Command A → Command B = INDIRECT via Main Agent    ║
+╚══════════════════════════════════════════════════════╝
+
+❌ IMPOSSIBLE (Direct) :
+   Command A → SlashCommand(/command-b)
+
+✅ POSSIBLE (Indirect via Main Agent) :
+   Command A (suggest) → Main Agent interprets → SlashCommand(/command-b)
+```
+
+**Source** : [GitHub Issue #8421](https://github.com/anthropics/claude-code/issues/8421) - "Nested SlashCommand calls stop execution"
+
+**Workaround recommandé** :
+- Command suggère autre command dans son prompt
+- Main Agent décide intelligemment d'invoquer via SlashCommand tool
+- Ou utiliser **Command → Subagent → Workers** pattern pour orchestration complexe
+
+**Voir** : [Command Coordination Pattern](../../agentic-workflow/architecture/command-coordinator-workers.md) pour orchestration multi-agents
 
 ---
 

@@ -16,7 +16,7 @@ Ce document établit les **règles fondamentales** pour orchestrer Commands, Sub
 
 ```
 ✅ CORRECT : Command → Agent
-✅ CORRECT : Command → Subcommand → Agent
+✅ CORRECT : Command → Coordinator Agent → Agent
 ❌ INTERDIT : Agent → Agent
 ❌ INTERDIT : Agent → Command
 ❌ INTERDIT : Agent → Subagent
@@ -35,9 +35,9 @@ Ce document établit les **règles fondamentales** pour orchestrer Commands, Sub
 
 ### Règle 2 : Hiérarchie Plate (Flat Hierarchy)
 
-**Voir** : [Command-Subcommand-Agent Architecture](./architecture/command-subcommand-agent.md) pour détails complets.
+**Voir** : [Command-Subcommand-Agent Architecture](./architecture/command-coordinator-workers.md) pour détails complets.
 
-**En bref** : Maximum 3 niveaux (Command → Subcommand → Agent). Agents = feuilles, jamais de délégation.
+**En bref** : Maximum 3 niveaux (Command → Coordinator Agent → Agent). Agents = feuilles, jamais de délégation.
 
 ---
 
@@ -545,8 +545,8 @@ Résultats:
 ✅ **COMMAND orchestre, AGENT exécute**
 - Jamais agent → agent ou agent → command
 
-✅ **Hiérarchie plate (3 niveaux max)**
-- Main Command → Subcommand → Agent
+✅ **Hiérarchie recommandée : 2-3 niveaux (4-5 possibles selon complexité)**
+- Main Command → Coordinator Agent → Agent
 
 ✅ **Agents atomiques**
 - 1 agent = 1 tâche unique et bien définie

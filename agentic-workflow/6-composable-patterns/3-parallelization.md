@@ -116,8 +116,8 @@ IF approaching limit:
 ## 🔗 Ressources
 
 - 📄 [Vue d'ensemble 6 Patterns](./README.md)
-- 📐 [Command-Agent-Skill Pattern](../architecture/command-subcommand-agent.md)
+- 📐 [Command-Agent-Skill Pattern](../architecture/command-coordinator-workers.md)
 - 🚀 [Error Handling](../best-practices/error-resilience.md)
 - 📄 [Claude Code Task Tool](https://code.claude.com/docs/task-tool)
 
-**Voir** : [Agents Guide](../../../themes/6-agents/guide.md) - Verdent Deck architecture
+**Voir** : [Agents Guide](../../themes/6-agents/guide.md) - Verdent Deck architecture
